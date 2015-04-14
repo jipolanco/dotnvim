@@ -1,0 +1,205 @@
+filetype indent plugin on
+
+" ========================================================================== "
+" PLUGINS
+call plug#begin('~/.nvim/plugged')
+
+Plug 'bling/vim-airline'
+Plug 'honza/vim-snippets'
+Plug 'junegunn/vim-easy-align'
+Plug 'kien/ctrlp.vim'
+Plug 'Lokaltog/vim-easymotion'
+Plug 'majutsushi/tagbar'
+Plug 'Raimondi/delimitMate'
+Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/syntastic'
+Plug 'SirVer/ultisnips'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'Valloric/ListToggle'
+Plug 'Valloric/YouCompleteMe'
+
+" Language-specific plugins.
+" Plug 'bfredl/nvim-ipy'    " ipython
+Plug 'gabrielelana/vim-markdown'
+Plug 'JuliaLang/julia-vim'
+" Plug 'LaTeX-Box-Team/LaTeX-Box'
+Plug 'lervag/vimtex'
+
+" Colourschemes.
+Plug 'altercation/vim-colors-solarized'
+Plug 'nanotech/jellybeans.vim'
+
+call plug#end()
+
+" ========================================================================== "
+" THEME / APPEARANCE
+set background=dark
+colorscheme solarized
+
+let g:airline_theme = 'solarized'
+let g:airline_powerline_fonts = 0
+" let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#tab_nr_type = 1 " show tab number
+
+" Height of the command bar
+set cmdheight=2
+
+" Numbers.
+set number
+set relativenumber
+
+set showmatch
+set linebreak
+
+" ========================================================================== "
+" GENERAL STUFF
+let mapleader = ","
+let maplocalleader = "\\"
+set wildignore+=*.o,*~,*.pyc
+set splitright
+set mouse=a
+set mousemodel=popup_setpos
+
+" "Y" yanks from cursor to end of line.
+noremap Y y$
+
+" Searching.
+set ignorecase
+set smartcase
+set hlsearch
+
+" Tabs / indenting.
+set expandtab
+set shiftwidth=4
+set tabstop=4
+set smartindent
+
+" ========================================================================== "
+" LaTeX
+let g:tex_flavor = 'latex'
+augroup set_latex_filetypes
+    autocmd!
+    autocmd BufRead,BufNewFile *.pgf     set filetype=tex
+    autocmd BufRead,BufNewFile *.tikz    set filetype=tex
+    autocmd BufRead,BufNewFile *.pdf_tex set filetype=tex
+augroup END
+
+let g:vimtex_view_method='okular'
+
+" See ":h vimtex-complete-youcompleteme".
+if !exists('g:ycm_semantic_triggers')
+  let g:ycm_semantic_triggers = {}
+endif
+let g:ycm_semantic_triggers.tex = [
+      \ 're!\\[A-Za-z]*(ref|cite)[A-Za-z]*([^]]*])?{([^}]*, ?)*'
+      \ ]
+
+" See ":h vimtex-faq-surround".
+augroup latexSurround
+    autocmd!
+    autocmd FileType tex call s:latexSurround()
+augroup END
+
+function! s:latexSurround()
+    let b:surround_{char2nr("e")}
+                \ = "\\begin{\1environment: \1}\n\t\r\n\\end{\1\1}"
+    let b:surround_{char2nr("c")} = "\\\1command: \1{\r}"
+endfunction
+
+" ========================================================================== "
+" Julia
+" LaTeX-to-Unicode via tab key doesn't play nicely with YouCompleteMe...
+let g:latex_to_unicode_tab = 0
+let g:latex_to_unicode_suggestions = 0
+let g:latex_to_unicode_auto = 0
+
+" Tagbar
+let g:tagbar_type_julia = {
+    \ 'ctagstype' : 'julia',
+    \ 'kinds'     : ['f:function']
+    \ }
+
+" ========================================================================== "
+" Other file types.
+augroup set_other_filetypes
+    autocmd!
+    autocmd BufRead,BufNewFile *.md           set filetype=markdown
+    autocmd BufRead,BufNewFile *.plt,.gnuplot set filetype=gnuplot
+augroup END
+
+" ========================================================================== "
+" PLUGINS
+let NERDTreeQuitOnOpen=1
+
+let g:syntastic_error_symbol='✗'
+let g:syntastic_warning_symbol='⚠'
+let g:syntastic_always_populate_loc_list = 1
+
+let g:UltiSnipsEditSplit = 'vertical'
+let g:UltiSnipsExpandTrigger = '<c-cr>'
+
+let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_seed_identifiers_with_syntax = 1
+" let g:ycm_global_ycm_extra_conf = '~/.nvim/ycm_extra_conf.default.py'
+
+let g:surround_indent = 1
+
+" ========================================================================== "
+" MORE MAPPINGS.
+nnoremap <silent> <F9> :TagbarToggle<CR>
+nnoremap <leader>n :NERDTreeToggle<cr>
+
+" CtrlP
+nnoremap <leader>b :CtrlPBuffer<cr>
+nnoremap <leader>m :CtrlPMRU<cr>
+nnoremap <leader>T :CtrlPTag<cr>
+nnoremap <leader>t :CtrlPBufTagAll<cr>
+nnoremap <leader>u :CtrlPUndo<cr>
+nnoremap <leader>M :CtrlPMixed<cr>
+nnoremap <leader>L :CtrlPLine<cr>     " <leader>l is used by ListToggle?
+nnoremap <leader>D :CtrlPDir<cr>      " <leader>d is used by YCM
+
+" Fugitive
+nmap <leader>gg :Gstatus<CR>
+nmap <leader>gd :Gdiff<CR>
+nmap <leader>gw :Gwrite<CR>
+nmap <leader>ge :Gedit<CR>
+
+" This fixes comment indenting in Python (see ":h smartindent").
+inoremap # X#
+
+" DelimitMate: use <c-l> to jump over a delimiter
+imap <c-l> <Plug>delimitMateS-Tab
+
+" easy-align
+" Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+vmap <Enter> <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
+nmap <Leader>a <Plug>(EasyAlign)
+
+" Underline a line of text
+" Based on http://vim.wikia.com/wiki/Underline_using_dashes_automatically
+nmap <leader>= yypv$r=
+nmap <leader>- yypv$r-
+
+" Navigate between windows.
+nnoremap <A-h> <C-w>h
+nnoremap <A-j> <C-w>j
+nnoremap <A-k> <C-w>k
+nnoremap <A-l> <C-w>l
+
+" Terminal mappings (see ":h nvim-terminal-emulator-input").
+if has('nvim')
+    tnoremap <Esc> <C-\><C-n>           " exit terminal mode
+    tnoremap <A-h> <C-\><C-n><C-w>h     " move to left window
+    tnoremap <A-j> <C-\><C-n><C-w>j     " etc...
+    tnoremap <A-k> <C-\><C-n><C-w>k
+    tnoremap <A-l> <C-\><C-n><C-w>l
+end
+
