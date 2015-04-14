@@ -38,6 +38,10 @@ call plug#end()
 
 " ========================================================================== "
 " THEME / APPEARANCE
+" Use true colours in terminal (supported by Konsole).
+" https://github.com/neovim/neovim/wiki/FAQ#how-do-i-use-true-colors-in-the-terminal
+" let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+
 set background=dark
 colorscheme solarized
 
@@ -79,9 +83,10 @@ set shiftwidth=4
 set tabstop=4
 set smartindent
 
+set textwidth=80
+
 " ========================================================================== "
 " LaTeX
-let g:tex_flavor = 'latex'
 augroup set_latex_filetypes
     autocmd!
     autocmd BufRead,BufNewFile *.pgf     set filetype=tex
@@ -89,42 +94,9 @@ augroup set_latex_filetypes
     autocmd BufRead,BufNewFile *.pdf_tex set filetype=tex
 augroup END
 
-let g:vimtex_view_method='okular'
+" Man pages (defines :Man and <leader>K).
+runtime! ftplugin/man.vim
 
-" See ":h vimtex-complete-youcompleteme".
-if !exists('g:ycm_semantic_triggers')
-  let g:ycm_semantic_triggers = {}
-endif
-let g:ycm_semantic_triggers.tex = [
-      \ 're!\\[A-Za-z]*(ref|cite)[A-Za-z]*([^]]*])?{([^}]*, ?)*'
-      \ ]
-
-" See ":h vimtex-faq-surround".
-augroup latexSurround
-    autocmd!
-    autocmd FileType tex call s:latexSurround()
-augroup END
-
-function! s:latexSurround()
-    let b:surround_{char2nr("e")}
-                \ = "\\begin{\1environment: \1}\n\t\r\n\\end{\1\1}"
-    let b:surround_{char2nr("c")} = "\\\1command: \1{\r}"
-endfunction
-
-" ========================================================================== "
-" Julia
-" LaTeX-to-Unicode via tab key doesn't play nicely with YouCompleteMe...
-let g:latex_to_unicode_tab = 0
-let g:latex_to_unicode_suggestions = 0
-let g:latex_to_unicode_auto = 0
-
-" Tagbar
-let g:tagbar_type_julia = {
-    \ 'ctagstype' : 'julia',
-    \ 'kinds'     : ['f:function']
-    \ }
-
-" ========================================================================== "
 " Other file types.
 augroup set_other_filetypes
     autocmd!
@@ -141,7 +113,7 @@ let g:syntastic_warning_symbol='⚠'
 let g:syntastic_always_populate_loc_list = 1
 
 let g:UltiSnipsEditSplit = 'vertical'
-let g:UltiSnipsExpandTrigger = '<c-cr>'
+let g:UltiSnipsExpandTrigger = '<a-cr>'  " alt-enter
 
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_seed_identifiers_with_syntax = 1
