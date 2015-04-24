@@ -1,5 +1,3 @@
-let g:tex_flavor = 'latex'
-
 setlocal shiftwidth=2
 setlocal tabstop=2
 
@@ -22,6 +20,12 @@ let g:syntastic_tex_checkers = ['chktex', 'lacheck']
 
 " ========================================================================== "
 " Vimtex plugin.
+
+" Open table of contents (shortcut \lt) and table of labels (\ly) at the right.
+let g:vimtex_index_split_pos = 'vert rightbelow'
+
+" Don't open the quickfix window automatically when there are only warnings.
+let g:vimtex_quickfix_open_on_warning = 0
 
 " Use okular for forward search.
 " NOTE: backward search doesn't work right now with neovim.
@@ -47,5 +51,27 @@ function! s:latexSurround()
                 \ = "\\begin{\1environment: \1}\n\t\r\n\\end{\1\1}"
     let b:surround_{char2nr("c")} = "\\\1command: \1{\r}"
 endfunction
+
+" ========================================================================== "
+" LatexBox plugin.
+
+" Forward search with Okular (mapping is only defined if LatexBox is loaded).
+if exists('g:LatexBox_quickfix')
+    nnoremap <silent> <LocalLeader>ls :silent
+                \ !okular --unique
+                \ <C-R>=LatexBox_GetOutputFile()<CR>
+                \ \#src:<C-R>=line('.')<CR><C-R>=expand('%:p')<CR> &<CR>
+endif
+
+let g:LatexBox_viewer = 'okular --unique'
+let g:LatexBox_latexmk_async = 1
+let g:LatexBox_latexmk_preview_continuously = 1
+let g:LatexBox_quickfix = 2   " set to 4 to disable opening quickfix when no errors
+let g:LatexBox_split_side = 'rightbelow'
+let g:LatexBox_ignore_warnings = []
+
+let g:LatexBox_Folding = 1
+let g:LatexBox_fold_envs = 0
+" let g:LatexBox_fold_automatic = 0  " uncomment this if things are too slow
 
 " ========================================================================== "
