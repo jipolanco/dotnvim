@@ -1,4 +1,5 @@
 filetype indent plugin on
+set encoding=utf-8
 
 " ========================================================================== "
 " PLUGINS
@@ -14,6 +15,7 @@ Plug 'Raimondi/delimitMate'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/syntastic'
 Plug 'SirVer/ultisnips'
+Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
@@ -85,8 +87,26 @@ set smartindent
 
 set textwidth=80
 
+" Settings copied from Fedora's /etc/vimrc (Fedora 21).
+augroup fedora
+    autocmd!
+    " In text files, always limit the width of text to 78 characters
+    autocmd BufRead *.txt set tw=78
+    " When editing a file, always jump to the last cursor position
+    autocmd BufReadPost *
+                \ if line("'\"") > 0 && line ("'\"") <= line("$") |
+                \   exe "normal! g'\"" |
+                \ endif
+    " don't write swapfile on most commonly used directories for NFS mounts or USB sticks
+    autocmd BufNewFile,BufReadPre /media/*,/run/media/*,/mnt/* set directory=~/tmp,/var/tmp,/tmp
+    " start with spec file template
+    autocmd BufNewFile *.spec 0r /usr/share/vim/vimfiles/template.spec
+augroup END
+
 " ========================================================================== "
 " LaTeX
+let g:tex_flavor = 'latex'
+
 augroup set_latex_filetypes
     autocmd!
     autocmd BufRead,BufNewFile *.pgf     set filetype=tex
@@ -113,7 +133,10 @@ let g:syntastic_warning_symbol='⚠'
 let g:syntastic_always_populate_loc_list = 1
 
 let g:UltiSnipsEditSplit = 'vertical'
-let g:UltiSnipsExpandTrigger = '<a-cr>'  " alt-enter
+let g:UltiSnipsExpandTrigger = '<a-cr>'     " alt-enter
+
+" Alternative trigger that works in gvim.
+inoremap <c-cr> <c-r>=UltiSnips#ExpandSnippet()<cr>
 
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_seed_identifiers_with_syntax = 1
@@ -121,8 +144,24 @@ let g:ycm_seed_identifiers_with_syntax = 1
 
 let g:surround_indent = 1
 
+" CtrlP: ignore files in .gitignore.
+" From https://github.com/kien/ctrlp.vim/issues/174#issuecomment-49747252
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+
 " ========================================================================== "
 " MORE MAPPINGS.
+
+" This changes the behaviour of j and k in wrapped lines.
+noremap j gj
+noremap k gk
+
+" Change dir to the directory of the open buffer.
+nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
+
+" Easier copy/paste with system clipboard.
+vnoremap <c-s-c> "+y
+inoremap <c-s-v> <c-r>+
+
 nnoremap <silent> <F9> :TagbarToggle<CR>
 nnoremap <leader>n :NERDTreeToggle<cr>
 
@@ -149,11 +188,12 @@ inoremap # X#
 imap <c-l> <Plug>delimitMateS-Tab
 
 " easy-align
+" Mappings copied from ":h easy-align-4"
 " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
 vmap <Enter> <Plug>(EasyAlign)
 
-" Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
-nmap <Leader>a <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
 " Underline a line of text
 " Based on http://vim.wikia.com/wiki/Underline_using_dashes_automatically
@@ -168,10 +208,11 @@ nnoremap <A-l> <C-w>l
 
 " Terminal mappings (see ":h nvim-terminal-emulator-input").
 if has('nvim')
-    tnoremap <Esc> <C-\><C-n>           " exit terminal mode
     tnoremap <A-h> <C-\><C-n><C-w>h     " move to left window
     tnoremap <A-j> <C-\><C-n><C-w>j     " etc...
     tnoremap <A-k> <C-\><C-n><C-w>k
     tnoremap <A-l> <C-\><C-n><C-w>l
-end
 
+    " This conflicts with the terminal vi-mode, if it is enabled:
+    " tnoremap <Esc> <C-\><C-n>           " exit terminal mode
+end
