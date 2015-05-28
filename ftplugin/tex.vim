@@ -3,7 +3,7 @@ setlocal tabstop=2
 
 " Use conceal mode (see ":h tex-conceal").
 setlocal conceallevel=2
-let g:tex_conceal = 'abdmgs'
+let g:tex_conceal = 'abdmg'
 
 " Treat all tex files as style files (*.sty).
 " This means that underscores are considered as keywords.
@@ -20,6 +20,16 @@ let g:syntastic_tex_checkers = ['chktex', 'lacheck']
 
 " ========================================================================== "
 " Vimtex plugin.
+
+" Don't fold using vimtex in diff mode.
+" NOTE: this doesn't work!!!
+" if &diff
+"     let g:vimtex_fold_enabled = 0
+" else
+"     let g:vimtex_fold_enabled = 1
+" end
+let g:vimtex_fold_enabled = 0
+let g:vimtex_fold_envs = 0
 
 " Open table of contents (shortcut \lt) and table of labels (\ly) at the right.
 let g:vimtex_index_split_pos = 'vert rightbelow'
