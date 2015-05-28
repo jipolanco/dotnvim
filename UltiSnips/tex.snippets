@@ -1,0 +1,25 @@
+snippet newenvironment "define new environment" b
+\newenvironment{${1:name}}[${2:opt}]{${3:before}}{${4:after}}
+endsnippet
+
+# Requires the siunitx package.
+snippet SI "\SI{}{} (physical magnitude)"
+\SI{${1:value}}{${2:unit}}
+endsnippet
+
+# Requires graphicx.
+snippet rb "\resizebox" b
+\resizebox{${1:${2:0.9}\textwidth}}{${3:!}}{${4:input}}$0
+endsnippet
+
+# ================================================================== #
+# TikZ / PGF snippets.
+snippet pgfmacro "\pgfmathsetmacro" b
+\pgfmathsetmacro{\\${1:name}}{${2:value}}
+endsnippet
+
+snippet for "\foreach loop (PGF command)" b
+\foreach \\${1:x} in {${2:1, 2, ..., 6}} {%
+	$3
+}
+endsnippet
