@@ -31,6 +31,7 @@ Plug 'gabrielelana/vim-markdown'
 Plug 'JuliaLang/julia-vim'
 " Plug 'LaTeX-Box-Team/LaTeX-Box'
 Plug 'lervag/vimtex'
+Plug 'chriskempson/base16-vim'
 
 " Colourschemes.
 Plug 'altercation/vim-colors-solarized'
@@ -44,7 +45,7 @@ call plug#end()
 " https://github.com/neovim/neovim/wiki/FAQ#how-do-i-use-true-colors-in-the-terminal
 " let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
 
-set background=dark
+set background=light
 colorscheme solarized
 
 let g:airline_theme = 'solarized'
@@ -86,6 +87,15 @@ set tabstop=4
 set smartindent
 
 set textwidth=80
+
+" Automatically insert comment leader in new lines.
+" NOTE: this is overriden by the ftplugins of several languages
+" (for example C++ and vimscript).
+set formatoptions+=r    " after hitting <Enter> in Insert mode
+" set formatoptions+=o    " after hitting 'o' or 'O' in Normal mode
+
+" Recognise numbered lists.
+set formatoptions+=n
 
 " Settings copied from Fedora's /etc/vimrc (Fedora 21).
 augroup fedora
@@ -141,6 +151,7 @@ inoremap <c-cr> <c-r>=UltiSnips#ExpandSnippet()<cr>
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_seed_identifiers_with_syntax = 1
 " let g:ycm_global_ycm_extra_conf = '~/.nvim/ycm_extra_conf.default.py'
+let g:ycm_filepath_completion_use_working_dir = 1
 
 let g:surround_indent = 1
 
@@ -152,15 +163,16 @@ let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclu
 " MORE MAPPINGS.
 
 " This changes the behaviour of j and k in wrapped lines.
-noremap j gj
-noremap k gk
+" noremap j gj
+" noremap k gk
 
 " Change dir to the directory of the open buffer.
 nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
 
 " Easier copy/paste with system clipboard.
-vnoremap <c-s-c> "+y
-inoremap <c-s-v> <c-r>+
+" PROBLEM: apparently, <c-v> and <c-s-v> are the same for (n)vim.
+" vnoremap <c-s-c> "+y
+" inoremap <c-s-v> <c-r>+
 
 nnoremap <silent> <F9> :TagbarToggle<CR>
 nnoremap <leader>n :NERDTreeToggle<cr>
@@ -213,6 +225,6 @@ if has('nvim')
     tnoremap <A-k> <C-\><C-n><C-w>k
     tnoremap <A-l> <C-\><C-n><C-w>l
 
-    " This conflicts with the terminal vi-mode, if it is enabled:
-    " tnoremap <Esc> <C-\><C-n>           " exit terminal mode
+    " NOTE: using just one <Esc> conflicts with the terminal vi-mode.
+    tnoremap <Esc><Esc> <C-\><C-n>      " exit terminal mode
 end
