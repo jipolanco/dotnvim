@@ -8,7 +8,7 @@ call plug#begin('~/.nvim/plugged')
 Plug 'bling/vim-airline'
 Plug 'honza/vim-snippets'
 Plug 'junegunn/vim-easy-align'
-Plug 'kien/ctrlp.vim'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'majutsushi/tagbar'
 Plug 'Raimondi/delimitMate'
