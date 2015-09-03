@@ -31,6 +31,9 @@ let g:syntastic_tex_checkers = ['chktex', 'lacheck']
 let g:vimtex_fold_enabled = 0
 let g:vimtex_fold_envs = 0
 
+let g:vimtex_latexmk_continuous = 1
+let g:vimtex_latexmk_background = 1  " always run latexmk in the background
+
 " Open table of contents (shortcut \lt) and table of labels (\ly) at the right.
 let g:vimtex_index_split_pos = 'vert rightbelow'
 
@@ -40,7 +43,9 @@ let g:vimtex_quickfix_open_on_warning = 0
 " Use okular for forward search.
 " NOTE: backward search doesn't work right now with neovim.
 " It works with vim/gvim though (see ":h vimtex-synctex-backward-search").
-let g:vimtex_view_method = 'okular'
+let g:vimtex_view_general_viewer = 'okular'
+let g:vimtex_view_general_options = '--unique @pdf\#src:@line@tex'
+let g:vimtex_view_general_options_latexmk = '--unique'
 
 " See ":h vimtex-complete-youcompleteme".
 if !exists('g:ycm_semantic_triggers')
