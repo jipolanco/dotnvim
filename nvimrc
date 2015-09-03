@@ -32,10 +32,20 @@ Plug 'JuliaLang/julia-vim'
 " Plug 'LaTeX-Box-Team/LaTeX-Box'
 Plug 'lervag/vimtex'
 Plug 'chriskempson/base16-vim'
+Plug 'dag/vim-fish'
+Plug 'jvirtanen/vim-octave'
 
 " Colourschemes.
-Plug 'altercation/vim-colors-solarized'
 Plug 'nanotech/jellybeans.vim'
+Plug 'NLKNguyen/papercolor-theme'
+Plug 'Wutzara/vim-materialtheme'
+
+if has('nvim')
+    " This version of solarized works better when using $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+    Plug 'frankier/neovim-colors-solarized-truecolor-only'
+else
+    Plug 'altercation/vim-colors-solarized'
+endif
 
 call plug#end()
 
@@ -43,13 +53,20 @@ call plug#end()
 " THEME / APPEARANCE
 " Use true colours in terminal (supported by Konsole).
 " https://github.com/neovim/neovim/wiki/FAQ#how-do-i-use-true-colors-in-the-terminal
-" let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
 
-set background=light
-colorscheme solarized
+set background=dark
 
-let g:airline_theme = 'solarized'
-let g:airline_powerline_fonts = 0
+if has('nvim') || has('gui')
+    colorscheme PaperColor
+    let g:airline_theme = 'PaperColor'
+else
+    colorscheme solarized
+    let g:airline_theme = 'solarized'
+end
+
+" let g:airline_powerline_fonts = 0
 " let g:airline#extensions#tabline#enabled = 1
 " let g:airline#extensions#tabline#tab_nr_type = 1 " show tab number
 
@@ -62,6 +79,8 @@ set relativenumber
 
 set showmatch
 set linebreak
+
+" set hidden
 
 " ========================================================================== "
 " GENERAL STUFF
@@ -145,6 +164,10 @@ let g:syntastic_always_populate_loc_list = 1
 let g:UltiSnipsEditSplit = 'vertical'
 let g:UltiSnipsExpandTrigger = '<a-cr>'     " alt-enter
 
+" This fixes autocompletion of snippets with YCM.
+" https://github.com/Valloric/YouCompleteMe/issues/1214#issuecomment-77366433
+let g:UltiSnipsUsePythonVersion = 2
+
 " Alternative trigger that works in gvim.
 inoremap <c-cr> <c-r>=UltiSnips#ExpandSnippet()<cr>
 
@@ -161,6 +184,15 @@ let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclu
 
 " ========================================================================== "
 " MORE MAPPINGS.
+
+" Use the left/right arrow keys to change buffers or tabs.
+nnoremap <Left>    :bprev<CR>
+nnoremap <Right>   :bnext<CR>
+nnoremap <M-Left>  :tabprev<CR>  " M == Alt key
+nnoremap <M-Right> :tabnext<CR>
+
+" TODO Use the up/down arrow keys for something!!
+
 
 " This changes the behaviour of j and k in wrapped lines.
 " noremap j gj
@@ -220,10 +252,10 @@ nnoremap <A-l> <C-w>l
 
 " Terminal mappings (see ":h nvim-terminal-emulator-input").
 if has('nvim')
-    tnoremap <A-h> <C-\><C-n><C-w>h     " move to left window
-    tnoremap <A-j> <C-\><C-n><C-w>j     " etc...
-    tnoremap <A-k> <C-\><C-n><C-w>k
-    tnoremap <A-l> <C-\><C-n><C-w>l
+    tnoremap <M-h> <C-\><C-n><C-w>h     " move to left window
+    tnoremap <M-j> <C-\><C-n><C-w>j     " etc...
+    tnoremap <M-k> <C-\><C-n><C-w>k
+    tnoremap <M-l> <C-\><C-n><C-w>l
 
     " NOTE: using just one <Esc> conflicts with the terminal vi-mode.
     tnoremap <Esc><Esc> <C-\><C-n>      " exit terminal mode
