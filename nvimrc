@@ -6,9 +6,9 @@ set encoding=utf-8
 call plug#begin('~/.nvim/plugged')
 
 Plug 'bling/vim-airline'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'honza/vim-snippets'
 Plug 'junegunn/vim-easy-align'
-Plug 'ctrlpvim/ctrlp.vim'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'majutsushi/tagbar'
 Plug 'Raimondi/delimitMate'
@@ -218,6 +218,10 @@ nnoremap <leader>u :CtrlPUndo<cr>
 nnoremap <leader>M :CtrlPMixed<cr>
 nnoremap <leader>L :CtrlPLine<cr>     " <leader>l is used by ListToggle?
 nnoremap <leader>D :CtrlPDir<cr>      " <leader>d is used by YCM
+
+" YouCompleteMe
+nnoremap <leader>jd :YcmCompleter GoTo<CR>
+nnoremap <leader>jj :YcmCompleter GoToImprecise<CR>
 
 " Fugitive
 nmap <leader>gg :Gstatus<CR>
