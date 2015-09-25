@@ -107,6 +107,10 @@ set smartindent
 
 set textwidth=80
 
+" Wrapping
+set nowrap
+set sidescroll=5
+
 " Automatically insert comment leader in new lines.
 " NOTE: this is overriden by the ftplugins of several languages
 " (for example C++ and vimscript).
@@ -182,6 +186,8 @@ let g:surround_indent = 1
 " CtrlP: ignore files in .gitignore.
 " From https://github.com/kien/ctrlp.vim/issues/174#issuecomment-49747252
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+
+let g:tagbar_width = 30
 
 " ========================================================================== "
 " MORE MAPPINGS.
