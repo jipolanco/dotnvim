@@ -168,8 +168,9 @@ let g:UltiSnipsExpandTrigger = '<a-cr>'     " alt-enter
 " https://github.com/Valloric/YouCompleteMe/issues/1214#issuecomment-77366433
 let g:UltiSnipsUsePythonVersion = 2
 
-" Alternative trigger that works in gvim.
+" Alternative triggers that work in gvim/vim.
 inoremap <c-cr> <c-r>=UltiSnips#ExpandSnippet()<cr>
+inoremap <c-\>  <c-r>=UltiSnips#ExpandSnippet()<cr>
 
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_seed_identifiers_with_syntax = 1
