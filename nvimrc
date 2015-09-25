@@ -220,8 +220,10 @@ nnoremap <leader>L :CtrlPLine<cr>     " <leader>l is used by ListToggle?
 nnoremap <leader>D :CtrlPDir<cr>      " <leader>d is used by YCM
 
 " YouCompleteMe
-nnoremap <leader>jd :YcmCompleter GoTo<CR>
+nnoremap <leader>jJ :YcmCompleter GoTo<CR>
 nnoremap <leader>jj :YcmCompleter GoToImprecise<CR>
+nnoremap <leader>jd :YcmCompleter GoToDeclaration<CR>
+nnoremap <leader>jf :YcmCompleter FixIt<CR>
 
 " Fugitive
 nmap <leader>gg :Gstatus<CR>
