@@ -80,7 +80,7 @@ set relativenumber
 set showmatch
 set linebreak
 
-" set hidden
+set hidden
 
 " ========================================================================== "
 " GENERAL STUFF
