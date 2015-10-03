@@ -57,14 +57,8 @@ let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
 
 set background=dark
-
-if has('nvim') || has('gui')
-    colorscheme PaperColor
-    let g:airline_theme = 'PaperColor'
-else
-    colorscheme solarized
-    let g:airline_theme = 'solarized'
-end
+colorscheme solarized
+let g:airline_theme = 'solarized'
 
 " let g:airline_powerline_fonts = 0
 " let g:airline#extensions#tabline#enabled = 1
