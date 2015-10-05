@@ -142,7 +142,9 @@ augroup set_latex_filetypes
 augroup END
 
 " Man pages (defines :Man and <leader>K).
-runtime! ftplugin/man.vim
+if !has('nvim')
+    runtime! ftplugin/man.vim
+end
 
 " Other file types.
 augroup set_other_filetypes
