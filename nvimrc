@@ -71,6 +71,8 @@ set cmdheight=2
 set number
 set relativenumber
 
+set lazyredraw  " don't redraw during macros, etc.
+
 set showmatch
 set linebreak
 
