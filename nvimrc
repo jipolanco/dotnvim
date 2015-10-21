@@ -237,6 +237,10 @@ nmap <leader>gd :Gdiff<CR>
 nmap <leader>gw :Gwrite<CR>
 nmap <leader>ge :Gedit<CR>
 
+" clang-format
+map <c-k> :pyf $HOME/.vim/clang-format.py<cr>
+imap <c-k> <c-o>:pyf $HOME/.vim/clang-format.py<cr>
+
 " This fixes comment indenting in Python (see ":h smartindent").
 inoremap # X#
 
