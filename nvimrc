@@ -28,13 +28,14 @@ Plug 'Valloric/YouCompleteMe'
 
 " Language-specific plugins.
 " Plug 'bfredl/nvim-ipy'    " ipython
-Plug 'gabrielelana/vim-markdown'
 Plug 'JuliaLang/julia-vim'
 " Plug 'LaTeX-Box-Team/LaTeX-Box'
 Plug 'lervag/vimtex'
 Plug 'chriskempson/base16-vim'
 Plug 'dag/vim-fish'
 Plug 'jvirtanen/vim-octave'
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
 
 " Colourschemes.
 Plug 'nanotech/jellybeans.vim'
