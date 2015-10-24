@@ -5,3 +5,6 @@
 # Backups.
 *.bak
 *.old
+
+# Neovim ShaDa file (see ":help shada").
+/shada/main.shada
