@@ -134,6 +134,9 @@ augroup fedora
     autocmd BufNewFile *.spec 0r /usr/share/vim/vimfiles/template.spec
 augroup END
 
+" Fix 'gx' mapping in Gnome 3.18 (not sure why it wasn't working...)
+let g:netrw_browsex_viewer = "xdg-open"
+
 " ========================================================================== "
 " LaTeX
 let g:tex_flavor = 'latex'
