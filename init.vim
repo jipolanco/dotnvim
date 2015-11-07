@@ -192,6 +192,9 @@ let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclu
 
 let g:tagbar_width = 30
 
+" Gutentags -- write tags files to this folder:
+let g:gutentags_cache_dir = '~/.cache/gutentags'
+
 " ========================================================================== "
 " MORE MAPPINGS.
 
