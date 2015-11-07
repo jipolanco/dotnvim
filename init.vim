@@ -5,6 +5,7 @@ set encoding=utf-8
 " PLUGINS
 call plug#begin('~/.nvim/plugged')
 
+Plug 'airblade/vim-gitgutter'
 Plug 'bling/vim-airline'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'honza/vim-snippets'
