@@ -43,12 +43,7 @@ Plug 'nanotech/jellybeans.vim'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'Wutzara/vim-materialtheme'
 
-if has('nvim')
-    " This version of solarized works better when using $NVIM_TUI_ENABLE_TRUE_COLOR = 1
-    Plug 'frankier/neovim-colors-solarized-truecolor-only'
-else
-    Plug 'altercation/vim-colors-solarized'
-endif
+Plug 'altercation/vim-colors-solarized'
 
 call plug#end()
 
@@ -56,7 +51,7 @@ call plug#end()
 " THEME / APPEARANCE
 " Use true colours in terminal (supported by Konsole).
 " https://github.com/neovim/neovim/wiki/FAQ#how-do-i-use-true-colors-in-the-terminal
-let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+" let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
 
 set background=dark
