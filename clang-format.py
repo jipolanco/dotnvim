@@ -1,4 +1,4 @@
-# https://raw.githubusercontent.com/llvm-mirror/clang/master/tools/clang-format/clang-format.py
+# https://raw.githubusercontent.com/llvm-mirror/clang/release_37/tools/clang-format/clang-format.py
 #
 # This file is a minimal clang-format vim-integration. To install:
 # - Change 'binary' if clang-format is not on the path (see below).
@@ -74,7 +74,7 @@ def main():
     startupinfo.wShowWindow = subprocess.SW_HIDE
 
   # Call formatter.
-  command = [binary, '-style', style, '-cursor', str(cursor), '-sort-includes']
+  command = [binary, '-style', style, '-cursor', str(cursor)]
   if lines != 'all':
     command.extend(['-lines', lines])
   if fallback_style:
