@@ -36,6 +36,7 @@ Plug 'chriskempson/base16-vim'
 Plug 'dag/vim-fish'
 Plug 'jvirtanen/vim-octave'
 Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-after'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 
 " Colourschemes.
@@ -191,6 +192,10 @@ let g:tagbar_width = 30
 " Gutentags -- write tags files to this folder:
 let g:gutentags_cache_dir = '~/.cache/gutentags'
 
+" vim-pandoc-after plugin (integrates vim-pandoc with other plugins)
+let g:pandoc#after#modules#enabled = ["ultisnips"]
+" let g:pandoc#formatting#mode = "A"  " Smart autoformatting // doesn't work!!
+
 " ========================================================================== "
 " MORE MAPPINGS.
 
@@ -231,6 +236,7 @@ nnoremap <leader>D :CtrlPDir<cr>      " <leader>d is used by YCM
 " YouCompleteMe
 nnoremap <leader>jJ :YcmCompleter GoTo<CR>
 nnoremap <leader>jj :YcmCompleter GoToImprecise<CR>
+nnoremap <leader>jD :YcmCompleter GetDoc<CR>
 nnoremap <leader>jd :YcmCompleter GoToDeclaration<CR>
 nnoremap <leader>jf :YcmCompleter FixIt<CR>
 
