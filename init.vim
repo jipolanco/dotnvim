@@ -188,8 +188,6 @@ let g:surround_indent = 1
 " From https://github.com/kien/ctrlp.vim/issues/174#issuecomment-49747252
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 
-let g:tagbar_width = 30
-
 " Gutentags -- write tags files to this folder:
 let g:gutentags_cache_dir = '~/.cache/gutentags'
 
