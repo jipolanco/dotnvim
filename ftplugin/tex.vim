@@ -67,6 +67,12 @@ function! s:latexSurround()
     let b:surround_{char2nr("c")} = "\\\1command: \1{\r}"
 endfunction
 
+" See ":h vimtex-faq-neovim"
+" Requires neovim-remote: https://github.com/mhinz/neovim-remote
+if has('nvim')
+    let g:vimtex_latexmk_progname = 'nvr'
+endif
+
 " ========================================================================== "
 " LatexBox plugin.
 
