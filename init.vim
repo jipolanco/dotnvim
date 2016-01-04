@@ -28,6 +28,9 @@ Plug 'tpope/vim-unimpaired'
 Plug 'Valloric/ListToggle'
 Plug 'Valloric/YouCompleteMe'
 
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+
 " Language-specific plugins.
 " Plug 'bfredl/nvim-ipy'    " ipython
 Plug 'JuliaLang/julia-vim'
