@@ -3,3 +3,10 @@ snippet brief "Doxygen \brief block" b
  *  $0
  */
 endsnippet
+
+snippet try "try/catch" b
+try {
+	$0
+} catch (${1:std::exception &e}) {
+}
+endsnippet
