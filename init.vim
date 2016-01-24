@@ -76,6 +76,7 @@ set relativenumber
 
 set lazyredraw  " don't redraw during macros, etc.
 
+set showcmd
 set showmatch
 set linebreak
 
