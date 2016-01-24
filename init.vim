@@ -7,7 +7,7 @@ call plug#begin('~/.nvim/plugged')
 
 Plug 'airblade/vim-gitgutter'
 Plug 'bling/vim-airline'
-Plug 'ctrlpvim/ctrlp.vim'
+" Plug 'ctrlpvim/ctrlp.vim'
 Plug 'honza/vim-snippets'
 Plug 'junegunn/vim-easy-align'
 Plug 'KabbAmine/zeavim.vim'
@@ -198,7 +198,7 @@ let g:gutentags_cache_dir = '~/.cache/gutentags'
 
 " vim-pandoc-after plugin (integrates vim-pandoc with other plugins)
 let g:pandoc#after#modules#enabled = ["ultisnips"]
-" let g:pandoc#formatting#mode = "A"  " Smart autoformatting // doesn't work!!
+let g:pandoc#formatting#mode = "ha"  " hard wraps, autoformatting
 
 " ========================================================================== "
 " MORE MAPPINGS.
@@ -228,14 +228,21 @@ nnoremap <silent> <F9> :TagbarToggle<CR>
 nnoremap <leader>n :NERDTreeToggle<cr>
 
 " CtrlP
-nnoremap <leader>b :CtrlPBuffer<cr>
-nnoremap <leader>m :CtrlPMRU<cr>
-nnoremap <leader>T :CtrlPTag<cr>
-nnoremap <leader>t :CtrlPBufTagAll<cr>
-nnoremap <leader>u :CtrlPUndo<cr>
-nnoremap <leader>M :CtrlPMixed<cr>
-nnoremap <leader>L :CtrlPLine<cr>     " <leader>l is used by ListToggle?
-nnoremap <leader>D :CtrlPDir<cr>      " <leader>d is used by YCM
+" nnoremap <leader>b :CtrlPBuffer<cr>
+" nnoremap <leader>m :CtrlPMRU<cr>
+" nnoremap <leader>T :CtrlPTag<cr>
+" nnoremap <leader>t :CtrlPBufTagAll<cr>
+" nnoremap <leader>u :CtrlPUndo<cr>
+" nnoremap <leader>M :CtrlPMixed<cr>
+" nnoremap <leader>L :CtrlPLine<cr>     " <leader>l is used by ListToggle?
+" nnoremap <leader>D :CtrlPDir<cr>      " <leader>d is used by YCM
+
+" FZF (instead of CtrlP)
+nnoremap <c-p> :FZF<cr>
+nnoremap <leader>b :Buffers<cr>
+nnoremap <leader>T :Tags<cr>
+nnoremap <leader>t :BTags<cr>
+nnoremap <leader>L :Lines<cr>     " <leader>l is used by ListToggle?
 
 " YouCompleteMe
 nnoremap <leader>jJ :YcmCompleter GoTo<CR>
