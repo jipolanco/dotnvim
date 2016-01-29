@@ -201,6 +201,10 @@ let g:gutentags_cache_dir = '~/.cache/gutentags'
 let g:pandoc#after#modules#enabled = ["ultisnips"]
 let g:pandoc#formatting#mode = "ha"  " hard wraps, autoformatting
 
+" Remove trailing whitespace from Pandoc markdown files (which are generated
+" by autoformatting).
+autocmd BufWritePre *.md :%s/\s\+$//e
+
 " ========================================================================== "
 " MORE MAPPINGS.
 
