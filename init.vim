@@ -3,7 +3,7 @@ set encoding=utf-8
 
 " ========================================================================== "
 " PLUGINS
-call plug#begin('~/.nvim/plugged')
+call plug#begin('~/.config/nvim/plugged')
 
 Plug 'airblade/vim-gitgutter'
 " Plug 'ctrlpvim/ctrlp.vim'
