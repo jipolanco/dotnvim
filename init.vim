@@ -6,6 +6,7 @@ set encoding=utf-8
 call plug#begin('~/.config/nvim/plugged')
 
 Plug 'airblade/vim-gitgutter'
+Plug 'benekastah/neomake'
 " Plug 'ctrlpvim/ctrlp.vim'
 Plug 'honza/vim-snippets'
 Plug 'junegunn/vim-easy-align'
@@ -15,7 +16,7 @@ Plug 'ludovicchabant/vim-gutentags'
 Plug 'majutsushi/tagbar'
 Plug 'Raimondi/delimitMate'
 Plug 'scrooloose/nerdtree'
-Plug 'scrooloose/syntastic'
+" Plug 'scrooloose/syntastic'
 Plug 'SirVer/ultisnips'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-commentary'
@@ -172,12 +173,15 @@ let g:syntastic_error_symbol='✗'
 let g:syntastic_warning_symbol='⚠'
 let g:syntastic_always_populate_loc_list = 1
 
+" Run Neomake when writing a file.
+autocmd! BufWritePost * Neomake
+
 let g:UltiSnipsEditSplit = 'vertical'
 let g:UltiSnipsExpandTrigger = '<a-cr>'     " alt-enter
 
 " This fixes autocompletion of snippets with YCM.
 " https://github.com/Valloric/YouCompleteMe/issues/1214#issuecomment-77366433
-let g:UltiSnipsUsePythonVersion = 2
+" let g:UltiSnipsUsePythonVersion = 3
 
 " Alternative triggers that work in gvim/vim.
 inoremap <c-cr> <c-r>=UltiSnips#ExpandSnippet()<cr>
