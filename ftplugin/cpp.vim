@@ -9,3 +9,6 @@ setlocal tabstop=8
 " Mappings for clang-format
 map <c-k> :pyf $HOME/.vim/clang-format.py<cr>
 imap <c-k> <c-o>:pyf $HOME/.vim/clang-format.py<cr>
+
+" Disable neomake (conflicts with YouCompleteMe)
+let g:neomake_cpp_enabled_makers = []
