@@ -6,3 +6,6 @@ setlocal expandtab
 setlocal shiftwidth=2
 setlocal tabstop=8
 
+" Mappings for clang-format
+map <c-k> :pyf $HOME/.vim/clang-format.py<cr>
+imap <c-k> <c-o>:pyf $HOME/.vim/clang-format.py<cr>
