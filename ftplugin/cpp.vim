@@ -7,8 +7,13 @@ setlocal shiftwidth=2
 setlocal tabstop=8
 
 " Mappings for clang-format
-map <c-k> :pyf $HOME/.vim/clang-format.py<cr>
-imap <c-k> <c-o>:pyf $HOME/.vim/clang-format.py<cr>
+if has('python3')
+    map <c-k> :py3file $HOME/.config/nvim/clang-format.py<cr>
+    imap <c-k> <c-o>:py3file $HOME/.config/nvim/clang-format.py<cr>
+else
+    map <c-k> :pyfile $HOME/.config/nvim/clang-format_py2.py<cr>
+    imap <c-k> <c-o>:pyfile $HOME/.config/nvim/clang-format_py2.py<cr>
+end
 
 " Disable neomake (conflicts with YouCompleteMe)
 let g:neomake_cpp_enabled_makers = []
