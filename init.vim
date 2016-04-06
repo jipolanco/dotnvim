@@ -60,7 +60,7 @@ call plug#end()
 " Use true colours in terminal (supported by Konsole).
 " https://github.com/neovim/neovim/wiki/FAQ#how-do-i-use-true-colors-in-the-terminal
 " let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+" let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
 
 set background=dark
 colorscheme solarized
