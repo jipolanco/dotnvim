@@ -50,8 +50,14 @@ Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'nanotech/jellybeans.vim'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'Wutzara/vim-materialtheme'
+Plug 'morhetz/gruvbox'
 
-Plug 'altercation/vim-colors-solarized'
+if has('nvim') && $NVIM_TUI_ENABLE_TRUE_COLOR
+    " Load patched solarized.
+    Plug 'frankier/neovim-colors-solarized-truecolor-only'
+else
+    Plug 'altercation/vim-colors-solarized'
+end
 
 call plug#end()
 
