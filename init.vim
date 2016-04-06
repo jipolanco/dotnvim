@@ -69,8 +69,15 @@ call plug#end()
 " let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
 
 set background=dark
-colorscheme solarized
-let g:airline_theme = 'solarized'
+
+if $TERM_COLOURSCHEME == 'gruvbox'
+    let g:gruvbox_italic = 1
+    colorscheme gruvbox
+    let g:airline_theme = 'gruvbox'
+else
+    colorscheme solarized
+    let g:airline_theme = 'solarized'
+end
 
 " let g:airline_powerline_fonts = 0
 " let g:airline#extensions#tabline#enabled = 1
