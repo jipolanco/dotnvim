@@ -33,6 +33,7 @@ let g:vimtex_fold_envs = 0
 
 let g:vimtex_latexmk_continuous = 1
 let g:vimtex_latexmk_background = 1  " always run latexmk in the background
+let g:vimtex_latexmk_options = '-verbose -file-line-error -synctex=1 -interaction=nonstopmode'
 
 " Open table of contents (shortcut \lt) and table of labels (\ly) at the right.
 let g:vimtex_index_split_pos = 'vert rightbelow'
