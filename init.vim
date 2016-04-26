@@ -5,18 +5,19 @@ set encoding=utf-8
 " PLUGINS
 call plug#begin('~/.config/nvim/plugged')
 
+" Plug 'ctrlpvim/ctrlp.vim'
+" Plug 'scrooloose/syntastic'
 Plug 'airblade/vim-gitgutter'
 Plug 'benekastah/neomake'
-" Plug 'ctrlpvim/ctrlp.vim'
 Plug 'honza/vim-snippets'
 Plug 'junegunn/vim-easy-align'
 Plug 'KabbAmine/zeavim.vim'
+Plug 'kshenoy/vim-signature'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'majutsushi/tagbar'
 Plug 'Raimondi/delimitMate'
 Plug 'scrooloose/nerdtree'
-" Plug 'scrooloose/syntastic'
 Plug 'SirVer/ultisnips'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-commentary'
@@ -306,12 +307,12 @@ nnoremap <A-k> <C-w>k
 nnoremap <A-l> <C-w>l
 
 " Terminal mappings (see ":h nvim-terminal-emulator-input").
-if has('nvim')
-    tnoremap <M-h> <C-\><C-n><C-w>h     " move to left window
-    tnoremap <M-j> <C-\><C-n><C-w>j     " etc...
-    tnoremap <M-k> <C-\><C-n><C-w>k
-    tnoremap <M-l> <C-\><C-n><C-w>l
+" if has('nvim')
+"     tnoremap <M-h> <C-\><C-n><C-w>h     " move to left window
+"     tnoremap <M-j> <C-\><C-n><C-w>j     " etc...
+"     tnoremap <M-k> <C-\><C-n><C-w>k
+"     tnoremap <M-l> <C-\><C-n><C-w>l
 
-    " NOTE: using just one <Esc> conflicts with the terminal vi-mode.
-    tnoremap <Esc><Esc> <C-\><C-n>      " exit terminal mode
-end
+"     " NOTE: using just one <Esc> conflicts with the terminal vi-mode.
+"     tnoremap <Esc><Esc> <C-\><C-n>      " exit terminal mode
+" end
