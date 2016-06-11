@@ -9,6 +9,7 @@ call plug#begin('~/.config/nvim/plugged')
 " Plug 'scrooloose/syntastic'
 Plug 'airblade/vim-gitgutter'
 Plug 'benekastah/neomake'
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'honza/vim-snippets'
 Plug 'junegunn/vim-easy-align'
 Plug 'KabbAmine/zeavim.vim'
