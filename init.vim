@@ -47,6 +47,9 @@ Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-after'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 
+Plug 'hail2u/vim-css3-syntax'
+" Plug 'skammer/vim-css-color'
+
 " Colourschemes.
 Plug 'nanotech/jellybeans.vim'
 Plug 'NLKNguyen/papercolor-theme'
@@ -223,6 +226,11 @@ let g:pandoc#formatting#mode = "ha"  " hard wraps, autoformatting
 " Remove trailing whitespace from Pandoc markdown files (which are generated
 " by autoformatting).
 autocmd BufWritePre *.md :%s/\s\+$//e
+
+
+" Disable gitgutter mappings. Some conflict with vimtex (for example "ic",
+" "ac" for LaTeX commands).
+let g:gitgutter_map_keys = 0
 
 " ========================================================================== "
 " MORE MAPPINGS.

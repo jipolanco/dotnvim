@@ -1,5 +1,4 @@
 setlocal shiftwidth=2
-setlocal tabstop=2
 
 " Use conceal mode (see ":h tex-conceal").
 setlocal conceallevel=2
@@ -53,7 +52,14 @@ if !exists('g:ycm_semantic_triggers')
   let g:ycm_semantic_triggers = {}
 endif
 let g:ycm_semantic_triggers.tex = [
-      \ 're!\\[A-Za-z]*(ref|cite)[A-Za-z]*([^]]*])?{([^}]*, ?)*'
+      \ 're!\\[A-Za-z]*cite[A-Za-z]*(\[[^]]*\]){0,2}{[^}]*',
+      \ 're!\\[A-Za-z]*ref({[^}]*|range{([^,{}]*(}{)?))',
+      \ 're!\\hyperref\[[^]]*',
+      \ 're!\\includegraphics\*?(\[[^]]*\]){0,2}{[^}]*',
+      \ 're!\\(include(only)?|input){[^}]*',
+      \ 're!\\\a*(gls|Gls|GLS)(pl)?\a*(\s*\[[^]]*\]){0,2}\s*\{[^}]*',
+      \ 're!\\includepdf(\s*\[[^]]*\])?\s*\{[^}]*',
+      \ 're!\\includestandalone(\s*\[[^]]*\])?\s*\{[^}]*',
       \ ]
 
 " See ":h vimtex-faq-surround".
@@ -73,27 +79,3 @@ endfunction
 if has('nvim')
     let g:vimtex_latexmk_progname = 'nvr'
 endif
-
-" ========================================================================== "
-" LatexBox plugin.
-
-" Forward search with Okular (mapping is only defined if LatexBox is loaded).
-if exists('g:LatexBox_quickfix')
-    nnoremap <silent> <LocalLeader>ls :silent
-                \ !okular --unique
-                \ <C-R>=LatexBox_GetOutputFile()<CR>
-                \ \#src:<C-R>=line('.')<CR><C-R>=expand('%:p')<CR> &<CR>
-endif
-
-let g:LatexBox_viewer = 'okular --unique'
-let g:LatexBox_latexmk_async = 1
-let g:LatexBox_latexmk_preview_continuously = 1
-let g:LatexBox_quickfix = 2   " set to 4 to disable opening quickfix when no errors
-let g:LatexBox_split_side = 'rightbelow'
-let g:LatexBox_ignore_warnings = []
-
-let g:LatexBox_Folding = 1
-let g:LatexBox_fold_envs = 0
-" let g:LatexBox_fold_automatic = 0  " uncomment this if things are too slow
-
-" ========================================================================== "
