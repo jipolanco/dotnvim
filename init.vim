@@ -236,6 +236,11 @@ let g:gitgutter_map_keys = 0
 " ========================================================================== "
 " MORE MAPPINGS.
 
+" Use <leader>h to clear the highlighting of :set hlsearch.
+" Copied from vim-sensible plugin, which uses <C-L>, but this mapping conflicts
+" with vim-tmux-navigator.
+nnoremap <silent> <leader>h :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><leader>h
+
 " Use the left/right arrow keys to change buffers or tabs.
 nnoremap <Left>    :bprev<CR>
 nnoremap <Right>   :bnext<CR>
