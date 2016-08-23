@@ -1,6 +1,11 @@
 filetype indent plugin on
 set encoding=utf-8
 
+if has('nvim')
+    " Use true colours in terminal.
+    set termguicolors   " neovim >= 0.1.5
+end
+
 " ========================================================================== "
 " PLUGINS
 call plug#begin('~/.config/nvim/plugged')
@@ -57,7 +62,7 @@ Plug 'NLKNguyen/papercolor-theme'
 Plug 'Wutzara/vim-materialtheme'
 Plug 'morhetz/gruvbox'
 
-if has('nvim') && $NVIM_TUI_ENABLE_TRUE_COLOR
+if has('nvim') && &termguicolors
     " Load patched solarized.
     Plug 'frankier/neovim-colors-solarized-truecolor-only'
 else
@@ -68,11 +73,8 @@ call plug#end()
 
 " ========================================================================== "
 " THEME / APPEARANCE
-" Use true colours in terminal (supported by Konsole).
-" https://github.com/neovim/neovim/wiki/FAQ#how-do-i-use-true-colors-in-the-terminal
-" let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
-" let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
 
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
 set background=dark
 
 if $TERM_COLOURSCHEME == 'gruvbox'
