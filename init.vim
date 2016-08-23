@@ -223,6 +223,8 @@ let g:gutentags_cache_dir = '~/.cache/gutentags'
 " vim-pandoc-after plugin (integrates vim-pandoc with other plugins)
 let g:pandoc#after#modules#enabled = ["ultisnips"]
 let g:pandoc#formatting#mode = "ha"  " hard wraps, autoformatting
+" (default = 1) don't use italics, they don't work for me in neovim
+let g:pandoc#syntax#style#emphases = 0
 
 " Remove trailing whitespace from Pandoc markdown files (which are generated
 " by autoformatting).
@@ -241,26 +243,12 @@ let g:gitgutter_map_keys = 0
 " with vim-tmux-navigator.
 nnoremap <silent> <leader>h :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><leader>h
 
-" Use the left/right arrow keys to change buffers or tabs.
-nnoremap <Left>    :bprev<CR>
-nnoremap <Right>   :bnext<CR>
-nnoremap <M-Left>  :tabprev<CR>  " M == Alt key
-nnoremap <M-Right> :tabnext<CR>
-
-" TODO Use the up/down arrow keys for something!!
-
-
 " This changes the behaviour of j and k in wrapped lines.
 " noremap j gj
 " noremap k gk
 
 " Change dir to the directory of the open buffer.
 nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
-
-" Easier copy/paste with system clipboard.
-" PROBLEM: apparently, <c-v> and <c-s-v> are the same for (n)vim.
-" vnoremap <c-s-c> "+y
-" inoremap <c-s-v> <c-r>+
 
 nnoremap <silent> <F9> :TagbarToggle<CR>
 nnoremap <leader>n :NERDTreeToggle<cr>
@@ -313,12 +301,6 @@ nmap ga <Plug>(EasyAlign)
 " Based on http://vim.wikia.com/wiki/Underline_using_dashes_automatically
 nmap <leader>= yypv$r=
 nmap <leader>- yypv$r-
-
-" Navigate between windows.
-nnoremap <A-h> <C-w>h
-nnoremap <A-j> <C-w>j
-nnoremap <A-k> <C-w>k
-nnoremap <A-l> <C-w>l
 
 " Terminal mappings (see ":h nvim-terminal-emulator-input").
 " if has('nvim')
