@@ -275,7 +275,8 @@ nnoremap <leader>L :Lines<cr>     " <leader>l is used by ListToggle?
 " YouCompleteMe
 nnoremap <leader>jJ :YcmCompleter GoTo<CR>
 nnoremap <leader>jj :YcmCompleter GoToImprecise<CR>
-nnoremap <leader>jD :YcmCompleter GetDoc<CR>
+nnoremap <leader>j? :YcmCompleter GetDoc<CR>
+nnoremap <leader>jD :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>jd :YcmCompleter GoToDeclaration<CR>
 nnoremap <leader>jf :YcmCompleter FixIt<CR>
 
