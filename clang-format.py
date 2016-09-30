@@ -1,5 +1,4 @@
-# https://raw.githubusercontent.com/llvm-mirror/clang/release_37/tools/clang-format/clang-format.py
-#
+# https://raw.githubusercontent.com/llvm-mirror/clang/master/tools/clang-format/clang-format.py
 # This file is a minimal clang-format vim-integration. To install:
 # - Change 'binary' if clang-format is not on the path (see below).
 # - Add to your .vimrc:
@@ -27,6 +26,7 @@
 #
 # It operates on the current, potentially unsaved buffer and does not create
 # or save any files. To revert a formatting, just undo.
+from __future__ import print_function
 
 import difflib
 import json
@@ -51,6 +51,7 @@ if vim.eval('exists("g:clang_format_fallback_style")') == "1":
 
 def main():
   # Get the current text.
+  encoding = vim.eval("&encoding")
   buf = vim.current.buffer
   text = '\n'.join(buf)
 
@@ -81,21 +82,22 @@ def main():
     command.extend(['-fallback-style', fallback_style])
   if vim.current.buffer.name:
     command.extend(['-assume-filename', vim.current.buffer.name])
-
   p = subprocess.Popen(command,
                        stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                        stdin=subprocess.PIPE, startupinfo=startupinfo)
-  stdout, stderr = p.communicate(input=text.encode())
+  stdout, stderr = p.communicate(input=text.encode(encoding))
 
   # If successful, replace buffer contents.
   if stderr:
     print(stderr)
 
   if not stdout:
-    print(('No output from clang-format (crashed?).\n' +
-        'Please report to bugs.llvm.org.'))
+    print(
+        'No output from clang-format (crashed?).\n'
+        'Please report to bugs.llvm.org.'
+    )
   else:
-    lines = stdout.decode().split('\n')
+    lines = stdout.decode(encoding).split('\n')
     output = json.loads(lines[0])
     lines = lines[1:]
     sequence = difflib.SequenceMatcher(None, vim.current.buffer, lines)
