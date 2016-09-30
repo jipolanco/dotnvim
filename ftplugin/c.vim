@@ -1,6 +1,6 @@
-let b:commentary_format = '// %s'
+" The configuration is very similar to the one used for C++.
 
-" Google style C++ (see `clang-format -style=google -dump-config`)
+" Google style C (see `clang-format -style=google -dump-config`)
 setlocal textwidth=80
 setlocal expandtab
 setlocal shiftwidth=2
@@ -18,3 +18,4 @@ end
 
 " Disable neomake (conflicts with YouCompleteMe)
 let g:neomake_cpp_enabled_makers = []
+
