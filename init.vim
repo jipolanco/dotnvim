@@ -246,8 +246,8 @@ let g:gitgutter_map_keys = 0
 nnoremap <silent> <leader>h :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><leader>h
 
 " This changes the behaviour of j and k in wrapped lines.
-noremap j gj
-noremap k gk
+" noremap j gj
+" noremap k gk
 
 " Change dir to the directory of the open buffer.
 nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
