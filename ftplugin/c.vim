@@ -17,5 +17,4 @@ else
 end
 
 " Disable neomake (conflicts with YouCompleteMe)
-let g:neomake_cpp_enabled_makers = []
-
+let g:neomake_c_enabled_makers = []
