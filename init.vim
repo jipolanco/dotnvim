@@ -42,7 +42,7 @@ Plug 'junegunn/fzf.vim'
 
 " Language-specific plugins.
 " Plug 'bfredl/nvim-ipy'    " ipython
-Plug 'JuliaLang/julia-vim'
+Plug 'JuliaEditorSupport/julia-vim'
 " Plug 'LaTeX-Box-Team/LaTeX-Box'
 Plug 'lervag/vimtex'
 Plug 'chriskempson/base16-vim'
@@ -231,7 +231,6 @@ let g:pandoc#syntax#style#emphases = 0
 " Remove trailing whitespace from Pandoc markdown files (which are generated
 " by autoformatting).
 autocmd BufWritePre *.md :%s/\s\+$//e
-
 
 " Disable gitgutter mappings. Some conflict with vimtex (for example "ic",
 " "ac" for LaTeX commands).
