@@ -13,7 +13,10 @@ call plug#begin('~/.config/nvim/plugged')
 " Plug 'ctrlpvim/ctrlp.vim'
 " Plug 'scrooloose/syntastic'
 Plug 'airblade/vim-gitgutter'
-Plug 'benekastah/neomake'
+" Plug 'benekastah/neomake'
+if has('nvim')
+    Plug 'w0rp/ale'
+end
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'honza/vim-snippets'
 Plug 'junegunn/vim-easy-align'
@@ -194,7 +197,13 @@ let g:syntastic_warning_symbol='⚠'
 let g:syntastic_always_populate_loc_list = 1
 
 " Run Neomake when writing a file.
-autocmd! BufWritePost * Neomake
+" autocmd! BufWritePost * Neomake
+
+" Disable ALE for C and C++ (conflicts with YCM)
+let g:ale_linters = {
+            \   'c': [],
+            \   'cpp': [],
+            \}
 
 let g:UltiSnipsEditSplit = 'vertical'
 let g:UltiSnipsExpandTrigger = '<a-cr>'     " alt-enter
