@@ -1,5 +1,6 @@
-filetype indent plugin on
 set encoding=utf-8
+scriptencoding utf-8
+filetype indent plugin on
 
 if has('nvim')
     " Use true colours in terminal.
@@ -11,12 +12,12 @@ end
 call plug#begin('~/.config/nvim/plugged')
 
 " Plug 'ctrlpvim/ctrlp.vim'
-" Plug 'scrooloose/syntastic'
+Plug 'scrooloose/syntastic'
 Plug 'airblade/vim-gitgutter'
 " Plug 'benekastah/neomake'
-if has('nvim')
-    Plug 'w0rp/ale'
-end
+" if has('nvim')
+"     Plug 'w0rp/ale'
+" end
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'honza/vim-snippets'
 Plug 'junegunn/vim-easy-align'
@@ -55,6 +56,8 @@ Plug 'keith/tmux.vim'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-after'
 Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'rust-lang/rust.vim'
+Plug 'cespare/vim-toml'
 
 Plug 'hail2u/vim-css3-syntax'
 " Plug 'skammer/vim-css-color'
@@ -80,13 +83,18 @@ call plug#end()
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
 set background=dark
 
-if $TERM_COLOURSCHEME == 'gruvbox'
+if $TERM_COLOURSCHEME ==# 'gruvbox'
     let g:gruvbox_italic = 1
     colorscheme gruvbox
     let g:airline_theme = 'gruvbox'
 else
     colorscheme solarized
     let g:airline_theme = 'solarized'
+end
+
+if $KONSOLE_PROFILE_NAME ==# 'Solarized Light'
+    colorscheme solarized
+    set background=light
 end
 
 " let g:airline_powerline_fonts = 0
@@ -110,8 +118,8 @@ set hidden
 
 " ========================================================================== "
 " GENERAL STUFF
-let mapleader = ","
-let maplocalleader = "\\"
+let mapleader = ','
+let maplocalleader = '\'
 set wildignore+=*.o,*~,*.pyc
 set splitright
 set mouse=a
@@ -163,7 +171,7 @@ augroup fedora
 augroup END
 
 " Fix 'gx' mapping in Gnome 3.18 (not sure why it wasn't working...)
-let g:netrw_browsex_viewer = "xdg-open"
+let g:netrw_browsex_viewer = 'xdg-open'
 
 " ========================================================================== "
 " LaTeX
@@ -188,6 +196,14 @@ augroup set_other_filetypes
     autocmd BufRead,BufNewFile *.plt,.gnuplot set filetype=gnuplot
 augroup END
 
+" Rust
+let g:rust_conceal = 1
+let g:rust_conceal_mod_path = 0
+let g:rust_conceal_pub = 0
+let g:rust_fold = 1
+let g:rustfmt_autosave = 1
+let g:ftplugin_rust_source_path = $HOME.'/src/rust/src'
+
 " ========================================================================== "
 " PLUGINS
 let NERDTreeQuitOnOpen=1
@@ -195,6 +211,7 @@ let NERDTreeQuitOnOpen=1
 let g:syntastic_error_symbol='✗'
 let g:syntastic_warning_symbol='⚠'
 let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_rust_checkers = ['rustc']
 
 " Run Neomake when writing a file.
 " autocmd! BufWritePost * Neomake
@@ -208,10 +225,6 @@ let g:ale_linters = {
 let g:UltiSnipsEditSplit = 'vertical'
 let g:UltiSnipsExpandTrigger = '<a-cr>'     " alt-enter
 
-" This fixes autocompletion of snippets with YCM.
-" https://github.com/Valloric/YouCompleteMe/issues/1214#issuecomment-77366433
-" let g:UltiSnipsUsePythonVersion = 3
-
 " Alternative triggers that work in gvim/vim.
 inoremap <c-cr> <c-r>=UltiSnips#ExpandSnippet()<cr>
 inoremap <c-\>  <c-r>=UltiSnips#ExpandSnippet()<cr>
@@ -221,6 +234,8 @@ let g:ycm_seed_identifiers_with_syntax = 1
 " let g:ycm_global_ycm_extra_conf = '~/.nvim/ycm_extra_conf.default.py'
 let g:ycm_filepath_completion_use_working_dir = 1
 let g:ycm_max_diagnostics_to_display = 300
+let g:ycm_python_binary_path = 'python3'
+let g:ycm_rust_src_path = $HOME.'/src/rust/src'
 
 let g:surround_indent = 1
 
@@ -232,14 +247,16 @@ let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclu
 let g:gutentags_cache_dir = '~/.cache/gutentags'
 
 " vim-pandoc-after plugin (integrates vim-pandoc with other plugins)
-let g:pandoc#after#modules#enabled = ["ultisnips"]
-let g:pandoc#formatting#mode = "ha"  " hard wraps, autoformatting
+let g:pandoc#after#modules#enabled = ['ultisnips']
+let g:pandoc#formatting#mode = 'ha'  " hard wraps, autoformatting
 " (default = 1) don't use italics, they don't work for me in neovim
 let g:pandoc#syntax#style#emphases = 0
 
 " Remove trailing whitespace from Pandoc markdown files (which are generated
 " by autoformatting).
-autocmd BufWritePre *.md :%s/\s\+$//e
+augroup PANDOC_TRAILING
+    autocmd BufWritePre *.md :%s/\s\+$//e
+augroup END
 
 " Disable gitgutter mappings. Some conflict with vimtex (for example "ic",
 " "ac" for LaTeX commands).
