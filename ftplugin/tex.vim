@@ -44,7 +44,7 @@ let g:vimtex_quickfix_open_on_warning = 0
 " NOTE: backward search doesn't work right now with neovim.
 " It works with vim/gvim though (see ":h vimtex-synctex-backward-search").
 let g:vimtex_view_general_viewer = 'okular'
-let g:vimtex_view_general_options = '--unique @pdf\#src:@line@tex'
+let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
 let g:vimtex_view_general_options_latexmk = '--unique'
 
 " See ":h vimtex-complete-youcompleteme".
