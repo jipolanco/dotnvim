@@ -58,6 +58,7 @@ Plug 'vim-pandoc/vim-pandoc-after'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'rust-lang/rust.vim'
 Plug 'cespare/vim-toml'
+Plug 'Vimjas/vim-python-pep8-indent'
 
 Plug 'hail2u/vim-css3-syntax'
 " Plug 'skammer/vim-css-color'
