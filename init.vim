@@ -2,9 +2,9 @@ set encoding=utf-8
 scriptencoding utf-8
 filetype indent plugin on
 
-if has('nvim')
-    " Use true colours in terminal.
-    set termguicolors   " neovim >= 0.1.5
+" Use true colours in terminal.
+if has('termguicolors')
+    set termguicolors
 end
 
 " ========================================================================== "
@@ -68,8 +68,9 @@ Plug 'nanotech/jellybeans.vim'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'Wutzara/vim-materialtheme'
 Plug 'morhetz/gruvbox'
+Plug 'lifepillar/vim-solarized8'
 
-if has('nvim') && &termguicolors
+if &termguicolors
     " Load patched solarized.
     Plug 'frankier/neovim-colors-solarized-truecolor-only'
 else
@@ -89,18 +90,24 @@ if $TERM_COLOURSCHEME ==# 'gruvbox'
     colorscheme gruvbox
     let g:airline_theme = 'gruvbox'
 else
-    colorscheme solarized
+    colorscheme solarized8_dark
     let g:airline_theme = 'solarized'
 end
 
 if $KONSOLE_PROFILE_NAME ==# 'Solarized Light'
-    colorscheme solarized
-    set background=light
+    colorscheme solarized8_light
+end
+
+" Fix solarized8 colour schemes in vim + tmux (see `:h xterm-true-color`)
+if !has('nvim')
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 end
 
 " let g:airline_powerline_fonts = 0
 " let g:airline#extensions#tabline#enabled = 1
 " let g:airline#extensions#tabline#tab_nr_type = 1 " show tab number
+let g:airline_symbols_ascii = 1  " unicode symbols look weird...
 
 " Height of the command bar
 set cmdheight=2
@@ -311,6 +318,12 @@ nmap <leader>gg :Gstatus<CR>
 nmap <leader>gd :Gdiff<CR>
 nmap <leader>gw :Gwrite<CR>
 nmap <leader>ge :Gedit<CR>
+
+" Solarized8: toggle between dark and light variants (taken from their README.md)
+nnoremap  <leader>B :<c-u>exe "colors" (g:colors_name =~# "dark"
+    \ ? substitute(g:colors_name, 'dark', 'light', '')
+    \ : substitute(g:colors_name, 'light', 'dark', '')
+    \ )<cr>
 
 " This fixes comment indenting in Python (see ":h smartindent").
 inoremap # X#
