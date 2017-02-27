@@ -119,7 +119,7 @@ set hidden
 
 " ========================================================================== "
 " GENERAL STUFF
-let mapleader = ','
+let mapleader = "\<Space>"
 let maplocalleader = '\'
 set wildignore+=*.o,*~,*.pyc
 set splitright
