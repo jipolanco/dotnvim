@@ -27,7 +27,7 @@ let g:syntastic_tex_checkers = ['chktex', 'lacheck']
 " else
 "     let g:vimtex_fold_enabled = 1
 " end
-let g:vimtex_fold_enabled = 0
+let g:vimtex_fold_enabled = 1
 let g:vimtex_fold_envs = 0
 
 let g:vimtex_latexmk_continuous = 1

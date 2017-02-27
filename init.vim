@@ -210,7 +210,7 @@ let g:rust_conceal_mod_path = 0
 let g:rust_conceal_pub = 0
 let g:rust_fold = 1
 let g:rustfmt_autosave = 1
-let g:ftplugin_rust_source_path = $HOME.'/src/rust/src'
+let g:ftplugin_rust_source_path = $RUST_SRC_PATH
 
 " ========================================================================== "
 " PLUGINS
@@ -219,7 +219,7 @@ let NERDTreeQuitOnOpen=1
 let g:syntastic_error_symbol='✗'
 let g:syntastic_warning_symbol='⚠'
 let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_rust_checkers = ['rustc']
+let g:syntastic_rust_checkers = ['rustc']
 
 " Run Neomake when writing a file.
 " autocmd! BufWritePost * Neomake
@@ -243,7 +243,7 @@ let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_filepath_completion_use_working_dir = 1
 let g:ycm_max_diagnostics_to_display = 300
 let g:ycm_python_binary_path = 'python3'
-let g:ycm_rust_src_path = $HOME.'/src/rust/src'
+let g:ycm_rust_src_path = $RUST_SRC_PATH
 
 let g:surround_indent = 1
 
