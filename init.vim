@@ -288,22 +288,20 @@ nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
 nnoremap <silent> <F9> :TagbarToggle<CR>
 nnoremap <leader>n :NERDTreeToggle<cr>
 
-" CtrlP
-" nnoremap <leader>b :CtrlPBuffer<cr>
-" nnoremap <leader>m :CtrlPMRU<cr>
-" nnoremap <leader>T :CtrlPTag<cr>
-" nnoremap <leader>t :CtrlPBufTagAll<cr>
-" nnoremap <leader>u :CtrlPUndo<cr>
-" nnoremap <leader>M :CtrlPMixed<cr>
-" nnoremap <leader>L :CtrlPLine<cr>     " <leader>l is used by ListToggle?
-" nnoremap <leader>D :CtrlPDir<cr>      " <leader>d is used by YCM
-
-" FZF (instead of CtrlP)
-nnoremap <c-p> :FZF<cr>
+" FZF
 nnoremap <leader>b :Buffers<cr>
+" Files in the directory of the current file.
+nnoremap <leader>f :Files %:p:h<cr>
+" Git files (mapping is compatible with fugitive!).
+nnoremap <leader>gf :GFiles<cr>
 nnoremap <leader>T :Tags<cr>
 nnoremap <leader>t :BTags<cr>
-nnoremap <leader>L :Lines<cr>     " <leader>l is used by ListToggle?
+" Note: <leader>l is used by ListToggle
+nnoremap <leader>L :BLines<cr>
+nnoremap <leader>H :History<cr>
+nnoremap <leader>: :History:<cr>
+nnoremap <leader>/ :History/<cr>
+nnoremap <leader>w :Windows<cr>
 
 " YouCompleteMe
 nnoremap <leader>jJ :YcmCompleter GoTo<CR>
