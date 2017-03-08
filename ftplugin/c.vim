@@ -9,11 +9,9 @@ setlocal tabstop=2
 
 " Mappings for clang-format
 if has('python3')
-    map <c-k> :py3file $HOME/.config/nvim/clang-format.py<cr>
-    imap <c-k> <c-o>:py3file $HOME/.config/nvim/clang-format.py<cr>
+    map <localleader>f :py3file $HOME/.config/nvim/clang-format.py<cr>
 else
-    map <c-k> :pyfile $HOME/.config/nvim/clang-format_py2.py<cr>
-    imap <c-k> <c-o>:pyfile $HOME/.config/nvim/clang-format_py2.py<cr>
+    map <localleader>f :pyfile $HOME/.config/nvim/clang-format_py2.py<cr>
 end
 
 " Disable neomake (conflicts with YouCompleteMe)
