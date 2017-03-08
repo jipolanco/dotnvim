@@ -11,13 +11,9 @@ end
 " PLUGINS
 call plug#begin('~/.config/nvim/plugged')
 
-" Plug 'ctrlpvim/ctrlp.vim'
-Plug 'scrooloose/syntastic'
 Plug 'airblade/vim-gitgutter'
-" Plug 'benekastah/neomake'
-" if has('nvim')
-"     Plug 'w0rp/ale'
-" end
+" Plug 'scrooloose/syntastic'
+Plug 'w0rp/ale'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'honza/vim-snippets'
 Plug 'junegunn/vim-easy-align'
@@ -104,10 +100,9 @@ if !has('nvim')
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 end
 
-" let g:airline_powerline_fonts = 0
 " let g:airline#extensions#tabline#enabled = 1
 " let g:airline#extensions#tabline#tab_nr_type = 1 " show tab number
-let g:airline_symbols_ascii = 1  " unicode symbols look weird...
+" let g:airline_symbols_ascii = 1  " unicode symbols look weird...
 
 " Height of the command bar
 set cmdheight=2
@@ -126,8 +121,8 @@ set hidden
 
 " ========================================================================== "
 " GENERAL STUFF
-let mapleader = "\<Space>"
-let maplocalleader = '\'
+let g:mapleader = "\<Space>"
+let g:maplocalleader = '\'
 set wildignore+=*.o,*~,*.pyc
 set splitright
 set mouse=a
@@ -214,7 +209,7 @@ let g:ftplugin_rust_source_path = $RUST_SRC_PATH
 
 " ========================================================================== "
 " PLUGINS
-let NERDTreeQuitOnOpen=1
+let g:NERDTreeQuitOnOpen=1
 
 let g:syntastic_error_symbol='✗'
 let g:syntastic_warning_symbol='⚠'
