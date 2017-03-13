@@ -225,6 +225,7 @@ let g:ale_linters = {
             \   'cpp': [],
             \   'python': ['flake8', 'mypy'],
             \}
+let g:ale_linter_aliases = {'pandoc': 'markdown'}
 
 let g:UltiSnipsEditSplit = 'vertical'
 let g:UltiSnipsExpandTrigger = '<a-cr>'     " alt-enter
