@@ -223,6 +223,7 @@ let g:syntastic_rust_checkers = ['rustc']
 let g:ale_linters = {
             \   'c': [],
             \   'cpp': [],
+            \   'python': ['flake8', 'mypy'],
             \}
 
 let g:UltiSnipsEditSplit = 'vertical'
@@ -324,10 +325,9 @@ inoremap # X#
 " DelimitMate: use <c-l> to jump over a delimiter
 imap <c-l> <Plug>delimitMateS-Tab
 
-" easy-align
-" Mappings copied from ":h easy-align-4"
-" Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
-vmap <Enter> <Plug>(EasyAlign)
+" easy-align (mappings copied from README.md)
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
 
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
