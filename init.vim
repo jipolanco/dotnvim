@@ -100,6 +100,15 @@ if !has('nvim')
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 end
 
+" Improve MatchParen highlighting of solarized8-light (the original colours are
+" a bit confusing...).
+augroup SOLARIZED8_LIGHT_FIX
+    autocmd!
+    autocmd ColorScheme solarized8_light*
+                \ hi! MatchParen cterm=NONE,bold gui=NONE,bold ctermfg=15
+                \ guifg=#586e75 ctermbg=12 guibg=#eee8d5
+augroup end
+
 " let g:airline#extensions#tabline#enabled = 1
 " let g:airline#extensions#tabline#tab_nr_type = 1 " show tab number
 " let g:airline_symbols_ascii = 1  " unicode symbols look weird...
