@@ -2,7 +2,7 @@ setlocal shiftwidth=2
 
 " Use conceal mode (see ":h tex-conceal").
 setlocal conceallevel=2
-let g:tex_conceal = 'abdmg'
+let g:tex_conceal = 'amg'
 
 " Treat all tex files as style files (*.sty).
 " This means that underscores are considered as keywords.
@@ -30,10 +30,6 @@ let g:syntastic_tex_checkers = ['chktex', 'lacheck']
 let g:vimtex_fold_enabled = 1
 let g:vimtex_fold_envs = 0
 
-let g:vimtex_latexmk_continuous = 1
-let g:vimtex_latexmk_background = 1  " always run latexmk in the background
-let g:vimtex_latexmk_options = '-verbose -file-line-error -synctex=1 -interaction=nonstopmode'
-
 " Open table of contents (shortcut \lt) and table of labels (\ly) at the right.
 let g:vimtex_index_split_pos = 'vert rightbelow'
 
@@ -41,8 +37,6 @@ let g:vimtex_index_split_pos = 'vert rightbelow'
 let g:vimtex_quickfix_open_on_warning = 0
 
 " Use okular for forward search.
-" NOTE: backward search doesn't work right now with neovim.
-" It works with vim/gvim though (see ":h vimtex-synctex-backward-search").
 let g:vimtex_view_general_viewer = 'okular'
 let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
 let g:vimtex_view_general_options_latexmk = '--unique'
@@ -77,5 +71,5 @@ endfunction
 " See ":h vimtex-faq-neovim"
 " Requires neovim-remote: https://github.com/mhinz/neovim-remote
 if has('nvim')
-    let g:vimtex_latexmk_progname = 'nvr'
+    let g:vimtex_compiler_progname = 'nvr'
 endif

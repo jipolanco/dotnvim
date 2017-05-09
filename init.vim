@@ -18,6 +18,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'honza/vim-snippets'
 Plug 'junegunn/vim-easy-align'
 Plug 'KabbAmine/zeavim.vim'
+Plug 'Konfekt/FastFold'
 Plug 'kshenoy/vim-signature'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'ludovicchabant/vim-gutentags'
@@ -29,7 +30,9 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-sensible'
+if !has('nvim')
+    Plug 'tpope/vim-sensible'
+endif
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'Valloric/ListToggle'
@@ -43,8 +46,8 @@ Plug 'junegunn/fzf.vim'
 " Language-specific plugins.
 " Plug 'bfredl/nvim-ipy'    " ipython
 Plug 'JuliaEditorSupport/julia-vim'
-" Plug 'LaTeX-Box-Team/LaTeX-Box'
 Plug 'lervag/vimtex'
+Plug 'poppyschmo/vim-latexrefman'
 Plug 'chriskempson/base16-vim'
 Plug 'dag/vim-fish'
 Plug 'jvirtanen/vim-octave'
@@ -179,6 +182,7 @@ let g:netrw_browsex_viewer = 'xdg-open'
 " ========================================================================== "
 " LaTeX
 let g:tex_flavor = 'latex'
+let g:latexrefman_use_example_mappings = 1
 
 augroup set_latex_filetypes
     autocmd!
@@ -219,13 +223,16 @@ let g:syntastic_rust_checkers = ['rustc']
 " Run Neomake when writing a file.
 " autocmd! BufWritePost * Neomake
 
-" Disable ALE for C and C++ (conflicts with YCM)
+" Disable ALE for C and C++ (conflicts with YCM).
+" LaTeX: disable proselint (it's nice, but uses a lot of CPU)
 let g:ale_linters = {
             \   'c': [],
             \   'cpp': [],
             \   'python': ['flake8', 'mypy'],
+            \   'tex': ['chktex', 'lacheck'],
             \}
 let g:ale_linter_aliases = {'pandoc': 'markdown'}
+let g:ale_python_mypy_options = '--ignore-missing-imports'
 
 let g:UltiSnipsEditSplit = 'vertical'
 let g:UltiSnipsExpandTrigger = '<a-cr>'     " alt-enter
