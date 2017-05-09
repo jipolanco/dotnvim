@@ -45,7 +45,10 @@ Plug 'junegunn/fzf.vim'
 
 " Language-specific plugins.
 " Plug 'bfredl/nvim-ipy'    " ipython
+
 Plug 'JuliaEditorSupport/julia-vim'
+let g:default_julia_version = '0.6'
+
 Plug 'lervag/vimtex'
 Plug 'poppyschmo/vim-latexrefman'
 Plug 'chriskempson/base16-vim'
