@@ -292,7 +292,7 @@ nnoremap <silent> <leader>h :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR
 " Change dir to the directory of the open buffer.
 nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
 
-nnoremap <silent> <F9> :TagbarToggle<CR>
+nnoremap <silent> <F8> :TagbarToggle<CR>
 nnoremap <leader>n :NERDTreeToggle<cr>
 
 " FZF
