@@ -106,9 +106,10 @@ if !has('nvim')
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 end
 
-" let g:airline#extensions#tabline#enabled = 1
-" let g:airline#extensions#tabline#tab_nr_type = 1 " show tab number
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#tab_nr_type = 1 " show tab number
 " let g:airline_symbols_ascii = 1  " unicode symbols look weird...
+let g:airline#extensions#vimtex#enabled = 0  " doesn't work!
 
 " Height of the command bar
 set cmdheight=2
@@ -239,6 +240,7 @@ let g:ale_python_mypy_options = '--ignore-missing-imports'
 
 let g:UltiSnipsEditSplit = 'vertical'
 let g:UltiSnipsExpandTrigger = '<a-cr>'     " alt-enter
+let g:UltiSnipsSnippetsDir = '~/.config/nvim/UltiSnips'
 
 " Alternative triggers that work in gvim/vim.
 inoremap <c-cr> <c-r>=UltiSnips#ExpandSnippet()<cr>
@@ -263,9 +265,11 @@ let g:gutentags_cache_dir = '~/.cache/gutentags'
 
 " vim-pandoc-after plugin (integrates vim-pandoc with other plugins)
 let g:pandoc#after#modules#enabled = ['ultisnips']
-let g:pandoc#formatting#mode = 'ha'  " hard wraps, autoformatting
+" let g:pandoc#formatting#mode = 'ha'  " hard wraps, autoformatting
+let g:pandoc#formatting#mode = 'hA'  " hard wraps, autoformatting
 " (default = 1) don't use italics, they don't work for me in neovim
 let g:pandoc#syntax#style#emphases = 0
+let g:pandoc#command#latex_engine = 'lualatex'
 
 " Remove trailing whitespace from Pandoc markdown files (which are generated
 " by autoformatting).
