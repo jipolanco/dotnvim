@@ -85,19 +85,13 @@ call plug#end()
 " THEME / APPEARANCE
 
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
-set background=dark
 
-if $TERM_COLOURSCHEME ==# 'gruvbox'
-    let g:gruvbox_italic = 1
-    colorscheme gruvbox
-    let g:airline_theme = 'gruvbox'
-else
-    colorscheme solarized8_dark
-    let g:airline_theme = 'solarized'
-end
-
-if $KONSOLE_PROFILE_NAME ==# 'Solarized Light'
+if $VIM_BACKGROUND ==# 'light'
+    set background=light
     colorscheme solarized8_light
+else
+    set background=dark
+    colorscheme solarized8_dark
 end
 
 " Fix solarized8 colour schemes in vim + tmux (see `:h xterm-true-color`)
@@ -105,6 +99,16 @@ if !has('nvim')
     let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 end
+
+set laststatus=2
+set statusline+=%{gutentags#statusline()}
+
+" Airline + gutentags integration.
+" Show "TAGS" in the status line while gutentags is generating tags.
+function! GutentagsStatus(...)
+    let w:airline_section_a = '%{gutentags#statusline()}'
+endfunction
+call airline#add_statusline_func('GutentagsStatus')
 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#tab_nr_type = 1 " show tab number
@@ -130,6 +134,7 @@ set hidden
 " GENERAL STUFF
 let g:mapleader = "\<Space>"
 let g:maplocalleader = '\'
+
 set wildignore+=*.o,*~,*.pyc
 set splitright
 set mouse=a
@@ -246,13 +251,14 @@ let g:UltiSnipsSnippetsDir = '~/.config/nvim/UltiSnips'
 inoremap <c-cr> <c-r>=UltiSnips#ExpandSnippet()<cr>
 inoremap <c-\>  <c-r>=UltiSnips#ExpandSnippet()<cr>
 
-let g:ycm_collect_identifiers_from_tags_files = 1
+" let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_seed_identifiers_with_syntax = 1
 " let g:ycm_global_ycm_extra_conf = '~/.nvim/ycm_extra_conf.default.py'
 let g:ycm_filepath_completion_use_working_dir = 1
 let g:ycm_max_diagnostics_to_display = 300
 let g:ycm_python_binary_path = 'python3'
 let g:ycm_rust_src_path = $RUST_SRC_PATH
+" let g:ycm_log_level = 'debug'
 
 let g:surround_indent = 1
 
@@ -261,7 +267,10 @@ let g:surround_indent = 1
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 
 " Gutentags -- write tags files to this folder:
-let g:gutentags_cache_dir = '~/.cache/gutentags'
+let g:gutentags_cache_dir = '/tmp/gutentags'
+" Don't generate tags for project documentation (e.g. doxygen-generated files)
+" and some CMake-generated files.
+let g:gutentags_ctags_exclude = ['doc', 'CMakeFiles']
 
 " vim-pandoc-after plugin (integrates vim-pandoc with other plugins)
 let g:pandoc#after#modules#enabled = ['ultisnips']
