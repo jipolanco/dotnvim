@@ -275,7 +275,7 @@ let g:gutentags_ctags_exclude = ['doc', 'CMakeFiles']
 " vim-pandoc-after plugin (integrates vim-pandoc with other plugins)
 let g:pandoc#after#modules#enabled = ['ultisnips']
 " let g:pandoc#formatting#mode = 'ha'  " hard wraps, autoformatting
-let g:pandoc#formatting#mode = 'hA'  " hard wraps, autoformatting
+let g:pandoc#formatting#mode = 'sa'
 " (default = 1) don't use italics, they don't work for me in neovim
 let g:pandoc#syntax#style#emphases = 0
 let g:pandoc#command#latex_engine = 'lualatex'
