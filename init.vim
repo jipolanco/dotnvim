@@ -84,14 +84,18 @@ call plug#end()
 " ========================================================================== "
 " THEME / APPEARANCE
 
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
-
 if $VIM_BACKGROUND ==# 'light'
     set background=light
     colorscheme solarized8_light
 else
     set background=dark
     colorscheme solarized8_dark
+end
+
+if has('nvim')
+    set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
+                \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
+                \,sm:block-blinkwait175-blinkoff150-blinkon175
 end
 
 " Fix solarized8 colour schemes in vim + tmux (see `:h xterm-true-color`)
