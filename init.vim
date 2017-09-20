@@ -71,6 +71,9 @@ Plug 'NLKNguyen/papercolor-theme'
 Plug 'Wutzara/vim-materialtheme'
 Plug 'morhetz/gruvbox'
 Plug 'lifepillar/vim-solarized8'
+Plug 'iCyMind/NeoSolarized'
+Plug 'joshdick/onedark.vim'
+Plug 'mhartington/oceanic-next'
 
 if &termguicolors
     " Load patched solarized.
@@ -86,11 +89,13 @@ call plug#end()
 
 if $VIM_BACKGROUND ==# 'light'
     set background=light
-    colorscheme solarized8_light
 else
     set background=dark
-    colorscheme solarized8_dark
 end
+colorscheme NeoSolarized
+
+" let g:onedark_terminal_italics = 0
+" colorscheme onedark
 
 if has('nvim')
     set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
@@ -98,10 +103,13 @@ if has('nvim')
                 \,sm:block-blinkwait175-blinkoff150-blinkon175
 end
 
-" Fix solarized8 colour schemes in vim + tmux (see `:h xterm-true-color`)
+" Fix solarized8 / NeoSolarized colour schemes in vim + tmux (see README.md of
+" NeoSolarized)
 if !has('nvim')
-    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    set t_8f=[38;2;%lu;%lu;%lum
+    set t_8b=[48;2;%lu;%lu;%lum
+    " let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    " let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 end
 
 set laststatus=2
@@ -293,6 +301,7 @@ augroup END
 " Disable gitgutter mappings. Some conflict with vimtex (for example "ic",
 " "ac" for LaTeX commands).
 let g:gitgutter_map_keys = 0
+let g:gitgutter_override_sign_column_highlight = 0
 
 " ========================================================================== "
 " MORE MAPPINGS.
