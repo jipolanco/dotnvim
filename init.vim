@@ -277,6 +277,7 @@ if b:use_deoplete
                 \       server.runlinter = true;
                 \       run(server);
                 \   '],
+                \ 'python': ['~/opt/miniconda3/envs/py3/bin/pyls'],
     \ }
     " Automatically start language servers.
     let g:LanguageClient_autoStart = 1
@@ -293,9 +294,9 @@ endif
 
 
 
-" Disable ALE for C and C++ (conflicts with YCM).
 " LaTeX: disable proselint (it's nice, but uses a lot of CPU)
 if b:use_ycm
+    " Disable ALE for C and C++ (conflicts with YCM).
     let g:ale_linters = {
                 \   'c': [],
                 \   'cpp': [],
@@ -306,10 +307,11 @@ else
     " Right now cppcheck and clangcheck are the only linters that detect
     " compile_commands.json files.
     " TODO add cppcheck for c and cpp
+    " Disable ALE for python (use python-language-server instead).
     let g:ale_linters = {
                 \   'c': ['clangcheck'],
                 \   'cpp': ['clangcheck'],
-                \   'python': ['flake8', 'mypy'],
+                \   'python': [],
                 \   'tex': ['chktex', 'lacheck'],
                 \}
 endif
