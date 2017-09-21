@@ -12,6 +12,7 @@ end
 call plug#begin('~/.config/nvim/plugged')
 
 Plug 'airblade/vim-gitgutter'
+Plug 'alx741/vinfo'
 " Plug 'scrooloose/syntastic'
 Plug 'w0rp/ale'
 Plug 'christoomey/vim-tmux-navigator'
