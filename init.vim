@@ -107,6 +107,7 @@ else
     set background=dark
 end
 colorscheme NeoSolarized
+let g:airline_theme = 'solarized'
 
 " let g:onedark_terminal_italics = 0
 " colorscheme onedark
@@ -134,11 +135,11 @@ set statusline+=%{gutentags#statusline()}
 function! GutentagsStatus(...)
     let w:airline_section_a = '%{gutentags#statusline()}'
 endfunction
-call airline#add_statusline_func('GutentagsStatus')
+" call airline#add_statusline_func('GutentagsStatus')
 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#tab_nr_type = 1 " show tab number
-" let g:airline_symbols_ascii = 1  " unicode symbols look weird...
+let g:airline_powerline_fonts = 1
 let g:airline#extensions#vimtex#enabled = 0  " doesn't work!
 
 " Height of the command bar
