@@ -2,6 +2,9 @@ set encoding=utf-8
 scriptencoding utf-8
 filetype indent plugin on
 
+let b:use_ycm = 0
+let b:use_deoplete = 1 && !b:use_ycm
+
 " Use true colours in terminal.
 if has('termguicolors')
     set termguicolors
@@ -36,7 +39,18 @@ endif
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'Valloric/ListToggle'
-Plug 'Valloric/YouCompleteMe'
+if b:use_ycm
+    Plug 'Valloric/YouCompleteMe'
+elseif b:use_deoplete
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'Shougo/echodoc.vim'
+    " Plug 'ervandew/supertab'
+    " Plug 'zchee/deoplete-clang'
+    " Plug 'tweekmonster/deoplete-clang2'
+    Plug 'Rip-Rip/clang_complete'
+    Plug 'Shougo/neco-vim'
+endif
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -244,33 +258,82 @@ let g:syntastic_rust_checkers = ['rustc']
 " Run Neomake when writing a file.
 " autocmd! BufWritePost * Neomake
 
+if b:use_deoplete
+    let g:deoplete#enable_at_startup = 1
+
+    " deoplete-clang & deoplete-clang2
+    let g:deoplete#sources#clang#libclang_path = '/usr/lib64/libclang.so'
+    let g:deoplete#sources#clang#clang_header = '/usr/include/clang'
+    let g:deoplete#sources#clang#executable = '/usr/bin/clang'
+
+    " clang_complete
+    let g:clang_library_path = '/usr/lib64'
+
+                " \ 'cpp': ['~/opt/clang/bin/clangd'],
+    let g:LanguageClient_serverCommands = {
+                \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
+                \       using LanguageServer;
+                \       server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false);
+                \       server.runlinter = true;
+                \       run(server);
+                \   '],
+    \ }
+    " Automatically start language servers.
+    let g:LanguageClient_autoStart = 1
+
+    nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+    nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+    nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+
+    " https://github.com/ervandew/supertab#frequently-asked-questions
+    " let g:SuperTabDefaultCompletionType = '<c-n>'
+    inoremap <silent><expr><tab> pumvisible() ? "\<C-n>" : "\<tab>"
+    inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
+endif
+
+
+
 " Disable ALE for C and C++ (conflicts with YCM).
 " LaTeX: disable proselint (it's nice, but uses a lot of CPU)
-let g:ale_linters = {
-            \   'c': [],
-            \   'cpp': [],
-            \   'python': ['flake8', 'mypy'],
-            \   'tex': ['chktex', 'lacheck'],
-            \}
+if b:use_ycm
+    let g:ale_linters = {
+                \   'c': [],
+                \   'cpp': [],
+                \   'python': ['flake8', 'mypy'],
+                \   'tex': ['chktex', 'lacheck'],
+                \}
+else
+    " Right now cppcheck and clangcheck are the only linters that detect
+    " compile_commands.json files.
+    " TODO add cppcheck for c and cpp
+    let g:ale_linters = {
+                \   'c': ['clangcheck'],
+                \   'cpp': ['clangcheck'],
+                \   'python': ['flake8', 'mypy'],
+                \   'tex': ['chktex', 'lacheck'],
+                \}
+endif
 let g:ale_linter_aliases = {'pandoc': 'markdown'}
 let g:ale_python_mypy_options = '--ignore-missing-imports'
 
 let g:UltiSnipsEditSplit = 'vertical'
-let g:UltiSnipsExpandTrigger = '<a-cr>'     " alt-enter
+let g:UltiSnipsExpandTrigger = '<C-j>'
 let g:UltiSnipsSnippetsDir = '~/.config/nvim/UltiSnips'
 
 " Alternative triggers that work in gvim/vim.
 inoremap <c-cr> <c-r>=UltiSnips#ExpandSnippet()<cr>
 inoremap <c-\>  <c-r>=UltiSnips#ExpandSnippet()<cr>
 
-" let g:ycm_collect_identifiers_from_tags_files = 1
-let g:ycm_seed_identifiers_with_syntax = 1
-" let g:ycm_global_ycm_extra_conf = '~/.nvim/ycm_extra_conf.default.py'
-let g:ycm_filepath_completion_use_working_dir = 1
-let g:ycm_max_diagnostics_to_display = 300
-let g:ycm_python_binary_path = 'python3'
-let g:ycm_rust_src_path = $RUST_SRC_PATH
-" let g:ycm_log_level = 'debug'
+if b:use_ycm
+    " let g:ycm_collect_identifiers_from_tags_files = 1
+    let g:ycm_seed_identifiers_with_syntax = 1
+    " let g:ycm_global_ycm_extra_conf = '~/.nvim/ycm_extra_conf.default.py'
+    let g:ycm_filepath_completion_use_working_dir = 1
+    let g:ycm_max_diagnostics_to_display = 300
+    let g:ycm_python_binary_path = 'python3'
+    let g:ycm_rust_src_path = $RUST_SRC_PATH
+    " let g:ycm_log_level = 'debug'
+endif
 
 let g:surround_indent = 1
 
@@ -337,12 +400,14 @@ nnoremap <leader>/ :History/<cr>
 nnoremap <leader>w :Windows<cr>
 
 " YouCompleteMe
-nnoremap <leader>jJ :YcmCompleter GoTo<CR>
-nnoremap <leader>jj :YcmCompleter GoToImprecise<CR>
-nnoremap <leader>j? :YcmCompleter GetDoc<CR>
-nnoremap <leader>jD :YcmCompleter GoToDefinition<CR>
-nnoremap <leader>jd :YcmCompleter GoToDeclaration<CR>
-nnoremap <leader>jf :YcmCompleter FixIt<CR>
+if b:use_ycm
+    nnoremap <leader>jJ :YcmCompleter GoTo<CR>
+    nnoremap <leader>jj :YcmCompleter GoToImprecise<CR>
+    nnoremap <leader>j? :YcmCompleter GetDoc<CR>
+    nnoremap <leader>jD :YcmCompleter GoToDefinition<CR>
+    nnoremap <leader>jd :YcmCompleter GoToDeclaration<CR>
+    nnoremap <leader>jf :YcmCompleter FixIt<CR>
+endif
 
 " Fugitive
 nmap <leader>gg :Gstatus<CR>
