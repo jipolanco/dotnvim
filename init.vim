@@ -4,6 +4,7 @@ filetype indent plugin on
 
 let b:use_ycm = 0
 let b:use_deoplete = 1 && !b:use_ycm
+let b:use_ncm = 1 && !b:use_deoplete
 
 " Use true colours in terminal.
 if has('termguicolors')
@@ -44,11 +45,15 @@ if b:use_ycm
     Plug 'Valloric/YouCompleteMe'
 elseif b:use_deoplete
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    " Plug 'zchee/deoplete-clang'
+    " Plug 'tweekmonster/deoplete-clang2'
+elseif b:use_ncm
+    Plug 'roxma/nvim-completion-manager'
+end
+if !b:use_ycm
     Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
     Plug 'Shougo/echodoc.vim'
     " Plug 'ervandew/supertab'
-    " Plug 'zchee/deoplete-clang'
-    " Plug 'tweekmonster/deoplete-clang2'
     Plug 'Rip-Rip/clang_complete'
     Plug 'Shougo/neco-vim'
 endif
@@ -260,35 +265,53 @@ let g:syntastic_rust_checkers = ['rustc']
 " Run Neomake when writing a file.
 " autocmd! BufWritePost * Neomake
 
-if b:use_deoplete
-    let g:deoplete#enable_at_startup = 1
+if !b:use_ycm
+    if b:use_deoplete
+        let g:deoplete#enable_at_startup = 1
+        " deoplete-clang & deoplete-clang2
+        let g:deoplete#sources#clang#libclang_path = '/usr/lib64/libclang.so'
+        let g:deoplete#sources#clang#clang_header = '/usr/include/clang'
+        let g:deoplete#sources#clang#executable = '/usr/bin/clang'
 
-    " deoplete-clang & deoplete-clang2
-    let g:deoplete#sources#clang#libclang_path = '/usr/lib64/libclang.so'
-    let g:deoplete#sources#clang#clang_header = '/usr/include/clang'
-    let g:deoplete#sources#clang#executable = '/usr/bin/clang'
+        " LaTeX / vimtex
+        if !exists('g:deoplete#omni#input_patterns')
+            let g:deoplete#omni#input_patterns = {}
+        endif
+        let g:deoplete#omni#input_patterns.tex = g:vimtex#re#deoplete
+
+    elseif b:use_ncm
+        set shortmess+=c
+
+        " LaTeX / vimtex
+        augroup my_cm_setup
+          autocmd!
+          autocmd User CmSetup call cm#register_source({
+                \ 'name' : 'vimtex',
+                \ 'priority': 8,
+                \ 'scoping': 1,
+                \ 'scopes': ['tex'],
+                \ 'abbreviation': 'tex',
+                \ 'cm_refresh_patterns': g:vimtex#re#ncm,
+                \ 'cm_refresh': {'omnifunc': 'vimtex#complete#omnifunc'},
+                \ })
+        augroup END
+    end
 
     " clang_complete
     let g:clang_library_path = '/usr/lib64'
 
                 " \ 'cpp': ['~/opt/clang/bin/clangd'],
+                " \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
+                " \       using LanguageServer;
+                " \       server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false);
+                " \       server.runlinter = true;
+                " \       run(server);
+                " \   '],
     let g:LanguageClient_serverCommands = {
-                \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
-                \       using LanguageServer;
-                \       server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false);
-                \       server.runlinter = true;
-                \       run(server);
-                \   '],
                 \ 'python': ['~/opt/miniconda3/envs/py3/bin/pyls'],
     \ }
     " Automatically start language servers.
     let g:LanguageClient_autoStart = 1
-
-    " Deoplete + vimtex
-    if !exists('g:deoplete#omni#input_patterns')
-        let g:deoplete#omni#input_patterns = {}
-    endif
-    let g:deoplete#omni#input_patterns.tex = g:vimtex#re#deoplete
 
     nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
     nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
@@ -298,9 +321,9 @@ if b:use_deoplete
     " let g:SuperTabDefaultCompletionType = '<c-n>'
     inoremap <silent><expr><tab> pumvisible() ? "\<C-n>" : "\<tab>"
     inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
+    " https://github.com/roxma/nvim-completion-manager#optional-configuration-tips
+    inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
 endif
-
-
 
 " LaTeX: disable proselint (it's nice, but uses a lot of CPU)
 if b:use_ycm
@@ -312,10 +335,10 @@ if b:use_ycm
                 \   'tex': ['chktex', 'lacheck'],
                 \}
 else
-    " Right now cppcheck and clangcheck are the only linters that detect
+    " C/C++: right now cppcheck and clangcheck are the only linters that detect
     " compile_commands.json files.
-    " TODO add cppcheck for c and cpp
-    " Disable ALE for python (use python-language-server instead).
+    " Python: disable ALE (using python-language-server instead).
+    " TODO add cppcheck for c and cpp?
     let g:ale_linters = {
                 \   'c': ['clangcheck'],
                 \   'cpp': ['clangcheck'],
