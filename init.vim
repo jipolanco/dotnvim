@@ -265,8 +265,12 @@ let g:syntastic_rust_checkers = ['rustc']
 " autocmd! BufWritePost * Neomake
 
 if !b:use_ycm
+    let g:echodoc#enable_at_startup = 1
+
     if b:use_deoplete
         let g:deoplete#enable_at_startup = 1
+        call deoplete#custom#source('_', 'matchers', ['matcher_full_fuzzy'])
+
         " deoplete-clang & deoplete-clang2
         let g:deoplete#sources#clang#libclang_path = '/usr/lib64/libclang.so'
         let g:deoplete#sources#clang#clang_header = '/usr/include/clang'
