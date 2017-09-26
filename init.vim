@@ -317,9 +317,24 @@ if !b:use_ycm
     " Automatically start language servers.
     let g:LanguageClient_autoStart = 1
 
+    augroup LanguageClient_config
+        autocmd!
+        autocmd User LanguageClientStarted
+                    \ setlocal
+                    \ formatexpr=LanguageClient_textDocument_rangeFormatting()
+        autocmd User LanguageClientStarted
+                    \ setlocal completefunc=LanguageClient#complete
+        autocmd User LanguageClientStopped
+                    \ setlocal formatexpr=
+        autocmd User LanguageClientStopped
+                    \ setlocal completefunc=
+    augroup END
+
     nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
     nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
     nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+    nnoremap <silent> gs :call LanguageClient_textDocument_documentSymbol()<CR>
+    nnoremap <silent> gr :call LanguageClient_textDocument_references()<CR>
 
     " https://github.com/ervandew/supertab#frequently-asked-questions
     " let g:SuperTabDefaultCompletionType = '<c-n>'
