@@ -13,7 +13,7 @@ end
 
 " ========================================================================== "
 " PLUGINS
-call plug#begin('~/.config/nvim/plugged')
+call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'airblade/vim-gitgutter'
 " Plug 'scrooloose/syntastic'
