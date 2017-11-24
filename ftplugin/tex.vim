@@ -28,33 +28,27 @@ let g:syntastic_tex_checkers = ['chktex', 'lacheck']
 "     let g:vimtex_fold_enabled = 1
 " end
 let g:vimtex_fold_enabled = 1
-let g:vimtex_fold_envs = 0
+let g:vimtex_format_enabled = 1
 
 " Open table of contents (shortcut \lt) and table of labels (\ly) at the right.
-let g:vimtex_index_split_pos = 'vert rightbelow'
+" let g:vimtex_index_split_pos = 'vert rightbelow'
 
 " Don't open the quickfix window automatically when there are only warnings.
-let g:vimtex_quickfix_open_on_warning = 0
+" let g:vimtex_quickfix_open_on_warning = 0
+
+let g:vimtex_view_method = 'zathura'
+let g:vimtex_view_use_temp_files = 1
 
 " Use okular for forward search.
-let g:vimtex_view_general_viewer = 'okular'
-let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
-let g:vimtex_view_general_options_latexmk = '--unique'
+" let g:vimtex_view_general_viewer = 'okular'
+" let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
+" let g:vimtex_view_general_options_latexmk = '--unique'
 
 " See ":h vimtex-complete-youcompleteme".
 if !exists('g:ycm_semantic_triggers')
   let g:ycm_semantic_triggers = {}
 endif
-let g:ycm_semantic_triggers.tex = [
-      \ 're!\\[A-Za-z]*cite[A-Za-z]*(\[[^]]*\]){0,2}{[^}]*',
-      \ 're!\\[A-Za-z]*ref({[^}]*|range{([^,{}]*(}{)?))',
-      \ 're!\\hyperref\[[^]]*',
-      \ 're!\\includegraphics\*?(\[[^]]*\]){0,2}{[^}]*',
-      \ 're!\\(include(only)?|input){[^}]*',
-      \ 're!\\\a*(gls|Gls|GLS)(pl)?\a*(\s*\[[^]]*\]){0,2}\s*\{[^}]*',
-      \ 're!\\includepdf(\s*\[[^]]*\])?\s*\{[^}]*',
-      \ 're!\\includestandalone(\s*\[[^]]*\])?\s*\{[^}]*',
-      \ ]
+let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
 
 " See ":h vimtex-faq-surround".
 augroup latexSurround
@@ -66,6 +60,18 @@ function! s:latexSurround()
     let b:surround_{char2nr("e")}
                 \ = "\\begin{\1environment: \1}\n\t\r\n\\end{\1\1}"
     let b:surround_{char2nr("c")} = "\\\1command: \1{\r}"
+endfunction
+
+" Use local `texdoc` to open documentation (instead of searching online on
+" texdoc.net).
+" Copied from ":h g:vimtex_doc_handlers"
+let g:vimtex_doc_handlers = ['MyHandler']
+function! MyHandler(context)
+  call vimtex#doc#make_selection(a:context)
+  if !empty(a:context.selected)
+    execute '!texdoc' a:context.selected '&'
+  endif
+  return 1
 endfunction
 
 " See ":h vimtex-faq-neovim"

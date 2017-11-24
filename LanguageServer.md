@@ -20,3 +20,7 @@ Set path to `clangd` binary in `g:LanguageClient_serverCommands`.
 
     pip install python-language-server
     pip install pyls-mypy  # optional
+
+or, with Anaconda:
+
+    conda install python-language-server
