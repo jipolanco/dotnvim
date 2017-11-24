@@ -3,7 +3,7 @@ scriptencoding utf-8
 filetype indent plugin on
 
 let b:use_ycm = 0
-let b:use_deoplete = 1 && !b:use_ycm
+let b:use_deoplete = 0 && !b:use_ycm
 let b:use_ncm = 1 && !b:use_deoplete
 
 " Use true colours in terminal.
@@ -47,14 +47,16 @@ elseif b:use_deoplete
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
     " Plug 'zchee/deoplete-clang'
     " Plug 'tweekmonster/deoplete-clang2'
+    Plug 'Rip-Rip/clang_complete'
 elseif b:use_ncm
     Plug 'roxma/nvim-completion-manager'
+    " Plug 'Rip-Rip/clang_complete'
+    Plug 'roxma/ncm-clang'
 end
 if !b:use_ycm
     Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
     Plug 'Shougo/echodoc.vim'
     " Plug 'ervandew/supertab'
-    Plug 'Rip-Rip/clang_complete'
     Plug 'Shougo/neco-vim'
 endif
 Plug 'vim-airline/vim-airline'
@@ -68,6 +70,10 @@ Plug 'junegunn/fzf.vim'
 
 Plug 'JuliaEditorSupport/julia-vim'
 let g:default_julia_version = '0.6'
+" let g:latex_to_unicode_tab = 0
+let g:latex_to_unicode_suggestions = 0
+" let g:latex_to_unicode_auto = 1
+let g:latex_to_unicode_file_types = '.*'
 
 Plug 'lervag/vimtex'
 Plug 'poppyschmo/vim-latexrefman'
@@ -95,13 +101,6 @@ Plug 'iCyMind/NeoSolarized'
 Plug 'joshdick/onedark.vim'
 Plug 'mhartington/oceanic-next'
 
-if &termguicolors
-    " Load patched solarized.
-    Plug 'frankier/neovim-colors-solarized-truecolor-only'
-else
-    Plug 'altercation/vim-colors-solarized'
-end
-
 call plug#end()
 
 " ========================================================================== "
@@ -115,22 +114,12 @@ end
 colorscheme NeoSolarized
 let g:airline_theme = 'solarized'
 
-" let g:onedark_terminal_italics = 0
-" colorscheme onedark
-
-if has('nvim')
-    set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
-                \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
-                \,sm:block-blinkwait175-blinkoff150-blinkon175
-end
 
 " Fix solarized8 / NeoSolarized colour schemes in vim + tmux (see README.md of
 " NeoSolarized)
 if !has('nvim')
     set t_8f=[38;2;%lu;%lu;%lum
     set t_8b=[48;2;%lu;%lu;%lum
-    " let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-    " let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 end
 
 set laststatus=2
@@ -146,7 +135,6 @@ endfunction
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#tab_nr_type = 1 " show tab number
 let g:airline_powerline_fonts = 1
-let g:airline#extensions#vimtex#enabled = 0  " doesn't work!
 
 " Height of the command bar
 set cmdheight=2
@@ -276,6 +264,7 @@ if !b:use_ycm
         let g:deoplete#sources#clang#libclang_path = '/usr/lib64/libclang.so'
         let g:deoplete#sources#clang#clang_header = '/usr/include/clang'
         let g:deoplete#sources#clang#executable = '/usr/bin/clang'
+        let g:deoplete#sources#clang#sort_algo = 'priority'
 
         " LaTeX / vimtex
         if !exists('g:deoplete#omni#input_patterns')
@@ -285,6 +274,11 @@ if !b:use_ycm
 
     elseif b:use_ncm
         set shortmess+=c
+
+        let g:cm_matcher = {
+                    \ 'module': 'cm_matchers.fuzzy_matcher',
+                    \ 'case': 'smartcase'
+                    \ }
 
         " LaTeX / vimtex
         augroup my_cm_setup
@@ -304,18 +298,30 @@ if !b:use_ycm
     " clang_complete
     let g:clang_library_path = '/usr/lib64'
 
-                " \ 'cpp': ['~/opt/clang/bin/clangd'],
-                " \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
-                " \       using LanguageServer;
-                " \       server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false);
-                " \       server.runlinter = true;
-                " \       run(server);
-                " \   '],
     let g:LanguageClient_serverCommands = {
                 \ 'python': ['~/opt/miniconda3/envs/py3/bin/pyls'],
+                \ 'cpp': ['~/opt/clang/bin/clangd'],
+                \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
+                \       using LanguageServer;
+                \       server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false);
+                \       server.runlinter = true;
+                \       run(server);
+                \   '],
     \ }
+
     " Automatically start language servers.
-    let g:LanguageClient_autoStart = 1
+    " let g:LanguageClient_autoStart = 1
+
+    " Autostart language server for python.
+    autocmd BufRead,BufNewFile *.py :LanguageClientStart<CR>
+
+    function! LanguageClientSetMaps()
+        nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+        nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+        nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+        nnoremap <silent> gs :call LanguageClient_textDocument_documentSymbol()<CR>
+        nnoremap <silent> gr :call LanguageClient_textDocument_references()<CR>
+    endfunction
 
     augroup LanguageClient_config
         autocmd!
@@ -324,24 +330,18 @@ if !b:use_ycm
                     \ formatexpr=LanguageClient_textDocument_rangeFormatting()
         autocmd User LanguageClientStarted
                     \ setlocal completefunc=LanguageClient#complete
+        autocmd User LanguageClientStarted
+                    \ exec LanguageClientSetMaps()
         autocmd User LanguageClientStopped
                     \ setlocal formatexpr=
         autocmd User LanguageClientStopped
                     \ setlocal completefunc=
     augroup END
 
-    nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-    nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-    nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-    nnoremap <silent> gs :call LanguageClient_textDocument_documentSymbol()<CR>
-    nnoremap <silent> gr :call LanguageClient_textDocument_references()<CR>
-
-    " https://github.com/ervandew/supertab#frequently-asked-questions
-    " let g:SuperTabDefaultCompletionType = '<c-n>'
-    inoremap <silent><expr><tab> pumvisible() ? "\<C-n>" : "\<tab>"
-    inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
     " https://github.com/roxma/nvim-completion-manager#optional-configuration-tips
     inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+    inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 endif
 
 " LaTeX: disable proselint (it's nice, but uses a lot of CPU)
@@ -357,7 +357,7 @@ else
     " C/C++: right now cppcheck and clangcheck are the only linters that detect
     " compile_commands.json files.
     " Python: disable ALE (using python-language-server instead).
-    " TODO add cppcheck for c and cpp?
+    " TODO add cppcheck/clangcheck for c and cpp?
     let g:ale_linters = {
                 \   'c': ['clangcheck'],
                 \   'cpp': ['clangcheck'],
@@ -370,11 +370,8 @@ let g:ale_python_mypy_options = '--ignore-missing-imports'
 
 let g:UltiSnipsEditSplit = 'vertical'
 let g:UltiSnipsExpandTrigger = '<C-j>'
+let g:UltiSnipsListSnippets = '<C-M-j>'
 let g:UltiSnipsSnippetsDir = '~/.config/nvim/UltiSnips'
-
-" Alternative triggers that work in gvim/vim.
-inoremap <c-cr> <c-r>=UltiSnips#ExpandSnippet()<cr>
-inoremap <c-\>  <c-r>=UltiSnips#ExpandSnippet()<cr>
 
 if b:use_ycm
     " let g:ycm_collect_identifiers_from_tags_files = 1
