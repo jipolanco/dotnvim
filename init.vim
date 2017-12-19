@@ -48,7 +48,7 @@ elseif b:use_deoplete
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
     " Plug 'zchee/deoplete-clang'
     " Plug 'tweekmonster/deoplete-clang2'
-    Plug 'Rip-Rip/clang_complete'
+    " Plug 'Rip-Rip/clang_complete'
 elseif b:use_ncm
     Plug 'roxma/nvim-completion-manager'
     " Plug 'Rip-Rip/clang_complete'
@@ -304,9 +304,10 @@ if !b:use_ycm
     " clang_complete
     let g:clang_library_path = '/usr/lib64'
 
+                " \ 'cpp': ['~/opt/clang/bin/clangd'],
     let g:LanguageClient_serverCommands = {
                 \ 'python': ['~/opt/miniconda3/envs/py3/bin/pyls'],
-                \ 'cpp': ['~/opt/clang/bin/clangd'],
+                \ 'cpp': ['~/opt/cquery/bin/cquery', '--language-server'],
                 \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
                 \       using LanguageServer;
                 \       server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false);
@@ -314,6 +315,8 @@ if !b:use_ycm
                 \       run(server);
                 \   '],
     \ }
+    let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
+    let g:LanguageClient_loadSettings = 1
 
     " Automatically start language servers.
     " let g:LanguageClient_autoStart = 1
@@ -369,7 +372,7 @@ else
                 \   'cpp': ['clangcheck'],
                 \   'python': [],
                 \   'tex': ['chktex', 'lacheck'],
-                \ 'pandoc': [],
+                \   'pandoc': [],
                 \}
 endif
 let g:ale_linter_aliases = {'pandoc': 'markdown'}
