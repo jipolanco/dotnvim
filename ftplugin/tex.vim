@@ -19,6 +19,7 @@ let g:syntastic_tex_checkers = ['chktex', 'lacheck']
 
 " ========================================================================== "
 " Vimtex plugin.
+let g:vimtex_quickfix_open_on_warning = 0
 
 " Don't fold using vimtex in diff mode.
 " NOTE: this doesn't work!!!

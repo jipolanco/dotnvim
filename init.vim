@@ -3,7 +3,7 @@ scriptencoding utf-8
 filetype indent plugin on
 
 let b:use_ycm = 0
-let b:use_deoplete = 0 && !b:use_ycm
+let b:use_deoplete = 1 && !b:use_ycm
 let b:use_ncm = 1 && !b:use_deoplete
 
 " Use true colours in terminal.
@@ -15,6 +15,7 @@ end
 " PLUGINS
 call plug#begin('~/.local/share/nvim/plugged')
 
+Plug 'editorconfig/editorconfig-vim'
 Plug 'airblade/vim-gitgutter'
 " Plug 'scrooloose/syntastic'
 Plug 'w0rp/ale'
@@ -69,10 +70,12 @@ Plug 'junegunn/fzf.vim'
 
 Plug 'JuliaEditorSupport/julia-vim'
 let g:default_julia_version = '0.6'
-" let g:latex_to_unicode_tab = 0
-let g:latex_to_unicode_suggestions = 0
-" let g:latex_to_unicode_auto = 1
-let g:latex_to_unicode_file_types = '.*'
+let g:latex_to_unicode_tab = 0
+" let g:latex_to_unicode_suggestions = 0
+let g:latex_to_unicode_auto = 1
+" let g:latex_to_unicode_file_types = '.*'
+" noremap <expr> <F7> LaTeXtoUnicode#Toggle()
+" inoremap <expr> <F7> LaTeXtoUnicode#Toggle()
 
 Plug 'lervag/vimtex'
 Plug 'poppyschmo/vim-latexrefman'
@@ -252,12 +255,15 @@ let g:syntastic_rust_checkers = ['rustc']
 " Run Neomake when writing a file.
 " autocmd! BufWritePost * Neomake
 
+let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+" let g:EditorConfig_disable_rules = ['trim_trailing_whitespace']
+
 if !b:use_ycm
     let g:echodoc#enable_at_startup = 1
 
     if b:use_deoplete
         let g:deoplete#enable_at_startup = 1
-        call deoplete#custom#source('_', 'matchers', ['matcher_full_fuzzy'])
+        " call deoplete#custom#source('_', 'matchers', ['matcher_full_fuzzy'])
 
         " deoplete-clang & deoplete-clang2
         let g:deoplete#sources#clang#libclang_path = '/usr/lib64/libclang.so'
@@ -362,6 +368,7 @@ else
                 \   'cpp': ['clangcheck'],
                 \   'python': [],
                 \   'tex': ['chktex', 'lacheck'],
+                \ 'pandoc': [],
                 \}
 endif
 let g:ale_linter_aliases = {'pandoc': 'markdown'}
