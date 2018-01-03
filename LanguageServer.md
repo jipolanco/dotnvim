@@ -2,11 +2,18 @@
 
 ## cquery
 
-See:
-
 <https://github.com/jacobdufault/cquery>
 
 <https://github.com/autozimu/LanguageClient-neovim/wiki/cquery>
+
+Build:
+
+    git clone https://github.com/jacobdufault/cquery --single-branch
+    cd cquery
+    git submodule update --init
+    ./waf configure --use-system-clang --prefix ~/opt/cquery
+    ./waf build -j4
+    ./waf install
 
 ## clangd
 
