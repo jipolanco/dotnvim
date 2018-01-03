@@ -1,0 +1,6 @@
+{
+    "__comment__": "This is the settings file for LanguageClient-neovim",
+    "initializationOptions": {
+        "cacheDirectory": "/tmp/cquery"
+    }
+}

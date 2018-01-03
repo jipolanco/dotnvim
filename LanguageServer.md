@@ -1,4 +1,14 @@
-# C/C++ (clangd)
+# C/C++
+
+## cquery
+
+See:
+
+<https://github.com/jacobdufault/cquery>
+
+<https://github.com/autozimu/LanguageClient-neovim/wiki/cquery>
+
+## clangd
 
 <https://clang.llvm.org/extra/clangd.html>
 
