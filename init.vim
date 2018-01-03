@@ -307,7 +307,8 @@ if !b:use_ycm
                 " \ 'cpp': ['~/opt/clang/bin/clangd'],
     let g:LanguageClient_serverCommands = {
                 \ 'python': ['~/opt/miniconda3/envs/py3/bin/pyls'],
-                \ 'cpp': ['~/opt/cquery/bin/cquery', '--language-server'],
+                \ 'cpp': ['~/opt/cquery/bin/cquery', '--language-server',
+                \         '--log-file=/tmp/cquery.log'],
                 \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
                 \       using LanguageServer;
                 \       server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false);
