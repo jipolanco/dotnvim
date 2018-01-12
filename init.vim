@@ -51,10 +51,13 @@ elseif b:use_deoplete
 elseif b:use_ncm
     Plug 'roxma/nvim-completion-manager'
     " Plug 'Rip-Rip/clang_complete'
-    Plug 'roxma/ncm-clang'
+    " Plug 'roxma/ncm-clang'
 end
 if !b:use_ycm
-    Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'autozimu/LanguageClient-neovim', {
+                \ 'branch': 'next',
+                \ 'do': 'bash install.sh',
+                \ }
     Plug 'Shougo/echodoc.vim'
     " Plug 'ervandew/supertab'
     Plug 'Shougo/neco-vim'
@@ -264,12 +267,6 @@ if !b:use_ycm
     if b:use_deoplete
         let g:deoplete#enable_at_startup = 1
         " call deoplete#custom#source('_', 'matchers', ['matcher_full_fuzzy'])
-
-        " deoplete-clang & deoplete-clang2
-        let g:deoplete#sources#clang#libclang_path = '/usr/lib64/libclang.so'
-        let g:deoplete#sources#clang#clang_header = '/usr/include/clang'
-        let g:deoplete#sources#clang#executable = '/usr/bin/clang'
-        let g:deoplete#sources#clang#sort_algo = 'priority'
 
         " LaTeX / vimtex
         if !exists('g:deoplete#omni#input_patterns')
