@@ -317,10 +317,12 @@ if !b:use_ycm
     let g:LanguageClient_loadSettings = 1
 
     " Automatically start language servers.
-    " let g:LanguageClient_autoStart = 1
+    let g:LanguageClient_autoStart = 1
+    " Use location instead of quickfix list for diagnostics.
+    let g:LanguageClient_diagnosticsList = 'Location'
 
     " Autostart language server for python.
-    autocmd BufRead,BufNewFile *.py :LanguageClientStart<CR>
+    " autocmd BufRead,BufNewFile *.py :LanguageClientStart<CR>
 
     function! LanguageClientSetMaps()
         nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
@@ -335,14 +337,14 @@ if !b:use_ycm
         autocmd User LanguageClientStarted
                     \ setlocal
                     \ formatexpr=LanguageClient_textDocument_rangeFormatting()
-        autocmd User LanguageClientStarted
-                    \ setlocal completefunc=LanguageClient#complete
+        " autocmd User LanguageClientStarted
+        "             \ setlocal completefunc=LanguageClient#complete
         autocmd User LanguageClientStarted
                     \ exec LanguageClientSetMaps()
         autocmd User LanguageClientStopped
                     \ setlocal formatexpr=
-        autocmd User LanguageClientStopped
-                    \ setlocal completefunc=
+        " autocmd User LanguageClientStopped
+        "             \ setlocal completefunc=
     augroup END
 
     " https://github.com/roxma/nvim-completion-manager#optional-configuration-tips
