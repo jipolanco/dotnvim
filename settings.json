@@ -1,6 +1,9 @@
 {
     "__comment__": "This is the settings file for LanguageClient-neovim",
     "initializationOptions": {
-        "cacheDirectory": "/tmp/cquery"
+        "cacheDirectory": "/tmp/cquery",
+        "resourceDirectory_old": "/usr/lib64/clang/4.0.1",
+        "cacheFormat": "msgpack",
+        "enableComments": 1
     }
 }
