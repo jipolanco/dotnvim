@@ -17,7 +17,6 @@ call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'editorconfig/editorconfig-vim'
 Plug 'airblade/vim-gitgutter'
-" Plug 'scrooloose/syntastic'
 Plug 'w0rp/ale'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'honza/vim-snippets'
@@ -303,6 +302,8 @@ if !b:use_ycm
                 " \ 'cpp': ['~/opt/clang/bin/clangd'],
     let g:LanguageClient_serverCommands = {
                 \ 'python': ['~/opt/miniconda3/envs/py3/bin/pyls'],
+                \ 'c': ['~/opt/cquery/bin/cquery', '--language-server',
+                \         '--log-file=/tmp/cquery.log'],
                 \ 'cpp': ['~/opt/cquery/bin/cquery', '--language-server',
                 \         '--log-file=/tmp/cquery.log'],
                 \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
@@ -362,13 +363,10 @@ if b:use_ycm
                 \   'tex': ['chktex', 'lacheck'],
                 \}
 else
-    " C/C++: right now cppcheck and clangcheck are the only linters that detect
-    " compile_commands.json files.
-    " Python: disable ALE (using python-language-server instead).
-    " TODO add cppcheck/clangcheck for c and cpp?
+    " Disable ALE for python, C, C++ (using LanguageClient instead).
     let g:ale_linters = {
-                \   'c': ['clangcheck'],
-                \   'cpp': ['clangcheck'],
+                \   'c': [],
+                \   'cpp': [],
                 \   'python': [],
                 \   'tex': ['chktex', 'lacheck'],
                 \   'pandoc': [],
