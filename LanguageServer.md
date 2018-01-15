@@ -11,7 +11,13 @@ Build:
     git clone https://github.com/jacobdufault/cquery --single-branch
     cd cquery
     git submodule update --init
-    ./waf configure --use-system-clang --prefix ~/opt/cquery
+
+    # Note: by default, a version of clang+llvm compiled for Ubuntu is downloaded.
+    # However, a version compiled for Fedora is also available on the llvm site.
+    # Thus, modify the value of `CLANG_TARBALL_NAME` in `wscript` to:
+    #   CLANG_TARBALL_NAME = 'clang+llvm-$version-x86_64-linux-gnu-Fedora27'
+
+    ./waf configure --prefix ~/opt/cquery
     ./waf build -j4
     ./waf install
 
