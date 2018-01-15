@@ -130,6 +130,11 @@ end
 set laststatus=2
 set statusline+=%{gutentags#statusline()}
 
+" Disable cursor styling if inside an ssh session.
+if $SSH_CONNECTION != ''
+    set guicursor=
+end
+
 " Airline + gutentags integration.
 " Show "TAGS" in the status line while gutentags is generating tags.
 function! GutentagsStatus(...)
