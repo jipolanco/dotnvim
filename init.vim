@@ -18,6 +18,7 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'editorconfig/editorconfig-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'w0rp/ale'
+" Plug 'andymass/vim-matchup'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'honza/vim-snippets'
 Plug 'junegunn/vim-easy-align'
@@ -27,6 +28,7 @@ Plug 'kshenoy/vim-signature'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'majutsushi/tagbar'
+" Plug 'neomake/neomake'
 Plug 'Raimondi/delimitMate'
 Plug 'scrooloose/nerdtree'
 Plug 'SirVer/ultisnips'
@@ -90,7 +92,7 @@ Plug 'vim-pandoc/vim-pandoc-after'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'rust-lang/rust.vim'
 Plug 'cespare/vim-toml'
-Plug 'Vimjas/vim-python-pep8-indent'
+" Plug 'Vimjas/vim-python-pep8-indent'
 
 Plug 'hail2u/vim-css3-syntax'
 " Plug 'skammer/vim-css-color'
@@ -305,8 +307,9 @@ if !b:use_ycm
     let g:clang_library_path = '/usr/lib64'
 
                 " \ 'cpp': ['~/opt/clang/bin/clangd'],
+                " \ 'python': ['~/opt/miniconda3/envs/py3/bin/pyls'],
     let g:LanguageClient_serverCommands = {
-                \ 'python': ['~/opt/miniconda3/envs/py3/bin/pyls'],
+                \ 'python': ['pyls'],
                 \ 'c': ['~/opt/cquery/bin/cquery', '--language-server',
                 \         '--log-file=/tmp/cquery.log'],
                 \ 'cpp': ['~/opt/cquery/bin/cquery', '--language-server',
@@ -323,6 +326,7 @@ if !b:use_ycm
 
     " Automatically start language servers.
     let g:LanguageClient_autoStart = 1
+
     " Use location instead of quickfix list for diagnostics.
     let g:LanguageClient_diagnosticsList = 'Location'
 
@@ -330,11 +334,13 @@ if !b:use_ycm
     " autocmd BufRead,BufNewFile *.py :LanguageClientStart<CR>
 
     function! LanguageClientSetMaps()
-        nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+        " Mappings proposed at:
+        " https://github.com/cquery-project/cquery/wiki/Neovim
+        nnoremap <silent> gh :call LanguageClient_textDocument_hover()<CR>
         nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-        nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-        nnoremap <silent> gs :call LanguageClient_textDocument_documentSymbol()<CR>
         nnoremap <silent> gr :call LanguageClient_textDocument_references()<CR>
+        nnoremap <silent> gs :call LanguageClient_textDocument_documentSymbol()<CR>
+        nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
     endfunction
 
     augroup LanguageClient_config
@@ -342,18 +348,14 @@ if !b:use_ycm
         autocmd User LanguageClientStarted
                     \ setlocal
                     \ formatexpr=LanguageClient_textDocument_rangeFormatting()
-        " autocmd User LanguageClientStarted
-        "             \ setlocal completefunc=LanguageClient#complete
+        autocmd User LanguageClientStarted
+                    \ setlocal completefunc=LanguageClient#complete
         autocmd User LanguageClientStarted
                     \ exec LanguageClientSetMaps()
-        autocmd User LanguageClientStopped
-                    \ setlocal formatexpr=
-        " autocmd User LanguageClientStopped
-        "             \ setlocal completefunc=
     augroup END
 
     " https://github.com/roxma/nvim-completion-manager#optional-configuration-tips
-    inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+    " inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
     inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 endif
@@ -422,10 +424,12 @@ augroup PANDOC_TRAILING
     autocmd BufWritePre *.md :%s/\s\+$//e
 augroup END
 
-" Disable gitgutter mappings. Some conflict with vimtex (for example "ic",
-" "ac" for LaTeX commands).
+" Note: gitgutter default mappings "ic" and "ac" conflict with vimtex (for LaTeX
+" commands), so we disable them and manually define a few mappings.
 let g:gitgutter_map_keys = 0
 let g:gitgutter_override_sign_column_highlight = 0
+nmap [c <Plug>GitGutterPrevHunk
+nmap ]c <Plug>GitGutterNextHunk
 
 " ========================================================================== "
 " MORE MAPPINGS.
@@ -500,13 +504,23 @@ nmap ga <Plug>(EasyAlign)
 nmap <leader>= yypv$r=
 nmap <leader>- yypv$r-
 
-" Terminal mappings (see ":h nvim-terminal-emulator-input").
-" if has('nvim')
-"     tnoremap <M-h> <C-\><C-n><C-w>h     " move to left window
-"     tnoremap <M-j> <C-\><C-n><C-w>j     " etc...
-"     tnoremap <M-k> <C-\><C-n><C-w>k
-"     tnoremap <M-l> <C-\><C-n><C-w>l
+" Terminal mappings (see ":h terminal-emulator").
+if has('nvim')
+    " Stuff taken from ":h terminal-input".
+    " NOTE: using just one <Esc> conflicts with the terminal vi-mode.
+    tnoremap <Esc><Esc> <C-\><C-n>      " exit terminal mode
 
-"     " NOTE: using just one <Esc> conflicts with the terminal vi-mode.
-"     tnoremap <Esc><Esc> <C-\><C-n>      " exit terminal mode
-" end
+    " To use `ALT+{h,j,k,l}` to navigate windows from any mode:
+    tnoremap <A-h> <C-\><C-N><C-w>h
+    tnoremap <A-j> <C-\><C-N><C-w>j
+    tnoremap <A-k> <C-\><C-N><C-w>k
+    tnoremap <A-l> <C-\><C-N><C-w>l
+    inoremap <A-h> <C-\><C-N><C-w>h
+    inoremap <A-j> <C-\><C-N><C-w>j
+    inoremap <A-k> <C-\><C-N><C-w>k
+    inoremap <A-l> <C-\><C-N><C-w>l
+    nnoremap <A-h> <C-w>h
+    nnoremap <A-j> <C-w>j
+    nnoremap <A-k> <C-w>k
+    nnoremap <A-l> <C-w>l
+end
