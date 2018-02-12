@@ -37,13 +37,15 @@ let g:vimtex_format_enabled = 1
 " Don't open the quickfix window automatically when there are only warnings.
 " let g:vimtex_quickfix_open_on_warning = 0
 
-let g:vimtex_view_method = 'zathura'
-let g:vimtex_view_use_temp_files = 1
+" Config for zathura.
+" let g:vimtex_view_method = 'zathura'
+" let g:vimtex_view_use_temp_files = 1
 
-" Use okular for forward search.
-" let g:vimtex_view_general_viewer = 'okular'
-" let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
-" let g:vimtex_view_general_options_latexmk = '--unique'
+" Config for okular.
+let g:vimtex_view_method = 'general'
+let g:vimtex_view_general_viewer = 'okular'
+let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
+let g:vimtex_view_general_options_latexmk = '--unique'
 
 " See ":h vimtex-complete-youcompleteme".
 if !exists('g:ycm_semantic_triggers')
