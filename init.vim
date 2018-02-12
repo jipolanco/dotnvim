@@ -3,7 +3,7 @@ scriptencoding utf-8
 filetype indent plugin on
 
 let b:use_ycm = 0
-let b:use_deoplete = 1 && !b:use_ycm
+let b:use_deoplete = 0 && !b:use_ycm
 let b:use_ncm = 1 && !b:use_deoplete
 
 " Use true colours in terminal.
@@ -132,7 +132,7 @@ set laststatus=2
 set statusline+=%{gutentags#statusline()}
 
 " Disable cursor styling if inside an ssh session.
-if $SSH_CONNECTION != ''
+if $SSH_CONNECTION !=# ''
     set guicursor=
 end
 
