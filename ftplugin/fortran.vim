@@ -20,3 +20,7 @@ let fortran_do_enddo = 1
 let g:syntastic_fortran_compiler = 'gfortran'
 let g:syntastic_fortran_compiler_options = '-Wall -Wextra -cpp -std=f2008'
 let g:syntastic_fortran_remove_include_errors = 1
+
+let g:ale_fortran_gcc_executable = 'gfortran'
+let g:ale_fortran_gcc_options = '-Wall -Wextra -cpp -std=f2008'
+let g:ale_fortran_gcc_use_free_form = 1
