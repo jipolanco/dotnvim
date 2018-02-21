@@ -22,8 +22,8 @@ Plug 'w0rp/ale'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'honza/vim-snippets'
 Plug 'junegunn/vim-easy-align'
-Plug 'KabbAmine/zeavim.vim'
-Plug 'Konfekt/FastFold'
+" Plug 'KabbAmine/zeavim.vim'
+" Plug 'Konfekt/FastFold'
 Plug 'kshenoy/vim-signature'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'ludovicchabant/vim-gutentags'
@@ -46,13 +46,8 @@ if b:use_ycm
     Plug 'Valloric/YouCompleteMe'
 elseif b:use_deoplete
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    " Plug 'zchee/deoplete-clang'
-    " Plug 'tweekmonster/deoplete-clang2'
-    " Plug 'Rip-Rip/clang_complete'
 elseif b:use_ncm
     Plug 'roxma/nvim-completion-manager'
-    " Plug 'Rip-Rip/clang_complete'
-    " Plug 'roxma/ncm-clang'
 end
 if !b:use_ycm
     Plug 'autozimu/LanguageClient-neovim', {
@@ -60,7 +55,6 @@ if !b:use_ycm
                 \ 'do': 'bash install.sh',
                 \ }
     Plug 'Shougo/echodoc.vim'
-    " Plug 'ervandew/supertab'
     Plug 'Shougo/neco-vim'
 endif
 Plug 'vim-airline/vim-airline'
@@ -82,7 +76,6 @@ let g:latex_to_unicode_auto = 1
 " inoremap <expr> <F7> LaTeXtoUnicode#Toggle()
 
 Plug 'lervag/vimtex'
-Plug 'poppyschmo/vim-latexrefman'
 Plug 'chriskempson/base16-vim'
 Plug 'dag/vim-fish'
 Plug 'jvirtanen/vim-octave'
@@ -92,17 +85,14 @@ Plug 'vim-pandoc/vim-pandoc-after'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'rust-lang/rust.vim'
 Plug 'cespare/vim-toml'
-" Plug 'Vimjas/vim-python-pep8-indent'
 
 Plug 'hail2u/vim-css3-syntax'
-" Plug 'skammer/vim-css-color'
 
 " Colourschemes.
 Plug 'nanotech/jellybeans.vim'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'Wutzara/vim-materialtheme'
 Plug 'morhetz/gruvbox'
-Plug 'lifepillar/vim-solarized8'
 Plug 'iCyMind/NeoSolarized'
 Plug 'joshdick/onedark.vim'
 Plug 'mhartington/oceanic-next'
