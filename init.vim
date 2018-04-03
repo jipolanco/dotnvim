@@ -296,20 +296,18 @@ if !b:use_ycm
     " clang_complete
     let g:clang_library_path = '/usr/lib64'
 
-                " \ 'cpp': ['~/opt/clang/bin/clangd'],
-                " \ 'python': ['~/opt/miniconda3/envs/py3/bin/pyls'],
+                " \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
+                " \       using LanguageServer;
+                " \       server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false);
+                " \       server.runlinter = true;
+                " \       run(server);
+                " \   '],
     let g:LanguageClient_serverCommands = {
                 \ 'python': ['pyls'],
                 \ 'c': ['~/opt/cquery/bin/cquery', '--language-server',
                 \         '--log-file=/tmp/cquery.log'],
                 \ 'cpp': ['~/opt/cquery/bin/cquery', '--language-server',
                 \         '--log-file=/tmp/cquery.log'],
-                \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
-                \       using LanguageServer;
-                \       server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false);
-                \       server.runlinter = true;
-                \       run(server);
-                \   '],
     \ }
     let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
     let g:LanguageClient_loadSettings = 1
