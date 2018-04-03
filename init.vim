@@ -2,9 +2,6 @@ set encoding=utf-8
 scriptencoding utf-8
 filetype indent plugin on
 
-let b:use_deoplete = 0
-let b:use_ncm = 1 && !b:use_deoplete
-
 " Use true colours in terminal.
 if has('termguicolors')
     set termguicolors
@@ -42,11 +39,8 @@ endif
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'Valloric/ListToggle'
-if b:use_deoplete
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-elseif b:use_ncm
-    Plug 'roxma/nvim-completion-manager'
-end
+
+Plug 'roxma/nvim-completion-manager'
 
 Plug 'autozimu/LanguageClient-neovim', {
             \ 'branch': 'next',
@@ -242,63 +236,39 @@ let g:ftplugin_rust_source_path = $RUST_SRC_PATH
 
 " ========================================================================== "
 " PLUGINS
-let g:NERDTreeQuitOnOpen=1
-
-let g:syntastic_error_symbol='✗'
-let g:syntastic_warning_symbol='⚠'
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_rust_checkers = ['rustc']
-
-" Run Neomake when writing a file.
-" autocmd! BufWritePost * Neomake
-
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 " let g:EditorConfig_disable_rules = ['trim_trailing_whitespace']
 
 let g:echodoc#enable_at_startup = 1
 
-if b:use_deoplete
-    let g:deoplete#enable_at_startup = 1
-    " call deoplete#custom#source('_', 'matchers', ['matcher_full_fuzzy'])
+" Neovim completion manager (NCM).
+set shortmess+=c
+let g:cm_matcher = {
+            \ 'module': 'cm_matchers.fuzzy_matcher',
+            \ 'case': 'smartcase'
+            \ }
+augroup my_cm_setup
+  autocmd!
+  " LaTeX / vimtex
+  autocmd User CmSetup call cm#register_source({
+        \ 'name' : 'vimtex',
+        \ 'priority': 8,
+        \ 'scoping': 1,
+        \ 'scopes': ['tex'],
+        \ 'abbreviation': 'tex',
+        \ 'cm_refresh_patterns': g:vimtex#re#ncm,
+        \ 'cm_refresh': {'omnifunc': 'vimtex#complete#omnifunc'},
+        \ })
+augroup END
 
-    " LaTeX / vimtex
-    if !exists('g:deoplete#omni#input_patterns')
-        let g:deoplete#omni#input_patterns = {}
-    endif
-    let g:deoplete#omni#input_patterns.tex = g:vimtex#re#deoplete
+" https://github.com/roxma/nvim-completion-manager#optional-configuration-tips
+inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <c-c> <ESC>
 
-elseif b:use_ncm
-    set shortmess+=c
-
-    let g:cm_matcher = {
-                \ 'module': 'cm_matchers.fuzzy_matcher',
-                \ 'case': 'smartcase'
-                \ }
-
-    " LaTeX / vimtex
-    augroup my_cm_setup
-      autocmd!
-      autocmd User CmSetup call cm#register_source({
-            \ 'name' : 'vimtex',
-            \ 'priority': 8,
-            \ 'scoping': 1,
-            \ 'scopes': ['tex'],
-            \ 'abbreviation': 'tex',
-            \ 'cm_refresh_patterns': g:vimtex#re#ncm,
-            \ 'cm_refresh': {'omnifunc': 'vimtex#complete#omnifunc'},
-            \ })
-    augroup END
-end
-
-" clang_complete
-let g:clang_library_path = '/usr/lib64'
-
-            " \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
-            " \       using LanguageServer;
-            " \       server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false);
-            " \       server.runlinter = true;
-            " \       run(server);
-            " \   '],
+" LanguageClient
+" For some ideas, see https://github.com/cquery-project/cquery/wiki/Neovim
 let g:LanguageClient_serverCommands = {
             \ 'python': ['pyls'],
             \ 'c': ['~/opt/cquery/bin/cquery', '--language-server',
@@ -306,6 +276,12 @@ let g:LanguageClient_serverCommands = {
             \ 'cpp': ['~/opt/cquery/bin/cquery', '--language-server',
             \         '--log-file=/tmp/cquery.log'],
 \ }
+" \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
+" \       using LanguageServer;
+" \       server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false);
+" \       server.runlinter = true;
+" \       run(server);
+" \   '],
 let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
 let g:LanguageClient_loadSettings = 1
 
@@ -314,9 +290,6 @@ let g:LanguageClient_autoStart = 1
 
 " Use location instead of quickfix list for diagnostics.
 let g:LanguageClient_diagnosticsList = 'Location'
-
-" Autostart language server for python.
-" autocmd BufRead,BufNewFile *.py :LanguageClientStart<CR>
 
 function! LanguageClientSetMaps()
     " Mappings proposed at:
@@ -339,11 +312,7 @@ augroup LanguageClient_config
                 \ exec LanguageClientSetMaps()
 augroup END
 
-" https://github.com/roxma/nvim-completion-manager#optional-configuration-tips
-" inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
+" ALE
 " LaTeX: disable proselint (it's nice, but uses a lot of CPU)
 " Disable ALE for python, C, C++ (using LanguageClient instead).
 let g:ale_linters = {
@@ -357,28 +326,28 @@ let g:ale_linters = {
 let g:ale_linter_aliases = {'pandoc': 'markdown'}
 let g:ale_python_mypy_options = '--ignore-missing-imports'
 
+" UltiSnips
 let g:UltiSnipsEditSplit = 'vertical'
 let g:UltiSnipsExpandTrigger = '<C-j>'
 let g:UltiSnipsListSnippets = '<C-M-j>'
 let g:UltiSnipsSnippetsDir = '~/.config/nvim/UltiSnips'
 
+" Surround
 let g:surround_indent = 1
-
-" CtrlP: ignore files in .gitignore.
-" From https://github.com/kien/ctrlp.vim/issues/174#issuecomment-49747252
-let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 
 " Gutentags -- write tags files to this folder:
 let g:gutentags_cache_dir = '/tmp/gutentags'
+
 " Don't generate tags for project documentation (e.g. doxygen-generated files)
 " and some CMake-generated files.
 let g:gutentags_ctags_exclude = ['doc', 'CMakeFiles']
 
+" Pandoc
 " vim-pandoc-after plugin (integrates vim-pandoc with other plugins)
 let g:pandoc#after#modules#enabled = ['ultisnips']
-" let g:pandoc#formatting#mode = 'ha'  " hard wraps, autoformatting
 let g:pandoc#formatting#mode = 'sa'
-" (default = 1) don't use italics, they don't work for me in neovim
+
+" Don't use italics, they don't work for me in neovim (default: 1).
 let g:pandoc#syntax#style#emphases = 0
 let g:pandoc#command#latex_engine = 'lualatex'
 
@@ -388,6 +357,7 @@ augroup PANDOC_TRAILING
     autocmd BufWritePre *.md :%s/\s\+$//e
 augroup END
 
+" GitGutter
 " Note: gitgutter default mappings "ic" and "ac" conflict with vimtex (for LaTeX
 " commands), so we disable them and manually define a few mappings.
 let g:gitgutter_map_keys = 0
@@ -433,12 +403,6 @@ nmap <leader>gg :Gstatus<CR>
 nmap <leader>gd :Gdiff<CR>
 nmap <leader>gw :Gwrite<CR>
 nmap <leader>ge :Gedit<CR>
-
-" Solarized8: toggle between dark and light variants (taken from their README.md)
-nnoremap  <leader>B :<c-u>exe "colors" (g:colors_name =~# "dark"
-    \ ? substitute(g:colors_name, 'dark', 'light', '')
-    \ : substitute(g:colors_name, 'light', 'dark', '')
-    \ )<cr>
 
 " This fixes comment indenting in Python (see ":h smartindent").
 inoremap # X#
