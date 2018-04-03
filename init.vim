@@ -2,8 +2,7 @@ set encoding=utf-8
 scriptencoding utf-8
 filetype indent plugin on
 
-let b:use_ycm = 0
-let b:use_deoplete = 0 && !b:use_ycm
+let b:use_deoplete = 0
 let b:use_ncm = 1 && !b:use_deoplete
 
 " Use true colours in terminal.
@@ -43,21 +42,19 @@ endif
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'Valloric/ListToggle'
-if b:use_ycm
-    Plug 'Valloric/YouCompleteMe'
-elseif b:use_deoplete
+if b:use_deoplete
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 elseif b:use_ncm
     Plug 'roxma/nvim-completion-manager'
 end
-if !b:use_ycm
-    Plug 'autozimu/LanguageClient-neovim', {
-                \ 'branch': 'next',
-                \ 'do': 'bash install.sh',
-                \ }
-    Plug 'Shougo/echodoc.vim'
-    Plug 'Shougo/neco-vim'
-endif
+
+Plug 'autozimu/LanguageClient-neovim', {
+            \ 'branch': 'next',
+            \ 'do': 'bash install.sh',
+            \ }
+Plug 'Shougo/echodoc.vim'
+Plug 'Shougo/neco-vim'
+
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -258,116 +255,105 @@ let g:syntastic_rust_checkers = ['rustc']
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 " let g:EditorConfig_disable_rules = ['trim_trailing_whitespace']
 
-if !b:use_ycm
-    let g:echodoc#enable_at_startup = 1
+let g:echodoc#enable_at_startup = 1
 
-    if b:use_deoplete
-        let g:deoplete#enable_at_startup = 1
-        " call deoplete#custom#source('_', 'matchers', ['matcher_full_fuzzy'])
+if b:use_deoplete
+    let g:deoplete#enable_at_startup = 1
+    " call deoplete#custom#source('_', 'matchers', ['matcher_full_fuzzy'])
 
-        " LaTeX / vimtex
-        if !exists('g:deoplete#omni#input_patterns')
-            let g:deoplete#omni#input_patterns = {}
-        endif
-        let g:deoplete#omni#input_patterns.tex = g:vimtex#re#deoplete
+    " LaTeX / vimtex
+    if !exists('g:deoplete#omni#input_patterns')
+        let g:deoplete#omni#input_patterns = {}
+    endif
+    let g:deoplete#omni#input_patterns.tex = g:vimtex#re#deoplete
 
-    elseif b:use_ncm
-        set shortmess+=c
+elseif b:use_ncm
+    set shortmess+=c
 
-        let g:cm_matcher = {
-                    \ 'module': 'cm_matchers.fuzzy_matcher',
-                    \ 'case': 'smartcase'
-                    \ }
+    let g:cm_matcher = {
+                \ 'module': 'cm_matchers.fuzzy_matcher',
+                \ 'case': 'smartcase'
+                \ }
 
-        " LaTeX / vimtex
-        augroup my_cm_setup
-          autocmd!
-          autocmd User CmSetup call cm#register_source({
-                \ 'name' : 'vimtex',
-                \ 'priority': 8,
-                \ 'scoping': 1,
-                \ 'scopes': ['tex'],
-                \ 'abbreviation': 'tex',
-                \ 'cm_refresh_patterns': g:vimtex#re#ncm,
-                \ 'cm_refresh': {'omnifunc': 'vimtex#complete#omnifunc'},
-                \ })
-        augroup END
-    end
-
-    " clang_complete
-    let g:clang_library_path = '/usr/lib64'
-
-                " \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
-                " \       using LanguageServer;
-                " \       server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false);
-                " \       server.runlinter = true;
-                " \       run(server);
-                " \   '],
-    let g:LanguageClient_serverCommands = {
-                \ 'python': ['pyls'],
-                \ 'c': ['~/opt/cquery/bin/cquery', '--language-server',
-                \         '--log-file=/tmp/cquery.log'],
-                \ 'cpp': ['~/opt/cquery/bin/cquery', '--language-server',
-                \         '--log-file=/tmp/cquery.log'],
-    \ }
-    let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
-    let g:LanguageClient_loadSettings = 1
-
-    " Automatically start language servers.
-    let g:LanguageClient_autoStart = 1
-
-    " Use location instead of quickfix list for diagnostics.
-    let g:LanguageClient_diagnosticsList = 'Location'
-
-    " Autostart language server for python.
-    " autocmd BufRead,BufNewFile *.py :LanguageClientStart<CR>
-
-    function! LanguageClientSetMaps()
-        " Mappings proposed at:
-        " https://github.com/cquery-project/cquery/wiki/Neovim
-        nnoremap <silent> gh :call LanguageClient_textDocument_hover()<CR>
-        nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-        nnoremap <silent> gr :call LanguageClient_textDocument_references()<CR>
-        nnoremap <silent> gs :call LanguageClient_textDocument_documentSymbol()<CR>
-        nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-    endfunction
-
-    augroup LanguageClient_config
-        autocmd!
-        autocmd User LanguageClientStarted
-                    \ setlocal
-                    \ formatexpr=LanguageClient_textDocument_rangeFormatting()
-        autocmd User LanguageClientStarted
-                    \ setlocal completefunc=LanguageClient#complete
-        autocmd User LanguageClientStarted
-                    \ exec LanguageClientSetMaps()
+    " LaTeX / vimtex
+    augroup my_cm_setup
+      autocmd!
+      autocmd User CmSetup call cm#register_source({
+            \ 'name' : 'vimtex',
+            \ 'priority': 8,
+            \ 'scoping': 1,
+            \ 'scopes': ['tex'],
+            \ 'abbreviation': 'tex',
+            \ 'cm_refresh_patterns': g:vimtex#re#ncm,
+            \ 'cm_refresh': {'omnifunc': 'vimtex#complete#omnifunc'},
+            \ })
     augroup END
+end
 
-    " https://github.com/roxma/nvim-completion-manager#optional-configuration-tips
-    " inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-    inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-endif
+" clang_complete
+let g:clang_library_path = '/usr/lib64'
+
+            " \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
+            " \       using LanguageServer;
+            " \       server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false);
+            " \       server.runlinter = true;
+            " \       run(server);
+            " \   '],
+let g:LanguageClient_serverCommands = {
+            \ 'python': ['pyls'],
+            \ 'c': ['~/opt/cquery/bin/cquery', '--language-server',
+            \         '--log-file=/tmp/cquery.log'],
+            \ 'cpp': ['~/opt/cquery/bin/cquery', '--language-server',
+            \         '--log-file=/tmp/cquery.log'],
+\ }
+let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
+let g:LanguageClient_loadSettings = 1
+
+" Automatically start language servers.
+let g:LanguageClient_autoStart = 1
+
+" Use location instead of quickfix list for diagnostics.
+let g:LanguageClient_diagnosticsList = 'Location'
+
+" Autostart language server for python.
+" autocmd BufRead,BufNewFile *.py :LanguageClientStart<CR>
+
+function! LanguageClientSetMaps()
+    " Mappings proposed at:
+    " https://github.com/cquery-project/cquery/wiki/Neovim
+    nnoremap <silent> gh :call LanguageClient_textDocument_hover()<CR>
+    nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+    nnoremap <silent> gr :call LanguageClient_textDocument_references()<CR>
+    nnoremap <silent> gs :call LanguageClient_textDocument_documentSymbol()<CR>
+    nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+endfunction
+
+augroup LanguageClient_config
+    autocmd!
+    autocmd User LanguageClientStarted
+                \ setlocal
+                \ formatexpr=LanguageClient_textDocument_rangeFormatting()
+    autocmd User LanguageClientStarted
+                \ setlocal completefunc=LanguageClient#complete
+    autocmd User LanguageClientStarted
+                \ exec LanguageClientSetMaps()
+augroup END
+
+" https://github.com/roxma/nvim-completion-manager#optional-configuration-tips
+" inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " LaTeX: disable proselint (it's nice, but uses a lot of CPU)
-if b:use_ycm
-    " Disable ALE for C and C++ (conflicts with YCM).
-    let g:ale_linters = {
-                \   'c': [],
-                \   'cpp': [],
-                \   'python': ['flake8', 'mypy'],
-                \   'tex': ['chktex', 'lacheck'],
-                \}
-else
-    " Disable ALE for python, C, C++ (using LanguageClient instead).
-    let g:ale_linters = {
-                \   'c': [],
-                \   'cpp': [],
-                \   'python': [],
-                \   'tex': ['chktex', 'lacheck'],
-                \   'pandoc': [],
-                \}
-endif
+" Disable ALE for python, C, C++ (using LanguageClient instead).
+let g:ale_linters = {
+            \   'c': [],
+            \   'cpp': [],
+            \   'python': [],
+            \   'tex': ['chktex', 'lacheck'],
+            \   'pandoc': [],
+            \}
+
 let g:ale_linter_aliases = {'pandoc': 'markdown'}
 let g:ale_python_mypy_options = '--ignore-missing-imports'
 
@@ -375,17 +361,6 @@ let g:UltiSnipsEditSplit = 'vertical'
 let g:UltiSnipsExpandTrigger = '<C-j>'
 let g:UltiSnipsListSnippets = '<C-M-j>'
 let g:UltiSnipsSnippetsDir = '~/.config/nvim/UltiSnips'
-
-if b:use_ycm
-    " let g:ycm_collect_identifiers_from_tags_files = 1
-    let g:ycm_seed_identifiers_with_syntax = 1
-    " let g:ycm_global_ycm_extra_conf = '~/.nvim/ycm_extra_conf.default.py'
-    let g:ycm_filepath_completion_use_working_dir = 1
-    let g:ycm_max_diagnostics_to_display = 300
-    let g:ycm_python_binary_path = 'python3'
-    let g:ycm_rust_src_path = $RUST_SRC_PATH
-    " let g:ycm_log_level = 'debug'
-endif
 
 let g:surround_indent = 1
 
@@ -452,16 +427,6 @@ nnoremap <leader>H :History<cr>
 nnoremap <leader>: :History:<cr>
 nnoremap <leader>/ :History/<cr>
 nnoremap <leader>w :Windows<cr>
-
-" YouCompleteMe
-if b:use_ycm
-    nnoremap <leader>jJ :YcmCompleter GoTo<CR>
-    nnoremap <leader>jj :YcmCompleter GoToImprecise<CR>
-    nnoremap <leader>j? :YcmCompleter GetDoc<CR>
-    nnoremap <leader>jD :YcmCompleter GoToDefinition<CR>
-    nnoremap <leader>jd :YcmCompleter GoToDeclaration<CR>
-    nnoremap <leader>jf :YcmCompleter FixIt<CR>
-endif
 
 " Fugitive
 nmap <leader>gg :Gstatus<CR>

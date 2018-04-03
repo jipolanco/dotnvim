@@ -24,16 +24,3 @@
     ```bash
     vim +PlugInstall
     ```
-
-1.  Compile YouCompleteMe. See
-    [here](https://github.com/Valloric/YouCompleteMe/blob/master/README.md) for
-    instructions, or:
-
-    ```bash
-    cd ~/.nvim/plugged/YouCompleteMe/
-    mkdir build
-    cd build
-    cmake ../third_party/ycmd/cpp -DUSE_SYSTEM_LIBCLANG=ON \
-        -DUSE_SYSTEM_BOOST=ON -DUSE_CLANG_COMPLETER=ON
-    make ycm_support_libs
-    ```
