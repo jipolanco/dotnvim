@@ -242,11 +242,12 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 let g:echodoc#enable_at_startup = 1
 
 " Neovim completion manager (NCM).
-set shortmess+=c
 let g:cm_matcher = {
             \ 'module': 'cm_matchers.fuzzy_matcher',
             \ 'case': 'smartcase'
             \ }
+let g:cm_completekeys = "\<Plug>(cm_omnifunc)"
+
 augroup my_cm_setup
   autocmd!
   " LaTeX / vimtex
@@ -261,20 +262,21 @@ augroup my_cm_setup
         \ })
 augroup END
 
-" https://github.com/roxma/nvim-completion-manager#optional-configuration-tips
+" See ":h NCM-tips"
+set shortmess+=c
 inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+imap <expr> <CR>  (pumvisible() ?  "\<c-y>\<Plug>(expand_or_nl)" : "\<CR>")
+imap <expr> <Plug>(expand_or_nl) (cm#completed_is_snippet() ? "\<C-U>":"\<CR>")
+inoremap <c-c> <ESC>
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <c-c> <ESC>
 
 " LanguageClient
 " For some ideas, see https://github.com/cquery-project/cquery/wiki/Neovim
 let g:LanguageClient_serverCommands = {
             \ 'python': ['pyls'],
-            \ 'c': ['~/opt/cquery/bin/cquery', '--language-server',
-            \         '--log-file=/tmp/cquery.log'],
-            \ 'cpp': ['~/opt/cquery/bin/cquery', '--language-server',
-            \         '--log-file=/tmp/cquery.log'],
+            \ 'c': ['~/opt/cquery/bin/cquery', '--log-file=/tmp/cquery.log'],
+            \ 'cpp': ['~/opt/cquery/bin/cquery', '--log-file=/tmp/cquery.log'],
 \ }
 " \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
 " \       using LanguageServer;
@@ -326,11 +328,15 @@ let g:ale_linters = {
 let g:ale_linter_aliases = {'pandoc': 'markdown'}
 let g:ale_python_mypy_options = '--ignore-missing-imports'
 
-" UltiSnips
+" UltiSnips (and also NCM)
+" See also ":h NCM-Ultisnips"
 let g:UltiSnipsEditSplit = 'vertical'
-let g:UltiSnipsExpandTrigger = '<C-j>'
-let g:UltiSnipsListSnippets = '<C-M-j>'
 let g:UltiSnipsSnippetsDir = '~/.config/nvim/UltiSnips'
+let g:UltiSnipsExpandTrigger = '<Plug>(ultisnips_expand)'
+let g:UltiSnipsJumpForwardTrigger = '<c-j>'
+let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
+let g:UltiSnipsRemoveSelectModeMappings = 0
+inoremap <silent> <c-u> <c-r>=cm#sources#ultisnips#trigger_or_popup("\<Plug>(ultisnips_expand)")<cr>
 
 " Surround
 let g:surround_indent = 1
