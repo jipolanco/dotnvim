@@ -42,8 +42,9 @@ Plug 'Valloric/ListToggle'
 
 Plug 'roxma/nvim-completion-manager'
 
+            " \ 'branch': 'next',
 Plug 'autozimu/LanguageClient-neovim', {
-            \ 'branch': 'next',
+            \ 'tag': '0.1.58',
             \ 'do': 'bash install.sh',
             \ }
 Plug 'Shougo/echodoc.vim'
