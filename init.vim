@@ -32,6 +32,7 @@ Plug 'SirVer/ultisnips'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
+Plug 'lambdalisue/gina.vim'
 Plug 'tpope/vim-repeat'
 if !has('nvim')
     Plug 'tpope/vim-sensible'
@@ -59,7 +60,7 @@ Plug 'junegunn/fzf.vim'
 " Plug 'bfredl/nvim-ipy'    " ipython
 
 Plug 'JuliaEditorSupport/julia-vim'
-let g:default_julia_version = '0.6'
+let g:default_julia_version = 'devel'
 let g:latex_to_unicode_tab = 0
 " let g:latex_to_unicode_suggestions = 0
 let g:latex_to_unicode_auto = 1
@@ -135,6 +136,9 @@ set cmdheight=2
 " Numbers.
 set number
 set relativenumber
+
+" Always draw sign column.
+set signcolumn=yes
 
 set lazyredraw  " don't redraw during macros, etc.
 
@@ -229,10 +233,11 @@ augroup END
 " Rust
 let g:rust_conceal = 1
 let g:rust_conceal_mod_path = 0
-let g:rust_conceal_pub = 0
+let g:rust_conceal_pub = 1
+let g:rust_recommended_style = 1
 let g:rust_fold = 1
 let g:rustfmt_autosave = 1
-let g:ftplugin_rust_source_path = $RUST_SRC_PATH
+" let g:ftplugin_rust_source_path = $RUST_SRC_PATH
 
 " ========================================================================== "
 " PLUGINS
@@ -242,6 +247,7 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 let g:echodoc#enable_at_startup = 1
 
 " Neovim completion manager (NCM).
+" Note: abbrev_matcher requires the `ag` binary installed (i.e. the_silver_searcher).
 let g:cm_matcher = {
             \ 'module': 'cm_matchers.fuzzy_matcher',
             \ 'case': 'smartcase'
@@ -277,6 +283,7 @@ let g:LanguageClient_serverCommands = {
             \ 'python': ['pyls'],
             \ 'c': ['~/opt/cquery/bin/cquery', '--log-file=/tmp/cquery.log'],
             \ 'cpp': ['~/opt/cquery/bin/cquery', '--log-file=/tmp/cquery.log'],
+            \ 'rust': ['rustup', 'run', 'stable', 'rls'],
 \ }
 " \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
 " \       using LanguageServer;
@@ -296,18 +303,19 @@ let g:LanguageClient_diagnosticsList = 'Location'
 function! LanguageClientSetMaps()
     " Mappings proposed at:
     " https://github.com/cquery-project/cquery/wiki/Neovim
-    nnoremap <silent> gh :call LanguageClient_textDocument_hover()<CR>
-    nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-    nnoremap <silent> gr :call LanguageClient_textDocument_references()<CR>
-    nnoremap <silent> gs :call LanguageClient_textDocument_documentSymbol()<CR>
-    nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+    nnoremap <silent> gh :call LanguageClient#textDocument_hover()<CR>
+    nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+    nnoremap <silent> gr :call LanguageClient#textDocument_references()<CR>
+    nnoremap <silent> gs :call LanguageClient#textDocument_documentSymbol()<CR>
+    nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+    nnoremap <silent> <F5> :call LanguageClient_contextMenu()<CR>
 endfunction
 
 augroup LanguageClient_config
     autocmd!
     autocmd User LanguageClientStarted
                 \ setlocal
-                \ formatexpr=LanguageClient_textDocument_rangeFormatting()
+                \ formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
     autocmd User LanguageClientStarted
                 \ setlocal completefunc=LanguageClient#complete
     autocmd User LanguageClientStarted
@@ -315,14 +323,15 @@ augroup LanguageClient_config
 augroup END
 
 " ALE
-" LaTeX: disable proselint (it's nice, but uses a lot of CPU)
-" Disable ALE for python, C, C++ (using LanguageClient instead).
+" Disable ALE for python, C, C++, Rust (using LanguageClient instead).
 let g:ale_linters = {
             \   'c': [],
             \   'cpp': [],
             \   'python': [],
             \   'tex': ['chktex', 'lacheck'],
             \   'pandoc': [],
+            \   'perl': ['perl', 'perlcritic'],
+            \   'rust': [],
             \}
 
 let g:ale_linter_aliases = {'pandoc': 'markdown'}
@@ -335,6 +344,7 @@ let g:UltiSnipsSnippetsDir = '~/.config/nvim/UltiSnips'
 let g:UltiSnipsExpandTrigger = '<Plug>(ultisnips_expand)'
 let g:UltiSnipsJumpForwardTrigger = '<c-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
+let g:UltiSnipsListSnippets = '<m-u>'
 let g:UltiSnipsRemoveSelectModeMappings = 0
 inoremap <silent> <c-u> <c-r>=cm#sources#ultisnips#trigger_or_popup("\<Plug>(ultisnips_expand)")<cr>
 

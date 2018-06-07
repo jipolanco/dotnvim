@@ -5,5 +5,9 @@
         "resourceDirectory_old": "/usr/lib64/clang/5.0.1",
         "cacheFormat": "msgpack",
         "enableComments": 1
+    },
+    "rust": {
+        "__comment__": "See https://github.com/rust-lang-nursery/rls#configuration",
+        "clippy_preference": "on"
     }
 }

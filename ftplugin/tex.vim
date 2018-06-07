@@ -31,6 +31,18 @@ let g:vimtex_quickfix_open_on_warning = 0
 let g:vimtex_fold_enabled = 1
 let g:vimtex_format_enabled = 1
 
+" Remove -pdf option from default latexmk parameters.
+" This way, the value of $pdf_mode in .latexmkrc is respected.
+" In particular, if $pdf_mode = 4, pdf files are created using lualatex.
+let g:vimtex_compiler_latexmk = {
+    \ 'options' : [
+    \   '-verbose',
+    \   '-file-line-error',
+    \   '-synctex=1',
+    \   '-interaction=nonstopmode',
+    \ ],
+    \}
+
 " Open table of contents (shortcut \lt) and table of labels (\ly) at the right.
 " let g:vimtex_index_split_pos = 'vert rightbelow'
 
