@@ -41,7 +41,14 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'Valloric/ListToggle'
 
-Plug 'roxma/nvim-completion-manager'
+" ncm2 stuff
+Plug 'ncm2/ncm2'
+Plug 'roxma/nvim-yarp'
+Plug 'ncm2/ncm2-tmux'
+Plug 'ncm2/ncm2-path'
+Plug 'ncm2/ncm2-bufword'
+Plug 'ncm2/ncm2-ultisnips'
+Plug 'ncm2/ncm2-abbrfuzzy'
 
 Plug 'autozimu/LanguageClient-neovim', {
             \ 'branch': 'next',
@@ -246,36 +253,46 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
 let g:echodoc#enable_at_startup = 1
 
-" Neovim completion manager (NCM).
-" Note: abbrev_matcher requires the `ag` binary installed (i.e. the_silver_searcher).
-let g:cm_matcher = {
-            \ 'module': 'cm_matchers.fuzzy_matcher',
-            \ 'case': 'smartcase'
-            \ }
-let g:cm_completekeys = "\<Plug>(cm_omnifunc)"
+" ncm2 (formerly neovim completion manager)
+let g:ncm2#matcher = 'abbrfuzzy'
+let g:ncm2#sorter = 'abbrfuzzy'
+
+" TODO try "preview"
+set completeopt=noinsert,menuone,noselect
 
 augroup my_cm_setup
   autocmd!
+
+  " enable ncm2 for all buffers
+  autocmd BufEnter * call ncm2#enable_for_buffer()
+
+  " enable auto complete for `<backspace>`, `<c-w>` keys.
+  " known issue https://github.com/ncm2/ncm2/issues/7
+  autocmd TextChangedI * call ncm2#auto_trigger()
+
   " LaTeX / vimtex
-  autocmd User CmSetup call cm#register_source({
+  " TODO test! not sure if this works
+  autocmd User Ncm2Plugin call ncm2#register_source({
         \ 'name' : 'vimtex',
         \ 'priority': 8,
-        \ 'scoping': 1,
-        \ 'scopes': ['tex'],
-        \ 'abbreviation': 'tex',
-        \ 'cm_refresh_patterns': g:vimtex#re#ncm,
-        \ 'cm_refresh': {'omnifunc': 'vimtex#complete#omnifunc'},
+        \ 'subscope_enable': 1,
+        \ 'scope': ['tex'],
+        \ 'mark': 'tex',
+        \ 'on_complete': ['ncm2#on_complete#delay', 180,
+        \                 'ncm2#on_complete#omni', 'vimtex#complete#omnifunc'],
         \ })
+        " \ 'cm_refresh_patterns': g:vimtex#re#ncm,
+        " \ 'cm_refresh': {'omnifunc': 'vimtex#complete#omnifunc'},
 augroup END
 
-" See ":h NCM-tips"
+" See ":h NCM2-vimrc"
 set shortmess+=c
-inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-imap <expr> <CR>  (pumvisible() ?  "\<c-y>\<Plug>(expand_or_nl)" : "\<CR>")
-imap <expr> <Plug>(expand_or_nl) (cm#completed_is_snippet() ? "\<C-U>":"\<CR>")
 inoremap <c-c> <ESC>
+inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" imap <expr> <CR>  (pumvisible() ?  "\<c-y>\<Plug>(expand_or_nl)" : "\<CR>")
+" imap <expr> <Plug>(expand_or_nl) (cm#completed_is_snippet() ? "\<C-U>":"\<CR>")
 
 " LanguageClient
 " For some ideas, see https://github.com/cquery-project/cquery/wiki/Neovim
@@ -338,7 +355,7 @@ let g:ale_linter_aliases = {'pandoc': 'markdown'}
 let g:ale_python_mypy_options = '--ignore-missing-imports'
 
 " UltiSnips (and also NCM)
-" See also ":h NCM-Ultisnips"
+" See also docs for ncm2-ultisnips plugin.
 let g:UltiSnipsEditSplit = 'vertical'
 let g:UltiSnipsSnippetsDir = '~/.config/nvim/UltiSnips'
 let g:UltiSnipsExpandTrigger = '<Plug>(ultisnips_expand)'
@@ -346,7 +363,11 @@ let g:UltiSnipsJumpForwardTrigger = '<c-j>'
 let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
 let g:UltiSnipsListSnippets = '<m-u>'
 let g:UltiSnipsRemoveSelectModeMappings = 0
-inoremap <silent> <c-u> <c-r>=cm#sources#ultisnips#trigger_or_popup("\<Plug>(ultisnips_expand)")<cr>
+" inoremap <silent> <c-u> <c-r>=cm#sources#ultisnips#trigger_or_popup("\<Plug>(ultisnips_expand)")<cr>
+
+" Press enter key to trigger snippet expansion
+" The parameters are the same as `:help feedkeys()`
+inoremap <silent> <expr> <CR> ncm2_ultisnips#expand_or("\<CR>", 'n')
 
 " Surround
 let g:surround_indent = 1
