@@ -102,6 +102,7 @@ else
 end
 colorscheme NeoSolarized
 let g:airline_theme = 'solarized'
+set winhighlight=
 
 
 " Fix solarized8 / NeoSolarized colour schemes in vim + tmux (see README.md of
@@ -166,6 +167,12 @@ set ignorecase
 set smartcase
 set hlsearch
 
+if executable('rg')
+    " Use ripgrep instead of grep. Taken from
+    " https://github.com/BurntSushi/ripgrep/issues/425#issuecomment-381446152
+    set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
+endif
+
 " Tabs / indenting.
 set expandtab
 set shiftwidth=4
@@ -203,8 +210,8 @@ augroup fedora
     autocmd BufNewFile *.spec 0r /usr/share/vim/vimfiles/template.spec
 augroup END
 
-" Fix 'gx' mapping in Gnome 3.18 (not sure why it wasn't working...)
 let g:netrw_browsex_viewer = 'xdg-open'
+let g:netrw_home = expand('~/.local/share/nvim')
 
 " ========================================================================== "
 " LaTeX
