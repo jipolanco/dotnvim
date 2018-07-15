@@ -183,7 +183,7 @@ set textwidth=80
 
 " Wrapping
 set wrap
-set sidescroll=5
+set sidescroll=1
 
 " Automatically insert comment leader in new lines.
 " NOTE: this is overriden by the ftplugins of several languages
@@ -214,9 +214,15 @@ let g:netrw_browsex_viewer = 'xdg-open'
 let g:netrw_home = expand('~/.local/share/nvim')
 
 " ========================================================================== "
-" LaTeX
+" LaTeX / vimtex (see also ftplugin/tex.vim)
 let g:tex_flavor = 'latex'
 let g:latexrefman_use_example_mappings = 1
+
+" See ":h vimtex-faq-neovim"
+" Requires neovim-remote: https://github.com/mhinz/neovim-remote
+if has('nvim')
+    let g:vimtex_compiler_progname = 'nvr'
+endif
 
 augroup set_latex_filetypes
     autocmd!

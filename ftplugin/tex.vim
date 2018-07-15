@@ -34,14 +34,14 @@ let g:vimtex_format_enabled = 1
 " Remove -pdf option from default latexmk parameters.
 " This way, the value of $pdf_mode in .latexmkrc is respected.
 " In particular, if $pdf_mode = 4, pdf files are created using lualatex.
-let g:vimtex_compiler_latexmk = {
-    \ 'options' : [
-    \   '-verbose',
-    \   '-file-line-error',
-    \   '-synctex=1',
-    \   '-interaction=nonstopmode',
-    \ ],
-    \}
+" let g:vimtex_compiler_latexmk = {
+"     \ 'options' : [
+"     \   '-verbose',
+"     \   '-file-line-error',
+"     \   '-synctex=1',
+"     \   '-interaction=nonstopmode',
+"     \ ],
+"     \}
 
 " Open table of contents (shortcut \lt) and table of labels (\ly) at the right.
 " let g:vimtex_index_split_pos = 'vert rightbelow'
@@ -52,6 +52,11 @@ let g:vimtex_compiler_latexmk = {
 " Config for zathura.
 " let g:vimtex_view_method = 'zathura'
 " let g:vimtex_view_use_temp_files = 1
+
+let g:vimtex_delim_toggle_mod_list = [
+            \ ['\left', '\right'],
+            \ ['\big', '\big'],
+            \]
 
 " Config for okular.
 let g:vimtex_view_method = 'general'
@@ -82,9 +87,3 @@ function! MyHandler(context)
   endif
   return 1
 endfunction
-
-" See ":h vimtex-faq-neovim"
-" Requires neovim-remote: https://github.com/mhinz/neovim-remote
-if has('nvim')
-    let g:vimtex_compiler_progname = 'nvr'
-endif
