@@ -459,6 +459,11 @@ nmap ga <Plug>(EasyAlign)
 nmap <leader>= yypv$r=
 nmap <leader>- yypv$r-
 
+" Like 'do' and 'dp' (diff-obtain and diff-put) normal-mode commands, but for
+" visual mode.
+vnoremap <silent> <leader>do :diffget<cr>
+vnoremap <silent> <leader>dp :diffput<cr>
+
 " Terminal mappings (see ":h terminal-emulator").
 if has('nvim')
     " Stuff taken from ":h terminal-input".
