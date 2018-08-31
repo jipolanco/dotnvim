@@ -1,1 +1,2 @@
-let g:syntastic_vim_checkers = ['vint']
+set shiftwidth=2
+set foldmethod=marker

@@ -66,9 +66,9 @@ Plug 'junegunn/fzf.vim'
 " Plug 'bfredl/nvim-ipy'    " ipython
 
 Plug 'JuliaEditorSupport/julia-vim'
-let g:default_julia_version = 'devel'
-let g:latex_to_unicode_tab = 0
-" let g:latex_to_unicode_suggestions = 0
+" let g:default_julia_version = 'devel'
+let g:latex_to_unicode_tab = 1
+let g:latex_to_unicode_suggestions = 1
 let g:latex_to_unicode_auto = 1
 " let g:latex_to_unicode_file_types = '.*'
 " noremap <expr> <F7> LaTeXtoUnicode#Toggle()
@@ -106,9 +106,9 @@ if $VIM_BACKGROUND ==# 'light'
 else
     set background=dark
 end
+
 colorscheme NeoSolarized
 let g:airline_theme = 'solarized'
-
 
 " Fix solarized8 / NeoSolarized colour schemes in vim + tmux (see README.md of
 " NeoSolarized)
@@ -209,7 +209,6 @@ augroup fedora
     autocmd BufNewFile *.spec 0r /usr/share/vim/vimfiles/template.spec
 augroup END
 
-" Fix 'gx' mapping in Gnome 3.18 (not sure why it wasn't working...)
 let g:netrw_browsex_viewer = 'xdg-open'
 
 " ========================================================================== "
@@ -219,9 +218,10 @@ let g:latexrefman_use_example_mappings = 1
 
 augroup set_latex_filetypes
     autocmd!
-    autocmd BufRead,BufNewFile *.pgf     set filetype=tex
-    autocmd BufRead,BufNewFile *.tikz    set filetype=tex
-    autocmd BufRead,BufNewFile *.pdf_tex set filetype=tex
+    autocmd BufRead,BufNewFile *.pgf       set filetype=tex
+    autocmd BufRead,BufNewFile *.tikz      set filetype=tex
+    autocmd BufRead,BufNewFile *.pdf_tex   set filetype=tex
+    autocmd BufRead,BufNewFile .latexmkrc  set filetype=perl
 augroup END
 
 " Man pages (defines :Man and <leader>K).
@@ -252,39 +252,16 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
 let g:echodoc#enable_at_startup = 1
 
-" ncm2 (formerly neovim completion manager)
-let g:ncm2#matcher = 'abbrfuzzy'
+let g:surround_indent = 1
+
+" NCM2 {{{
+" let g:ncm2#matcher = 'abbrfuzzy'
+let g:ncm2#matcher = 'substrfuzzy'
 let g:ncm2#sorter = 'abbrfuzzy'
 
-" TODO try "preview"
+" See ":h ncm2-vimrc"
 set completeopt=noinsert,menuone,noselect
 
-augroup my_cm_setup
-  autocmd!
-
-  " enable ncm2 for all buffers
-  autocmd BufEnter * call ncm2#enable_for_buffer()
-
-  " enable auto complete for `<backspace>`, `<c-w>` keys.
-  " known issue https://github.com/ncm2/ncm2/issues/7
-  autocmd TextChangedI * call ncm2#auto_trigger()
-
-  " LaTeX / vimtex
-  " TODO test! not sure if this works
-  autocmd User Ncm2Plugin call ncm2#register_source({
-        \ 'name' : 'vimtex',
-        \ 'priority': 8,
-        \ 'subscope_enable': 1,
-        \ 'scope': ['tex'],
-        \ 'mark': 'tex',
-        \ 'on_complete': ['ncm2#on_complete#delay', 180,
-        \                 'ncm2#on_complete#omni', 'vimtex#complete#omnifunc'],
-        \ })
-        " \ 'cm_refresh_patterns': g:vimtex#re#ncm,
-        " \ 'cm_refresh': {'omnifunc': 'vimtex#complete#omnifunc'},
-augroup END
-
-" See ":h NCM2-vimrc"
 set shortmess+=c
 inoremap <c-c> <ESC>
 inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
@@ -293,7 +270,75 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " imap <expr> <CR>  (pumvisible() ?  "\<c-y>\<Plug>(expand_or_nl)" : "\<CR>")
 " imap <expr> <Plug>(expand_or_nl) (cm#completed_is_snippet() ? "\<C-U>":"\<CR>")
 
-" LanguageClient
+augroup my_ncm2_setup
+  autocmd!
+
+  " enable ncm2 for all buffers
+  autocmd BufEnter * call ncm2#enable_for_buffer()
+
+  " LaTeX / vimtex
+  " Taken from ":h vimtex-complete-ncm2"
+  autocmd Filetype tex call ncm2#register_source({
+          \ 'name' : 'vimtex-cmds',
+          \ 'priority': 8,
+          \ 'complete_length': -1,
+          \ 'scope': ['tex'],
+          \ 'matcher': {'name': 'prefix', 'key': 'word'},
+          \ 'word_pattern': '\w+',
+          \ 'complete_pattern': g:vimtex#re#ncm2#cmds,
+          \ 'on_complete': ['ncm2#on_complete#omni', 'vimtex#complete#omnifunc'],
+          \ })
+
+  autocmd Filetype tex call ncm2#register_source({
+          \ 'name' : 'vimtex-labels',
+          \ 'priority': 8,
+          \ 'complete_length': -1,
+          \ 'scope': ['tex'],
+          \ 'matcher': {'name': 'combine',
+          \             'matchers': [
+          \               {'name': 'substr', 'key': 'word'},
+          \               {'name': 'substr', 'key': 'menu'},
+          \             ]},
+          \ 'word_pattern': '\w+',
+          \ 'complete_pattern': g:vimtex#re#ncm2#labels,
+          \ 'on_complete': ['ncm2#on_complete#omni', 'vimtex#complete#omnifunc'],
+          \ })
+
+  autocmd Filetype tex call ncm2#register_source({
+          \ 'name' : 'vimtex-files',
+          \ 'priority': 8,
+          \ 'complete_length': -1,
+          \ 'scope': ['tex'],
+          \ 'matcher': {'name': 'combine',
+          \             'matchers': [
+          \               {'name': 'substrfuzzy', 'key': 'word'},
+          \               {'name': 'substrfuzzy', 'key': 'abbr'},
+          \             ]},
+          \ 'word_pattern': '\w+',
+          \ 'complete_pattern': g:vimtex#re#ncm2#files,
+          \ 'on_complete': ['ncm2#on_complete#omni', 'vimtex#complete#omnifunc'],
+          \ })
+
+  autocmd Filetype tex call ncm2#register_source({
+          \ 'name' : 'bibtex',
+          \ 'priority': 8,
+          \ 'complete_length': -1,
+          \ 'scope': ['tex'],
+          \ 'matcher': {'name': 'combine',
+          \             'matchers': [
+          \               {'name': 'prefix', 'key': 'word'},
+          \               {'name': 'substrfuzzy', 'key': 'abbr'},
+          \               {'name': 'substrfuzzy', 'key': 'menu'},
+          \             ]},
+          \ 'word_pattern': '\w+',
+          \ 'complete_pattern': g:vimtex#re#ncm2#bibtex,
+          \ 'on_complete': ['ncm2#on_complete#omni', 'vimtex#complete#omnifunc'],
+          \ })
+augroup END
+
+" }}}
+
+" LanguageClient {{{
 " For some ideas, see https://github.com/cquery-project/cquery/wiki/Neovim
 let g:LanguageClient_serverCommands = {
             \ 'python': ['pyls'],
@@ -338,22 +383,25 @@ augroup LanguageClient_config
                 \ exec LanguageClientSetMaps()
 augroup END
 
-" ALE
-" Disable ALE for python, C, C++, Rust (using LanguageClient instead).
-let g:ale_linters = {
-            \   'c': [],
-            \   'cpp': [],
-            \   'python': [],
-            \   'tex': ['chktex', 'lacheck'],
-            \   'pandoc': [],
-            \   'perl': ['perl', 'perlcritic'],
-            \   'rust': [],
-            \}
+" }}}
+
+" ALE {{{
+" Disable ALE for some languages (using LanguageClient instead).
+let g:ale_linters = {}
+let g:ale_linters.c = []
+let g:ale_linters.cpp = []
+" let g:ale_linters.pandoc = []
+let g:ale_linters.perl = ['perl', 'perlcritic']
+let g:ale_linters.python = []
+let g:ale_linters.rust = []
+let g:ale_linters.tex = ['chktex', 'lacheck']
 
 let g:ale_linter_aliases = {'pandoc': 'markdown'}
 let g:ale_python_mypy_options = '--ignore-missing-imports'
 
-" UltiSnips (and also NCM)
+" }}}
+
+" UltiSnips (and also NCM2) {{{
 " See also docs for ncm2-ultisnips plugin.
 let g:UltiSnipsEditSplit = 'vertical'
 let g:UltiSnipsSnippetsDir = '~/.config/nvim/UltiSnips'
@@ -369,17 +417,19 @@ let g:UltiSnipsRemoveSelectModeMappings = 0
 " The parameters are the same as `:help feedkeys()`
 inoremap <silent> <expr> <CR> ncm2_ultisnips#expand_or("\<CR>", 'n')
 
-" Surround
-let g:surround_indent = 1
+" }}}
 
-" Gutentags -- write tags files to this folder:
+" Gutentags {{{
+" Write tags files to this folder:
 let g:gutentags_cache_dir = '/tmp/gutentags'
 
 " Don't generate tags for project documentation (e.g. doxygen-generated files)
 " and some CMake-generated files.
 let g:gutentags_ctags_exclude = ['doc', 'CMakeFiles']
 
-" Pandoc
+" }}}
+
+" Pandoc {{{
 " vim-pandoc-after plugin (integrates vim-pandoc with other plugins)
 let g:pandoc#after#modules#enabled = ['ultisnips']
 let g:pandoc#formatting#mode = 'sa'
@@ -394,7 +444,9 @@ augroup PANDOC_TRAILING
     autocmd BufWritePre *.md :%s/\s\+$//e
 augroup END
 
-" GitGutter
+" }}}
+
+" GitGutter {{{
 " Note: gitgutter default mappings "ic" and "ac" conflict with vimtex (for LaTeX
 " commands), so we disable them and manually define a few mappings.
 let g:gitgutter_map_keys = 0
@@ -402,8 +454,9 @@ let g:gitgutter_override_sign_column_highlight = 0
 nmap [c <Plug>GitGutterPrevHunk
 nmap ]c <Plug>GitGutterNextHunk
 
-" ========================================================================== "
-" MORE MAPPINGS.
+" }}}
+
+" More mappings {{{
 
 " Use <leader>h to clear the highlighting of :set hlsearch.
 " Copied from vim-sensible plugin, which uses <C-L>, but this mapping conflicts
@@ -420,7 +473,7 @@ nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
 nnoremap <silent> <F8> :TagbarToggle<CR>
 nnoremap <leader>n :NERDTreeToggle<cr>
 
-" FZF
+" FZF {{{
 nnoremap <leader>b :Buffers<cr>
 " Files in the directory of the current file.
 nnoremap <leader>f :Files %:p:h<cr>
@@ -434,12 +487,14 @@ nnoremap <leader>H :History<cr>
 nnoremap <leader>: :History:<cr>
 nnoremap <leader>/ :History/<cr>
 nnoremap <leader>w :Windows<cr>
+" }}}
 
-" Fugitive
+" Fugitive {{{
 nmap <leader>gg :Gstatus<CR>
 nmap <leader>gd :Gdiff<CR>
 nmap <leader>gw :Gwrite<CR>
 nmap <leader>ge :Gedit<CR>
+" }}}
 
 " This fixes comment indenting in Python (see ":h smartindent").
 inoremap # X#
@@ -447,12 +502,14 @@ inoremap # X#
 " DelimitMate: use <c-l> to jump over a delimiter
 imap <c-l> <Plug>delimitMateS-Tab
 
-" easy-align (mappings copied from README.md)
+" easy-align {{{
+" (mappings copied from README.md)
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
+" }}}
 
 " Underline a line of text
 " Based on http://vim.wikia.com/wiki/Underline_using_dashes_automatically
@@ -464,7 +521,8 @@ nmap <leader>- yypv$r-
 vnoremap <silent> <leader>do :diffget<cr>
 vnoremap <silent> <leader>dp :diffput<cr>
 
-" Terminal mappings (see ":h terminal-emulator").
+" Terminal mappings {{{
+" (see ":h terminal-emulator")
 if has('nvim')
     " Stuff taken from ":h terminal-input".
     " NOTE: using just one <Esc> conflicts with the terminal vi-mode.
@@ -484,3 +542,7 @@ if has('nvim')
     nnoremap <A-k> <C-w>k
     nnoremap <A-l> <C-w>l
 end
+
+" }}}
+
+" }}}

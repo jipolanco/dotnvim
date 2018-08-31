@@ -21,27 +21,24 @@ let g:syntastic_tex_checkers = ['chktex', 'lacheck']
 " Vimtex plugin.
 let g:vimtex_quickfix_open_on_warning = 0
 
-" Don't fold using vimtex in diff mode.
-" NOTE: this doesn't work!!!
-" if &diff
-"     let g:vimtex_fold_enabled = 0
-" else
-"     let g:vimtex_fold_enabled = 1
-" end
-let g:vimtex_fold_enabled = 1
+" let g:vimtex_fold_enabled = 1
 let g:vimtex_format_enabled = 1
+
+" Use lualatex as default latexmk engine.
+" This can be overriden using a TeX program directive (see ":h vimtex-tex-program").
+" let g:vimtex_compiler_latexmk_engines = {'_':  '-lualatex'}
 
 " Remove -pdf option from default latexmk parameters.
 " This way, the value of $pdf_mode in .latexmkrc is respected.
 " In particular, if $pdf_mode = 4, pdf files are created using lualatex.
-let g:vimtex_compiler_latexmk = {
-    \ 'options' : [
-    \   '-verbose',
-    \   '-file-line-error',
-    \   '-synctex=1',
-    \   '-interaction=nonstopmode',
-    \ ],
-    \}
+" let g:vimtex_compiler_latexmk = {
+"     \ 'options' : [
+"     \   '-verbose',
+"     \   '-file-line-error',
+"     \   '-synctex=1',
+"     \   '-interaction=nonstopmode',
+"     \ ],
+"     \}
 
 " Open table of contents (shortcut \lt) and table of labels (\ly) at the right.
 " let g:vimtex_index_split_pos = 'vert rightbelow'
