@@ -26,6 +26,16 @@ snippet Eq "Equation reference"
 Eq.~\eqref{eq:$0}
 endsnippet
 
+snippet fig "figure environment" b
+\begin{figure}[${1:tp}]
+	\centering
+	\includegraphics{${2:file}}
+	\caption${3:[$4]}{%
+		$5
+	}\label{fig:$6}
+\end{figure}
+endsnippet
+
 # ================================================================== #
 # TikZ / PGF snippets.
 snippet pgfmacro "\pgfmathsetmacro" b

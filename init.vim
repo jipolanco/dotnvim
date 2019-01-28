@@ -84,6 +84,7 @@ Plug 'vim-pandoc/vim-pandoc-after'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'rust-lang/rust.vim'
 Plug 'cespare/vim-toml'
+Plug 'Vimjas/vim-python-pep8-indent'
 
 Plug 'hail2u/vim-css3-syntax'
 
@@ -124,17 +125,6 @@ set statusline+=%{gutentags#statusline()}
 if $SSH_CONNECTION !=# ''
     set guicursor=
 end
-
-" Airline + gutentags integration.
-" Show "TAGS" in the status line while gutentags is generating tags.
-function! GutentagsStatus(...)
-    let w:airline_section_a = '%{gutentags#statusline()}'
-endfunction
-" call airline#add_statusline_func('GutentagsStatus')
-
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#tab_nr_type = 1 " show tab number
-let g:airline_powerline_fonts = 1
 
 " Height of the command bar
 set cmdheight=2
@@ -256,8 +246,8 @@ let g:surround_indent = 1
 
 " NCM2 {{{
 " let g:ncm2#matcher = 'abbrfuzzy'
-let g:ncm2#matcher = 'substrfuzzy'
-let g:ncm2#sorter = 'abbrfuzzy'
+" let g:ncm2#matcher = 'substrfuzzy'
+" let g:ncm2#sorter = 'abbrfuzzy'
 
 " See ":h ncm2-vimrc"
 set completeopt=noinsert,menuone,noselect
@@ -277,7 +267,10 @@ augroup my_ncm2_setup
   autocmd BufEnter * call ncm2#enable_for_buffer()
 
   " LaTeX / vimtex
-  " Taken from ":h vimtex-complete-ncm2"
+  " Adapted from ":h vimtex-complete-ncm2"
+  let vimtex_on_complete = [
+        \ 'ncm2#on_complete#omni', 'vimtex#complete#omnifunc'
+        \]
   autocmd Filetype tex call ncm2#register_source({
           \ 'name' : 'vimtex-cmds',
           \ 'priority': 8,
@@ -286,7 +279,7 @@ augroup my_ncm2_setup
           \ 'matcher': {'name': 'prefix', 'key': 'word'},
           \ 'word_pattern': '\w+',
           \ 'complete_pattern': g:vimtex#re#ncm2#cmds,
-          \ 'on_complete': ['ncm2#on_complete#omni', 'vimtex#complete#omnifunc'],
+          \ 'on_complete': vimtex_on_complete,
           \ })
 
   autocmd Filetype tex call ncm2#register_source({
@@ -296,12 +289,12 @@ augroup my_ncm2_setup
           \ 'scope': ['tex'],
           \ 'matcher': {'name': 'combine',
           \             'matchers': [
-          \               {'name': 'substr', 'key': 'word'},
-          \               {'name': 'substr', 'key': 'menu'},
+          \               {'name': 'substrfuzzy', 'key': 'word'},
+          \               {'name': 'substrfuzzy', 'key': 'menu'},
           \             ]},
           \ 'word_pattern': '\w+',
           \ 'complete_pattern': g:vimtex#re#ncm2#labels,
-          \ 'on_complete': ['ncm2#on_complete#omni', 'vimtex#complete#omnifunc'],
+          \ 'on_complete': vimtex_on_complete,
           \ })
 
   autocmd Filetype tex call ncm2#register_source({
@@ -316,7 +309,7 @@ augroup my_ncm2_setup
           \             ]},
           \ 'word_pattern': '\w+',
           \ 'complete_pattern': g:vimtex#re#ncm2#files,
-          \ 'on_complete': ['ncm2#on_complete#omni', 'vimtex#complete#omnifunc'],
+          \ 'on_complete': vimtex_on_complete,
           \ })
 
   autocmd Filetype tex call ncm2#register_source({
@@ -332,7 +325,7 @@ augroup my_ncm2_setup
           \             ]},
           \ 'word_pattern': '\w+',
           \ 'complete_pattern': g:vimtex#re#ncm2#bibtex,
-          \ 'on_complete': ['ncm2#on_complete#omni', 'vimtex#complete#omnifunc'],
+          \ 'on_complete': vimtex_on_complete,
           \ })
 augroup END
 
@@ -341,19 +334,22 @@ augroup END
 " LanguageClient {{{
 " For some ideas, see https://github.com/cquery-project/cquery/wiki/Neovim
 let g:LanguageClient_serverCommands = {
-            \ 'python': ['pyls'],
+            \ 'python': ['pyls', '--log-file=/tmp/pyls.log'],
             \ 'c': ['~/opt/cquery/bin/cquery', '--log-file=/tmp/cquery.log'],
             \ 'cpp': ['~/opt/cquery/bin/cquery', '--log-file=/tmp/cquery.log'],
             \ 'rust': ['rustup', 'run', 'stable', 'rls'],
+            \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
+            \       using LanguageServer;
+            \       server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false);
+            \       server.runlinter = true;
+            \       run(server);
+            \   '],
 \ }
-" \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
-" \       using LanguageServer;
-" \       server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false);
-" \       server.runlinter = true;
-" \       run(server);
-" \   '],
 let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
 let g:LanguageClient_loadSettings = 1
+
+let g:LanguageClient_loggingFile = '/tmp/LanguageClient_neovim.log'
+let g:LanguageClient_loggingLevel = 'WARN'
 
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
@@ -382,6 +378,21 @@ augroup LanguageClient_config
     autocmd User LanguageClientStarted
                 \ exec LanguageClientSetMaps()
 augroup END
+
+" }}}
+
+" Airline {{{
+
+" Gutentags integration.
+" Show "TAGS" in the status line while gutentags is generating tags.
+function! GutentagsStatus(...)
+    let w:airline_section_a = '%{gutentags#statusline()}'
+endfunction
+" call airline#add_statusline_func('GutentagsStatus')
+
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#tab_nr_type = 1 " show tab number
+let g:airline_powerline_fonts = 1
 
 " }}}
 
@@ -434,8 +445,8 @@ let g:gutentags_ctags_exclude = ['doc', 'CMakeFiles']
 let g:pandoc#after#modules#enabled = ['ultisnips']
 let g:pandoc#formatting#mode = 'sa'
 
-" Don't use italics, they don't work for me in neovim (default: 1).
-let g:pandoc#syntax#style#emphases = 0
+" Don't use italics, they don't work for me in neovim + tmux (default: 1).
+" let g:pandoc#syntax#style#emphases = 0
 let g:pandoc#command#latex_engine = 'lualatex'
 
 " Remove trailing whitespace from Pandoc markdown files (which are generated

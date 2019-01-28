@@ -1,8 +1,9 @@
 setlocal shiftwidth=2
 
 " Use conceal mode (see ":h tex-conceal").
-setlocal conceallevel=2
-let g:tex_conceal = 'amg'
+" setlocal conceallevel=2
+" let g:tex_conceal = 'abdmg'
+setlocal conceallevel=0
 
 " Treat all tex files as style files (*.sty).
 " This means that underscores are considered as keywords.
@@ -28,33 +29,12 @@ let g:vimtex_format_enabled = 1
 " This can be overriden using a TeX program directive (see ":h vimtex-tex-program").
 " let g:vimtex_compiler_latexmk_engines = {'_':  '-lualatex'}
 
-" Remove -pdf option from default latexmk parameters.
-" This way, the value of $pdf_mode in .latexmkrc is respected.
-" In particular, if $pdf_mode = 4, pdf files are created using lualatex.
-" let g:vimtex_compiler_latexmk = {
-"     \ 'options' : [
-"     \   '-verbose',
-"     \   '-file-line-error',
-"     \   '-synctex=1',
-"     \   '-interaction=nonstopmode',
-"     \ ],
-"     \}
-
-" Open table of contents (shortcut \lt) and table of labels (\ly) at the right.
-" let g:vimtex_index_split_pos = 'vert rightbelow'
-
-" Don't open the quickfix window automatically when there are only warnings.
-" let g:vimtex_quickfix_open_on_warning = 0
-
-" Config for zathura.
-" let g:vimtex_view_method = 'zathura'
-" let g:vimtex_view_use_temp_files = 1
-
 " Config for okular.
 let g:vimtex_view_method = 'general'
 let g:vimtex_view_general_viewer = 'okular'
 let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
 let g:vimtex_view_general_options_latexmk = '--unique'
+let g:vimtex_view_use_temp_files = 0
 
 " See ":h vimtex-faq-surround".
 augroup latexSurround
