@@ -1,10 +1,9 @@
 {
     "__comment__": "This is the settings file for LanguageClient-neovim",
     "initializationOptions": {
-        "cacheDirectory": "/tmp/cquery",
-        "resourceDirectory_old": "/usr/lib64/clang/5.0.1",
-        "cacheFormat": "msgpack",
-        "enableComments": 1
+        "cacheDirectory": "/tmp/ccls",
+        "OLD_cacheFormat": "msgpack",
+        "OLD_enableComments": 1
     },
     "rust": {
         "__comment__": "See https://github.com/rust-lang-nursery/rls#configuration",

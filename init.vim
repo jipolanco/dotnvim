@@ -335,8 +335,8 @@ augroup END
 " For some ideas, see https://github.com/cquery-project/cquery/wiki/Neovim
 let g:LanguageClient_serverCommands = {
             \ 'python': ['pyls', '--log-file=/tmp/pyls.log'],
-            \ 'c': ['~/opt/cquery/bin/cquery', '--log-file=/tmp/cquery.log'],
-            \ 'cpp': ['~/opt/cquery/bin/cquery', '--log-file=/tmp/cquery.log'],
+            \ 'c': ['ccls', '--log-file=/tmp/ccls.log'],
+            \ 'cpp': ['ccls', '--log-file=/tmp/ccls.log'],
             \ 'rust': ['rustup', 'run', 'stable', 'rls'],
             \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
             \       using LanguageServer;
@@ -347,6 +347,8 @@ let g:LanguageClient_serverCommands = {
 \ }
 let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
 let g:LanguageClient_loadSettings = 1
+
+" let g:LanguageClient_hasSnippetSupport = 0
 
 let g:LanguageClient_loggingFile = '/tmp/LanguageClient_neovim.log'
 let g:LanguageClient_loggingLevel = 'WARN'
