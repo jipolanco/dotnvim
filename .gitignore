@@ -1,5 +1,6 @@
 *.old
 .netrwhist
 
-# binary spell file
-*.add.spl
+# binary spell files
+/spell/*.spl
+/spell/*.sug
