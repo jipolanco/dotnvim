@@ -445,6 +445,7 @@ let g:gutentags_ctags_exclude = ['doc', 'CMakeFiles']
 " Pandoc {{{
 " vim-pandoc-after plugin (integrates vim-pandoc with other plugins)
 let g:pandoc#after#modules#enabled = ['ultisnips']
+let g:pandoc#modules#disabled = ['chdir']
 let g:pandoc#formatting#mode = 'sa'
 
 " Don't use italics, they don't work for me in neovim + tmux (default: 1).
