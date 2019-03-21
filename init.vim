@@ -40,6 +40,7 @@ endif
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'Valloric/ListToggle'
+Plug 'Konfekt/FastFold'
 
 " ncm2 stuff
 Plug 'ncm2/ncm2'
@@ -337,6 +338,8 @@ let g:LanguageClient_serverCommands = {
             \ 'python': ['pyls', '--log-file=/tmp/pyls.log'],
             \ 'c': ['ccls', '--log-file=/tmp/ccls.log'],
             \ 'cpp': ['ccls', '--log-file=/tmp/ccls.log'],
+            \ 'fortran': ['fortls', '--symbol_skip_mem', '--incremental_sync',
+            \             '--autocomplete_no_prefix'],
             \ 'rust': ['rustup', 'run', 'stable', 'rls'],
             \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
             \       using LanguageServer;

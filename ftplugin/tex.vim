@@ -22,7 +22,7 @@ let g:syntastic_tex_checkers = ['chktex', 'lacheck']
 " Vimtex plugin.
 let g:vimtex_quickfix_open_on_warning = 0
 
-" let g:vimtex_fold_enabled = 1
+let g:vimtex_fold_enabled = 1
 let g:vimtex_format_enabled = 1
 
 " Use lualatex as default latexmk engine.
