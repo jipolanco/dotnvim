@@ -1,8 +1,9 @@
 setlocal shiftwidth=2
 
 " Use conceal mode (see ":h tex-conceal").
-setlocal conceallevel=2
-let g:tex_conceal = 'amg'
+" setlocal conceallevel=2
+" let g:tex_conceal = 'abdmg'
+setlocal conceallevel=0
 
 " Treat all tex files as style files (*.sty).
 " This means that underscores are considered as keywords.
@@ -21,48 +22,19 @@ let g:syntastic_tex_checkers = ['chktex', 'lacheck']
 " Vimtex plugin.
 let g:vimtex_quickfix_open_on_warning = 0
 
-" Don't fold using vimtex in diff mode.
-" NOTE: this doesn't work!!!
-" if &diff
-"     let g:vimtex_fold_enabled = 0
-" else
-"     let g:vimtex_fold_enabled = 1
-" end
 let g:vimtex_fold_enabled = 1
 let g:vimtex_format_enabled = 1
 
-" Remove -pdf option from default latexmk parameters.
-" This way, the value of $pdf_mode in .latexmkrc is respected.
-" In particular, if $pdf_mode = 4, pdf files are created using lualatex.
-" let g:vimtex_compiler_latexmk = {
-"     \ 'options' : [
-"     \   '-verbose',
-"     \   '-file-line-error',
-"     \   '-synctex=1',
-"     \   '-interaction=nonstopmode',
-"     \ ],
-"     \}
-
-" Open table of contents (shortcut \lt) and table of labels (\ly) at the right.
-" let g:vimtex_index_split_pos = 'vert rightbelow'
-
-" Don't open the quickfix window automatically when there are only warnings.
-" let g:vimtex_quickfix_open_on_warning = 0
-
-" Config for zathura.
-" let g:vimtex_view_method = 'zathura'
-" let g:vimtex_view_use_temp_files = 1
-
-let g:vimtex_delim_toggle_mod_list = [
-            \ ['\left', '\right'],
-            \ ['\big', '\big'],
-            \]
+" Use lualatex as default latexmk engine.
+" This can be overriden using a TeX program directive (see ":h vimtex-tex-program").
+" let g:vimtex_compiler_latexmk_engines = {'_':  '-lualatex'}
 
 " Config for okular.
 let g:vimtex_view_method = 'general'
 let g:vimtex_view_general_viewer = 'okular'
 let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
 let g:vimtex_view_general_options_latexmk = '--unique'
+let g:vimtex_view_use_temp_files = 0
 
 " See ":h vimtex-faq-surround".
 augroup latexSurround
@@ -87,3 +59,9 @@ function! MyHandler(context)
   endif
   return 1
 endfunction
+
+" See ":h vimtex-faq-neovim"
+" Requires neovim-remote: https://github.com/mhinz/neovim-remote
+if has('nvim')
+    let g:vimtex_compiler_progname = 'nvr'
+endif

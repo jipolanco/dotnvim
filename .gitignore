@@ -1,10 +1,6 @@
-# Directories.
-/plugged/
-/spell/
-
-# Backups.
-*.bak
 *.old
+.netrwhist
 
-# Neovim ShaDa file (see ":help shada").
-/shada/main.shada
+# binary spell files
+/spell/*.spl
+/spell/*.sug
