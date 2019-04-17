@@ -391,13 +391,28 @@ endfunction
 
 augroup LanguageClient_config
     autocmd!
-    autocmd User LanguageClientStarted
-                \ setlocal
-                \ formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+
     autocmd User LanguageClientStarted
                 \ setlocal completefunc=LanguageClient#complete
     autocmd User LanguageClientStarted
                 \ exec LanguageClientSetMaps()
+
+    " Use language server with formatting operator `gq`.
+    " In C/C++, this uses clang-format.
+    autocmd User LanguageClientStarted
+          \ setlocal formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+
+    " Taken from
+    " https://github.com/MaskRay/ccls/wiki/LanguageClient-neovim#textdocumentdocumenthighlight
+    autocmd BufEnter * let b:Plugin_LanguageClient_started = 0
+    autocmd User LanguageClientStarted let b:Plugin_LanguageClient_started = 1
+    autocmd User LanguageClientStopped let b:Plugin_LanguageClient_started = 0
+
+    " Highlight usages of the symbol under the cursor.
+    autocmd CursorMoved *
+          \ if b:Plugin_LanguageClient_started |
+          \     silent call LanguageClient#textDocument_documentHighlight() |
+          \ endif
 augroup END
 
 " }}}
