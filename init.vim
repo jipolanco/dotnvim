@@ -42,18 +42,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'Valloric/ListToggle'
 Plug 'Konfekt/FastFold'
 
-" ncm2 stuff
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
-Plug 'ncm2/ncm2-tmux'
-Plug 'ncm2/ncm2-path'
-Plug 'ncm2/ncm2-bufword'
-Plug 'ncm2/ncm2-ultisnips'
-
-Plug 'autozimu/LanguageClient-neovim', {
-            \ 'branch': 'next',
-            \ 'do': 'bash install.sh',
-            \ }
+Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 Plug 'Shougo/echodoc.vim'
 Plug 'Shougo/neco-vim'
 
@@ -259,167 +248,127 @@ let g:echodoc#enable_at_startup = 1
 
 let g:surround_indent = 1
 
-" NCM2 {{{
-" let g:ncm2#matcher = 'abbrfuzzy'
-" let g:ncm2#matcher = 'substrfuzzy'
-" let g:ncm2#sorter = 'abbrfuzzy'
+" COC {{{
+augroup COC
+  " Stuff adapted from
+  " https://github.com/neoclide/coc.nvim#example-vim-configuration
 
-" See ":h ncm2-vimrc"
-set completeopt=noinsert,menuone,noselect
+  " Smaller updatetime for CursorHold & CursorHoldI
+  set updatetime=300
 
-set shortmess+=c
-inoremap <c-c> <ESC>
-inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-" imap <expr> <CR>  (pumvisible() ?  "\<c-y>\<Plug>(expand_or_nl)" : "\<CR>")
-" imap <expr> <Plug>(expand_or_nl) (cm#completed_is_snippet() ? "\<C-U>":"\<CR>")
+  " don't give |ins-completion-menu| messages.
+  set shortmess+=c
 
-augroup my_ncm2_setup
-  autocmd!
+  " always show signcolumns
+  set signcolumn=yes
 
-  " enable ncm2 for all buffers
-  autocmd BufEnter * call ncm2#enable_for_buffer()
+  " Use tab for trigger completion with characters ahead and navigate.
+  " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+  inoremap <silent><expr> <TAB>
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ coc#refresh()
+  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-  " LaTeX / vimtex
-  " Adapted from ":h vimtex-complete-ncm2"
-  let vimtex_on_complete = [
-        \ 'ncm2#on_complete#omni', 'vimtex#complete#omnifunc'
-        \]
-  autocmd Filetype tex call ncm2#register_source({
-          \ 'name' : 'vimtex-cmds',
-          \ 'priority': 8,
-          \ 'complete_length': -1,
-          \ 'scope': ['tex'],
-          \ 'matcher': {'name': 'prefix', 'key': 'word'},
-          \ 'word_pattern': '\w+',
-          \ 'complete_pattern': g:vimtex#re#ncm2#cmds,
-          \ 'on_complete': vimtex_on_complete,
-          \ })
+  function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+  endfunction
 
-  autocmd Filetype tex call ncm2#register_source({
-          \ 'name' : 'vimtex-labels',
-          \ 'priority': 8,
-          \ 'complete_length': -1,
-          \ 'scope': ['tex'],
-          \ 'matcher': {'name': 'combine',
-          \             'matchers': [
-          \               {'name': 'substrfuzzy', 'key': 'word'},
-          \               {'name': 'substrfuzzy', 'key': 'menu'},
-          \             ]},
-          \ 'word_pattern': '\w+',
-          \ 'complete_pattern': g:vimtex#re#ncm2#labels,
-          \ 'on_complete': vimtex_on_complete,
-          \ })
+  " Use <c-space> to trigger completion.
+  inoremap <silent><expr> <c-space> coc#refresh()
 
-  autocmd Filetype tex call ncm2#register_source({
-          \ 'name' : 'vimtex-files',
-          \ 'priority': 8,
-          \ 'complete_length': -1,
-          \ 'scope': ['tex'],
-          \ 'matcher': {'name': 'combine',
-          \             'matchers': [
-          \               {'name': 'substrfuzzy', 'key': 'word'},
-          \               {'name': 'substrfuzzy', 'key': 'abbr'},
-          \             ]},
-          \ 'word_pattern': '\w+',
-          \ 'complete_pattern': g:vimtex#re#ncm2#files,
-          \ 'on_complete': vimtex_on_complete,
-          \ })
+  " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+  " Coc only does snippet and additional edit on confirm.
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-  autocmd Filetype tex call ncm2#register_source({
-          \ 'name' : 'bibtex',
-          \ 'priority': 8,
-          \ 'complete_length': -1,
-          \ 'scope': ['tex'],
-          \ 'matcher': {'name': 'combine',
-          \             'matchers': [
-          \               {'name': 'prefix', 'key': 'word'},
-          \               {'name': 'substrfuzzy', 'key': 'abbr'},
-          \               {'name': 'substrfuzzy', 'key': 'menu'},
-          \             ]},
-          \ 'word_pattern': '\w+',
-          \ 'complete_pattern': g:vimtex#re#ncm2#bibtex,
-          \ 'on_complete': vimtex_on_complete,
-          \ })
-augroup END
+  " Use `[d` and `]d` to navigate diagnostics
+  nmap <silent> [d <Plug>(coc-diagnostic-prev)
+  nmap <silent> ]d <Plug>(coc-diagnostic-next)
 
-" }}}
+  " Remap keys for gotos
+  nmap <silent> gd <Plug>(coc-definition)
+  nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> gi <Plug>(coc-implementation)
+  nmap <silent> gr <Plug>(coc-references)
 
-" LanguageClient {{{
-" For some ideas, see https://github.com/cquery-project/cquery/wiki/Neovim
-let g:LanguageClient_serverCommands = {
-            \ 'python': ['pyls', '--log-file=/tmp/pyls.log'],
-            \ 'c': ['ccls', '--log-file=/tmp/ccls.log'],
-            \ 'cpp': ['ccls', '--log-file=/tmp/ccls.log'],
-            \ 'fortran': ['fortls', '--symbol_skip_mem', '--incremental_sync',
-            \             '--autocomplete_no_prefix'],
-            \ 'rust': ['rustup', 'run', 'stable', 'rls'],
-            \ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
-            \       using LanguageServer;
-            \       server = LanguageServer.LanguageServerInstance(STDIN, STDOUT, false);
-            \       server.runlinter = true;
-            \       run(server);
-            \   '],
-\ }
-let g:LanguageClient_settingsPath = expand('~/.config/nvim/settings.json')
-let g:LanguageClient_loadSettings = 1
+  " Show documentation in preview window
+  nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-" let g:LanguageClient_hasSnippetSupport = 0
+  function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+      execute 'h '.expand('<cword>')
+    else
+      call CocAction('doHover')
+    endif
+  endfunction
 
-let g:LanguageClient_loggingFile = '/tmp/LanguageClient_neovim.log'
-let g:LanguageClient_loggingLevel = 'WARN'
 
-" Automatically start language servers.
-let g:LanguageClient_autoStart = 1
+  " Highlight symbol under cursor on CursorHold
+  autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Use location instead of quickfix list for diagnostics.
-let g:LanguageClient_diagnosticsList = 'Location'
+  " Remap for rename current word
+  nmap <F2> <Plug>(coc-rename)
 
-function! LanguageClientSetMaps()
-    " Mappings proposed at:
-    " https://github.com/cquery-project/cquery/wiki/Neovim
-    " (I added `gi`).
-    nnoremap <silent> gh :call LanguageClient#textDocument_hover()<CR>
-    nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-    nnoremap <silent> gr :call LanguageClient#textDocument_references()<CR>
-    nnoremap <silent> gs :call LanguageClient#textDocument_documentSymbol()<CR>
-    nnoremap <silent> gi :call LanguageClient#textDocument_implementation()<CR>
-    nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-    nnoremap <silent> <F5> :call LanguageClient_contextMenu()<CR>
-endfunction
+  " Remap for format selected region
+  vmap <localleader>f  <Plug>(coc-format-selected)
+  nmap <localleader>f  <Plug>(coc-format-selected)
 
-augroup LanguageClient_config
+  augroup COC_mygroup
     autocmd!
+    " Setup formatexpr specified filetype(s).
+    autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+    " Update signature help on jump placeholder
+    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  augroup end
 
-    autocmd User LanguageClientStarted
-                \ setlocal completefunc=LanguageClient#complete
-    autocmd User LanguageClientStarted
-                \ exec LanguageClientSetMaps()
+  " Remap for do codeAction of selected region, ex: `<leader>aap` for current
+  " paragraph
+  vmap <localleader>a  <Plug>(coc-codeaction-selected)
+  nmap <localleader>a  <Plug>(coc-codeaction-selected)
 
-    " Use language server with formatting operator `gq`.
-    " In C/C++, this uses clang-format.
-    autocmd User LanguageClientStarted
-          \ set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+  " Remap for do codeAction of current line
+  nmap <localleader>ac  <Plug>(coc-codeaction)
 
-    " Instead, use a different mapping for language server formatting.
-    " autocmd User LanguageClientStarted
-    "       \ map <silent> <localleader>f
-    "       \ :call LanguageClient#textDocument_rangeFormatting_sync()<CR>
+  " Fix autofix problem of current line
+  nmap <localleader>qf  <Plug>(coc-fix-current)
 
-    " Taken from
-    " https://github.com/MaskRay/ccls/wiki/LanguageClient-neovim#textdocumentdocumenthighlight
-    " Doesn't work really well...
-    " autocmd BufEnter * let b:Plugin_LanguageClient_started = 0
-    " autocmd User LanguageClientStarted let b:Plugin_LanguageClient_started = 1
-    " autocmd User LanguageClientStopped let b:Plugin_LanguageClient_started = 0
+  " Use `:Format` to format current buffer
+  command! -nargs=0 Format :call CocAction('format')
 
-    " Highlight usages of the symbol under the cursor.
-    " autocmd CursorMoved *
-    "       \ if b:Plugin_LanguageClient_started |
-    "       \     silent call LanguageClient#textDocument_documentHighlight() |
-    "       \ endif
-augroup END
+  " Use `:Fold` to fold current buffer
+  command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+  " Add diagnostic info for https://github.com/itchyny/lightline.vim
+  let g:lightline = {
+        \ 'colorscheme': 'wombat',
+        \ 'active': {
+        \   'left': [ [ 'mode', 'paste' ],
+        \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+        \ },
+        \ 'component_function': {
+        \   'cocstatus': 'coc#status'
+        \ },
+        \ }
+
+  " Using CocList
+  " Show all diagnostics
+  nnoremap <silent> <leader>d  :<C-u>CocList diagnostics<cr>
+  " Manage extensions
+  nnoremap <silent> <leader>e  :<C-u>CocList extensions<cr>
+  " Show commands
+  nnoremap <silent> <leader>c  :<C-u>CocList commands<cr>
+  " Find symbol of current document
+  nnoremap <silent> <leader>o  :<C-u>CocList outline<cr>
+  " Search workspace symbols
+  nnoremap <silent> <leader>s  :<C-u>CocList -I symbols<cr>
+  " Do default action for next item.
+  nnoremap <silent> <leader>j  :<C-u>CocNext<CR>
+  " Do default action for previous item.
+  nnoremap <silent> <leader>k  :<C-u>CocPrev<CR>
+  " Resume latest coc list
+  nnoremap <silent> <leader>p  :<C-u>CocListResume<CR>
+augroup end
 
 " }}}
 
@@ -439,7 +388,7 @@ let g:airline_powerline_fonts = 1
 " }}}
 
 " ALE {{{
-" Disable ALE for some languages (using LanguageClient instead).
+" Disable ALE for some languages (using LanguageClient or COC instead).
 let g:ale_linters = {}
 let g:ale_linters.c = []
 let g:ale_linters.cpp = []
@@ -468,7 +417,7 @@ let g:UltiSnipsRemoveSelectModeMappings = 0
 
 " Press enter key to trigger snippet expansion
 " The parameters are the same as `:help feedkeys()`
-inoremap <silent> <expr> <CR> ncm2_ultisnips#expand_or("\<CR>", 'n')
+" inoremap <silent> <expr> <CR> ncm2_ultisnips#expand_or("\<CR>", 'n')
 
 " }}}
 
