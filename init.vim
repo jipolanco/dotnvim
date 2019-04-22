@@ -42,9 +42,11 @@ Plug 'tpope/vim-unimpaired'
 Plug 'Valloric/ListToggle'
 Plug 'Konfekt/FastFold'
 
-Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 Plug 'Shougo/echodoc.vim'
 Plug 'Shougo/neco-vim'
+
+Plug 'neoclide/coc-neco'
+Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -320,6 +322,9 @@ augroup COC
     autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
     " Update signature help on jump placeholder
     autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+
+    " Correct highlighting of comments in coc-settings.json.
+    autocmd FileType json syntax match Comment +\/\/.\+$+
   augroup end
 
   " Remap for do codeAction of selected region, ex: `<leader>aap` for current
