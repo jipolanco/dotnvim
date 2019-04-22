@@ -400,19 +400,25 @@ augroup LanguageClient_config
     " Use language server with formatting operator `gq`.
     " In C/C++, this uses clang-format.
     autocmd User LanguageClientStarted
-          \ setlocal formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+          \ set formatexpr=LanguageClient#textDocument_rangeFormatting_sync()
+
+    " Instead, use a different mapping for language server formatting.
+    " autocmd User LanguageClientStarted
+    "       \ map <silent> <localleader>f
+    "       \ :call LanguageClient#textDocument_rangeFormatting_sync()<CR>
 
     " Taken from
     " https://github.com/MaskRay/ccls/wiki/LanguageClient-neovim#textdocumentdocumenthighlight
-    autocmd BufEnter * let b:Plugin_LanguageClient_started = 0
-    autocmd User LanguageClientStarted let b:Plugin_LanguageClient_started = 1
-    autocmd User LanguageClientStopped let b:Plugin_LanguageClient_started = 0
+    " Doesn't work really well...
+    " autocmd BufEnter * let b:Plugin_LanguageClient_started = 0
+    " autocmd User LanguageClientStarted let b:Plugin_LanguageClient_started = 1
+    " autocmd User LanguageClientStopped let b:Plugin_LanguageClient_started = 0
 
     " Highlight usages of the symbol under the cursor.
-    autocmd CursorMoved *
-          \ if b:Plugin_LanguageClient_started |
-          \     silent call LanguageClient#textDocument_documentHighlight() |
-          \ endif
+    " autocmd CursorMoved *
+    "       \ if b:Plugin_LanguageClient_started |
+    "       \     silent call LanguageClient#textDocument_documentHighlight() |
+    "       \ endif
 augroup END
 
 " }}}
