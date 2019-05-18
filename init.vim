@@ -46,7 +46,7 @@ Plug 'Shougo/echodoc.vim'
 Plug 'Shougo/neco-vim'
 
 Plug 'neoclide/coc-neco'
-Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -259,7 +259,7 @@ augroup COC
   set updatetime=300
 
   " don't give |ins-completion-menu| messages.
-  set shortmess+=c
+  " set shortmess+=c
 
   " always show signcolumns
   set signcolumn=yes
