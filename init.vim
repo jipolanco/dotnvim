@@ -46,7 +46,7 @@ Plug 'Shougo/echodoc.vim'
 Plug 'Shougo/neco-vim'
 
 Plug 'neoclide/coc-neco'
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -59,10 +59,10 @@ Plug 'junegunn/fzf.vim'
 
 Plug 'JuliaEditorSupport/julia-vim'
 " let g:default_julia_version = 'devel'
-let g:latex_to_unicode_tab = 1
-let g:latex_to_unicode_suggestions = 1
+let g:latex_to_unicode_tab = 0
 let g:latex_to_unicode_auto = 1
-" let g:latex_to_unicode_file_types = '.*'
+let g:latex_to_unicode_file_types = '.*'
+let g:latex_to_unicode_file_types_blacklist = 'tex'
 " noremap <expr> <F7> LaTeXtoUnicode#Toggle()
 " inoremap <expr> <F7> LaTeXtoUnicode#Toggle()
 
@@ -164,7 +164,7 @@ endif
 " Tabs / indenting.
 set expandtab
 set shiftwidth=4
-set tabstop=4
+set tabstop=8
 set smartindent
 
 set textwidth=80
