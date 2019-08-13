@@ -10,6 +10,7 @@
         }
       }
     },
+
     "julia": {
       "command": "julia",
       "args": [
@@ -22,11 +23,23 @@
       "initializationOptions": {},
       "settings": {}
     },
-    "digestif": {
-      "command": "digestif",
-      "filetypes": ["tex", "plaintex", "context"]
+
+    "fortran": {
+        "command": "fortls",
+        "args": ["--symbol_skip_mem", "--incrmental_sync", "--autocomplete_no_prefix", "--lowercase_intrinsics"],
+        "filetypes": ["fortran"],
     }
+  },  // languageserver
+
+  // https://github.com/neoclide/coc-python
+  "python": {
+      // If false, use MS language server instead
+      "jediEnabled": true,
+      "linting": {
+          "mypyEnabled": false
+      }
   },
+
   "coc.source.word.enable": false,
   "coc.source.ultisnips.enable": false,  // replaced by coc-snippets
   "coc.source.omni.filetypes": [],  // filetypes that work with omnicompletion

@@ -8,6 +8,8 @@ let fortran_fold = 1
 let fortran_fold_conditionals = 0
 let fortran_fold_multilinecomments = 0
 
+let fortran_free_source = 1
+
 " More precise syntax colouring.
 let fortran_more_precise = 1
 

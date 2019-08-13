@@ -397,6 +397,7 @@ let g:airline_powerline_fonts = 1
 let g:ale_linters = {}
 let g:ale_linters.c = []
 let g:ale_linters.cpp = []
+let g:ale_linters.fortran = []
 " let g:ale_linters.pandoc = []
 let g:ale_linters.perl = ['perl', 'perlcritic']
 let g:ale_linters.python = []
