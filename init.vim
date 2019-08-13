@@ -48,6 +48,11 @@ Plug 'Shougo/neco-vim'
 Plug 'neoclide/coc-neco'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+" Coc plugins
+" Not sure if this works...
+" (https://github.com/neoclide/coc.nvim/wiki/Using-coc-extensions#use-vims-plugin-manager-for-coc-extension)
+" Plug 'fannheyward/coc-texlab', {'do': 'yarn install --frozen-lockfile'}
+
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -70,7 +75,6 @@ Plug 'lervag/vimtex'
 Plug 'chriskempson/base16-vim'
 Plug 'dag/vim-fish'
 Plug 'jvirtanen/vim-octave'
-Plug 'keith/tmux.vim'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-after'
 Plug 'vim-pandoc/vim-pandoc-syntax'
@@ -294,8 +298,8 @@ augroup COC
   nmap <silent> gi <Plug>(coc-implementation)
   nmap <silent> gr <Plug>(coc-references)
 
-  " Show documentation in preview window
-  nnoremap <silent> K :call <SID>show_documentation()<CR>
+  " Show documentation in preview window with alt-K
+  nnoremap <silent> <M-k> :call <SID>show_documentation()<CR>
 
   function! s:show_documentation()
     if (index(['vim','help'], &filetype) >= 0)
@@ -536,20 +540,6 @@ if has('nvim')
     " Stuff taken from ":h terminal-input".
     " NOTE: using just one <Esc> conflicts with the terminal vi-mode.
     tnoremap <Esc><Esc> <C-\><C-n>      " exit terminal mode
-
-    " To use `ALT+{h,j,k,l}` to navigate windows from any mode:
-    tnoremap <A-h> <C-\><C-N><C-w>h
-    tnoremap <A-j> <C-\><C-N><C-w>j
-    tnoremap <A-k> <C-\><C-N><C-w>k
-    tnoremap <A-l> <C-\><C-N><C-w>l
-    inoremap <A-h> <C-\><C-N><C-w>h
-    inoremap <A-j> <C-\><C-N><C-w>j
-    inoremap <A-k> <C-\><C-N><C-w>k
-    inoremap <A-l> <C-\><C-N><C-w>l
-    nnoremap <A-h> <C-w>h
-    nnoremap <A-j> <C-w>j
-    nnoremap <A-k> <C-w>k
-    nnoremap <A-l> <C-w>l
 end
 
 " }}}
