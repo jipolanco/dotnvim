@@ -464,8 +464,8 @@ augroup END
 " commands), so we disable them and manually define a few mappings.
 let g:gitgutter_map_keys = 0
 let g:gitgutter_override_sign_column_highlight = 0
-nmap [c <Plug>GitGutterPrevHunk
-nmap ]c <Plug>GitGutterNextHunk
+nmap [c <Plug>(GitGutterPrevHunk)
+nmap ]c <Plug>(GitGutterNextHunk)
 
 " }}}
 
