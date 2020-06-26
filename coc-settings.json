@@ -17,7 +17,7 @@
         "--startup-file=no",
         "--history-file=no",
         "-e",
-        "using LanguageServer; using Pkg; import StaticLint; import SymbolServer; env_path = dirname(Pkg.Types.Context().env.project_file); debug = false; server = LanguageServer.LanguageServerInstance(stdin, stdout, debug, env_path, \"\", Dict()); server.runlinter=true; run(server);"
+        "using LanguageServer; using SymbolServer; using Pkg; env_path = dirname(Pkg.Types.Context().env.project_file); server = LanguageServer.LanguageServerInstance(stdin, stdout, env_path); server.runlinter = false; run(server);"
       ],
       "filetypes": ["julia"],
       "initializationOptions": {},
@@ -36,7 +36,10 @@
       // If false, use MS language server instead
       "jediEnabled": true,
       "linting": {
-          "mypyEnabled": false
+          "mypyEnabled": false,
+          "pylintEnabled": true,
+          "prospectorEnabled": false,
+          "prospectorArgs": ["--strictness", "low"],
       }
   },
 
