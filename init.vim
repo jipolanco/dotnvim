@@ -45,22 +45,15 @@ Plug 'Konfekt/FastFold'
 Plug 'Shougo/echodoc.vim'
 Plug 'Shougo/neco-vim'
 
-Plug 'neoclide/coc-neco'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-" Coc plugins
-" Not sure if this works...
-" (https://github.com/neoclide/coc.nvim/wiki/Using-coc-extensions#use-vims-plugin-manager-for-coc-extension)
-" Plug 'fannheyward/coc-texlab', {'do': 'yarn install --frozen-lockfile'}
-
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
-" Language-specific plugins.
-" Plug 'bfredl/nvim-ipy'    " ipython
+Plug 'neovim/nvim-lsp'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/deoplete-lsp'
 
 Plug 'JuliaEditorSupport/julia-vim'
 " let g:default_julia_version = 'devel'
@@ -246,6 +239,47 @@ let g:rustfmt_autosave = 1
 " let g:ftplugin_rust_source_path = $RUST_SRC_PATH
 
 " ========================================================================== "
+" COMPLETION
+let g:deoplete#enable_at_startup = 1
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ deoplete#manual_complete()
+
+function! s:check_back_space() abort "{{{
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction "}}}
+
+" ========================================================================== "
+" LANGUAGE SERVER
+
+lua << EOF
+    require'nvim_lsp'.julials.setup{
+      settings = {
+        julia = {
+          lint = {
+            missingrefs = "none"
+          }
+        }
+      }
+    }
+    require'nvim_lsp'.texlab.setup{}
+EOF
+
+autocmd Filetype julia setlocal omnifunc=v:lua.vim.lsp.omnifunc
+autocmd Filetype tex setlocal omnifunc=v:lua.vim.lsp.omnifunc
+
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> <M-k> <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> ge    <cmd>lua vim.lsp.util.show_line_diagnostics()<CR>
+nnoremap <silent> <leader>k    <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> gs    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+
+" ========================================================================== "
 " PLUGINS
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 " let g:EditorConfig_disable_rules = ['trim_trailing_whitespace']
@@ -253,133 +287,6 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 let g:echodoc#enable_at_startup = 1
 
 let g:surround_indent = 1
-
-" COC {{{
-augroup COC
-  " Stuff adapted from
-  " https://github.com/neoclide/coc.nvim#example-vim-configuration
-
-  " Smaller updatetime for CursorHold & CursorHoldI
-  set updatetime=300
-
-  " don't give |ins-completion-menu| messages.
-  " set shortmess+=c
-
-  " always show signcolumns
-  set signcolumn=yes
-
-  " Use tab for trigger completion with characters ahead and navigate.
-  " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-  inoremap <silent><expr> <TAB>
-        \ pumvisible() ? "\<C-n>" :
-        \ <SID>check_back_space() ? "\<TAB>" :
-        \ coc#refresh()
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-  function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
-  endfunction
-
-  " Use <c-space> to trigger completion.
-  inoremap <silent><expr> <c-space> coc#refresh()
-
-  " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-  " Coc only does snippet and additional edit on confirm.
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
-  " Use `[d` and `]d` to navigate diagnostics
-  nmap <silent> [d <Plug>(coc-diagnostic-prev)
-  nmap <silent> ]d <Plug>(coc-diagnostic-next)
-
-  " Remap keys for gotos
-  nmap <silent> gd <Plug>(coc-definition)
-  nmap <silent> gy <Plug>(coc-type-definition)
-  nmap <silent> gi <Plug>(coc-implementation)
-  nmap <silent> gr <Plug>(coc-references)
-
-  " Show documentation in preview window with alt-K
-  nnoremap <silent> <M-k> :call <SID>show_documentation()<CR>
-
-  function! s:show_documentation()
-    if (index(['vim','help'], &filetype) >= 0)
-      execute 'h '.expand('<cword>')
-    else
-      call CocAction('doHover')
-    endif
-  endfunction
-
-
-  " Highlight symbol under cursor on CursorHold
-  autocmd CursorHold * silent call CocActionAsync('highlight')
-
-  " Remap for rename current word
-  nmap <F2> <Plug>(coc-rename)
-
-  " Remap for format selected region
-  vmap <localleader>f  <Plug>(coc-format-selected)
-  nmap <localleader>f  <Plug>(coc-format-selected)
-
-  augroup COC_mygroup
-    autocmd!
-    " Setup formatexpr specified filetype(s).
-    autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-    " Update signature help on jump placeholder
-    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-
-    " Correct highlighting of comments in coc-settings.json.
-    autocmd FileType json syntax match Comment +\/\/.\+$+
-  augroup end
-
-  " Remap for do codeAction of selected region, ex: `<leader>aap` for current
-  " paragraph
-  vmap <localleader>a  <Plug>(coc-codeaction-selected)
-  nmap <localleader>a  <Plug>(coc-codeaction-selected)
-
-  " Remap for do codeAction of current line
-  nmap <localleader>ac  <Plug>(coc-codeaction)
-
-  " Fix autofix problem of current line
-  nmap <localleader>qf  <Plug>(coc-fix-current)
-
-  " Use `:Format` to format current buffer
-  command! -nargs=0 Format :call CocAction('format')
-
-  " Use `:Fold` to fold current buffer
-  command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-  " Add diagnostic info for https://github.com/itchyny/lightline.vim
-  let g:lightline = {
-        \ 'colorscheme': 'wombat',
-        \ 'active': {
-        \   'left': [ [ 'mode', 'paste' ],
-        \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
-        \ },
-        \ 'component_function': {
-        \   'cocstatus': 'coc#status'
-        \ },
-        \ }
-
-  " Using CocList
-  " Show all diagnostics
-  nnoremap <silent> <leader>d  :<C-u>CocList diagnostics<cr>
-  " Manage extensions
-  nnoremap <silent> <leader>e  :<C-u>CocList extensions<cr>
-  " Show commands
-  nnoremap <silent> <leader>c  :<C-u>CocList commands<cr>
-  " Find symbol of current document
-  nnoremap <silent> <leader>o  :<C-u>CocList outline<cr>
-  " Search workspace symbols
-  nnoremap <silent> <leader>s  :<C-u>CocList -I symbols<cr>
-  " Do default action for next item.
-  nnoremap <silent> <leader>j  :<C-u>CocNext<CR>
-  " Do default action for previous item.
-  nnoremap <silent> <leader>k  :<C-u>CocPrev<CR>
-  " Resume latest coc list
-  nnoremap <silent> <leader>p  :<C-u>CocListResume<CR>
-augroup end
-
-" }}}
 
 " Airline {{{
 
