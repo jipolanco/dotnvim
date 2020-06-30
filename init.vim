@@ -256,28 +256,41 @@ endfunction "}}}
 " LANGUAGE SERVER
 
 lua << EOF
-    require'nvim_lsp'.julials.setup{
-      settings = {
-        julia = {
-          lint = {
-            missingrefs = "none"
-          }
+  local nvim_lsp = require'nvim_lsp'
+  nvim_lsp.bashls.setup{}
+  nvim_lsp.ccls.setup{}
+  nvim_lsp.fortls.setup{}
+  nvim_lsp.jsonls.setup{}
+  nvim_lsp.julials.setup{
+    settings = {
+      julia = {
+        lint = {
+          missingrefs = "none";
         }
       }
     }
-    require'nvim_lsp'.texlab.setup{}
+  }
+  nvim_lsp.pyls.setup{}
+  nvim_lsp.texlab.setup{}
+  nvim_lsp.vimls.setup{}
 EOF
 
-autocmd Filetype julia setlocal omnifunc=v:lua.vim.lsp.omnifunc
-autocmd Filetype tex setlocal omnifunc=v:lua.vim.lsp.omnifunc
+command LspClientInfo lua print(vim.inspect(vim.lsp.buf_get_clients()))
 
-nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> gD    <cmd>lua vim.lsp.buf.declaration()<CR>
+" Adapted from ':h :lsp-config'
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> <M-k> <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> ge    <cmd>lua vim.lsp.util.show_line_diagnostics()<CR>
-nnoremap <silent> <leader>k    <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> gi    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
-nnoremap <silent> gs    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+
+" Use LSP omni-completion.
+autocmd Filetype julia,python,tex,c,cpp,fortran,json,sh,vim
+      \ setlocal omnifunc=v:lua.vim.lsp.omnifunc
 
 " ========================================================================== "
 " PLUGINS
