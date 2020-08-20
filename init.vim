@@ -54,6 +54,8 @@ Plug 'junegunn/fzf.vim'
 Plug 'neovim/nvim-lsp'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/deoplete-lsp'
+" Plug 'nvim-lua/lsp-status.nvim'
+Plug 'nvim-lua/diagnostic-nvim'
 
 Plug 'JuliaEditorSupport/julia-vim'
 " let g:default_julia_version = 'devel'
@@ -262,10 +264,12 @@ lua << EOF
   nvim_lsp.fortls.setup{}
   nvim_lsp.jsonls.setup{}
   nvim_lsp.julials.setup{
+    on_attach = require'diagnostic'.on_attach;
     settings = {
       julia = {
         lint = {
-          missingrefs = "none";
+          -- missingrefs = "none";
+          call = false;  -- "Possible method call error."
         }
       }
     }
