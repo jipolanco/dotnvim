@@ -57,6 +57,11 @@ Plug 'Shougo/deoplete-lsp'
 " Plug 'nvim-lua/lsp-status.nvim'
 Plug 'nvim-lua/diagnostic-nvim'
 
+Plug 'jpalardy/vim-slime'
+let g:slime_target = "tmux"
+let g:slime_paste_file = tempname()
+let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
+
 Plug 'JuliaEditorSupport/julia-vim'
 " let g:default_julia_version = 'devel'
 let g:latex_to_unicode_tab = 0
