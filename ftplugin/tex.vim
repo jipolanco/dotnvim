@@ -1,9 +1,11 @@
 setlocal shiftwidth=2
 
 " Use conceal mode (see ":h tex-conceal").
-" setlocal conceallevel=2
 " let g:tex_conceal = 'abdmg'
 setlocal conceallevel=0
+
+setlocal wrap
+setlocal textwidth=0
 
 " Treat all tex files as style files (*.sty).
 " This means that underscores are considered as keywords.
@@ -23,7 +25,7 @@ let g:syntastic_tex_checkers = ['chktex', 'lacheck']
 let g:vimtex_quickfix_open_on_warning = 0
 
 let g:vimtex_fold_enabled = 1
-let g:vimtex_format_enabled = 1
+let g:vimtex_format_enabled = 0
 
 " Use lualatex as default latexmk engine.
 " This can be overriden using a TeX program directive (see ":h vimtex-tex-program").

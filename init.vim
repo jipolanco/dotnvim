@@ -296,6 +296,7 @@ nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
 nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+nnoremap <silent> <localleader>f    <cmd>lua vim.lsp.buf.formatting()<CR>
 
 " Use LSP omni-completion.
 autocmd Filetype julia,python,tex,c,cpp,fortran,json,sh,vim
@@ -407,8 +408,8 @@ nmap ]c <Plug>(GitGutterNextHunk)
 nnoremap <silent> <leader>h :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><leader>h
 
 " This changes the behaviour of j and k in wrapped lines.
-" noremap j gj
-" noremap k gk
+noremap j gj
+noremap k gk
 
 " Change dir to the directory of the open buffer.
 nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
