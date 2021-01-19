@@ -55,7 +55,6 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/deoplete-lsp'
 " Plug 'nvim-lua/lsp-status.nvim'
-Plug 'nvim-lua/diagnostic-nvim'
 
 Plug 'jpalardy/vim-slime'
 let g:slime_target = "tmux"
@@ -263,28 +262,28 @@ endfunction "}}}
 " LANGUAGE SERVER
 
 lua << EOF
-  local nvim_lsp = require'nvim_lsp'
-  nvim_lsp.bashls.setup{}
-  nvim_lsp.ccls.setup{}
-  nvim_lsp.fortls.setup{}
-  nvim_lsp.jsonls.setup{}
-  nvim_lsp.julials.setup{
-    on_attach = require'diagnostic'.on_attach;
+  local lsp = require'lspconfig'
+  lsp.bashls.setup{}
+  lsp.ccls.setup{}
+  lsp.fortls.setup{}
+  lsp.jsonls.setup{}
+  lsp.julials.setup{
     settings = {
       julia = {
         lint = {
-          -- missingrefs = "none";
+          missingrefs = "none";
           call = false;  -- "Possible method call error."
         }
       }
     }
   }
-  nvim_lsp.pyls.setup{}
-  nvim_lsp.texlab.setup{}
-  nvim_lsp.vimls.setup{}
+  lsp.pyls.setup{}
+  lsp.texlab.setup{}
+  lsp.vimls.setup{}
 EOF
 
 command LspClientInfo lua print(vim.inspect(vim.lsp.buf_get_clients()))
+command LspClientStop lua vim.lsp.stop_client(vim.lsp.get_active_clients())
 
 " Adapted from ':h :lsp-config'
 nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
