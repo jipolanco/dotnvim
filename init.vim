@@ -51,6 +51,8 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
+" Plug 'rickhowe/diffchar.vim'
+
 Plug 'neovim/nvim-lspconfig'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/deoplete-lsp'
@@ -247,6 +249,11 @@ let g:rustfmt_autosave = 1
 " ========================================================================== "
 " COMPLETION
 let g:deoplete#enable_at_startup = 1
+
+" From :h vimtex-complete-deoplete
+" call deoplete#custom#var('omni', 'input_patterns', {
+"       \ 'tex': g:vimtex#re#deoplete
+"       \})
 
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
