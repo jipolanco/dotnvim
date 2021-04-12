@@ -42,10 +42,13 @@ Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'cespare/vim-toml'
 Plug 'dag/vim-fish'
 
+" Tmux
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'jpalardy/vim-slime'
+
 " Others
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'christoomey/vim-tmux-navigator'
 
 call plug#end()
 
@@ -130,6 +133,12 @@ smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab
 imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 
+" }}}
+
+"" VIM-SLIME {{{
+let g:slime_target = "tmux"
+let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
+let g:slime_paste_file = tempname()
 " }}}
 
 "" COMPE-NVIM {{{
