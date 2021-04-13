@@ -98,6 +98,16 @@ let g:maplocalleader = '\'
 
 " }}}
 
+"" AUTOCOMMANDS {{{
+
+" Jump to last position when reopening a file
+autocmd BufReadPost *
+            \ if line("'\"") > 1 && line("'\"") <= line("$") |
+            \ exe "normal! g'\"" |
+            \ endif
+
+" }}}
+
 "" LANGUAGE PLUGINS {{{
 
 " Julia
