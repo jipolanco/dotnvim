@@ -101,7 +101,7 @@ let g:maplocalleader = '\'
 "" LANGUAGE PLUGINS {{{
 
 " Julia
-let g:latex_to_unicode_tab = 1
+let g:latex_to_unicode_tab = 0
 let g:latex_to_unicode_auto = 1
 let g:latex_to_unicode_file_types = '.*'
 let g:latex_to_unicode_file_types_blacklist = 'tex'
