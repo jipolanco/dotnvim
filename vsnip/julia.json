@@ -6,5 +6,15 @@
             "$0",
             "\"\"\""
         ]
+    },
+    "Main function": {
+        "prefix": "main",
+        "body": [
+            "function main()",
+            "\t$0",
+            "end",
+            "",
+            "main()"
+        ]
     }
 }
