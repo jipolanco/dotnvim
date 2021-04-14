@@ -239,7 +239,7 @@ imap <c-l> <Plug>delimitMateS-Tab
 
 "" FUGITIVE {{{
 
-nnoremap <leader>gg :Gstatus<cr>
+nnoremap <leader>gg :Git<cr>
 nnoremap <leader>gw :Gwrite<cr>
 nnoremap <leader>gd :Gdiffsplit<cr>
 
