@@ -32,6 +32,7 @@ Plug 'overcache/NeoSolarized'
 " Completion
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/nvim-compe'
+Plug 'GoldsteinE/compe-latex-symbols'
 
 " Languages
 Plug 'JuliaEditorSupport/julia-vim'
@@ -111,7 +112,7 @@ autocmd BufReadPost *
 "" LANGUAGE PLUGINS {{{
 
 " Julia
-let g:latex_to_unicode_tab = 0
+let g:latex_to_unicode_tab = "command"
 let g:latex_to_unicode_auto = 1
 let g:latex_to_unicode_file_types = '.*'
 let g:latex_to_unicode_file_types_blacklist = 'tex'
@@ -175,6 +176,8 @@ require'compe'.setup {
     nvim_lsp = true;
     nvim_lua = true;
     vsnip = true;
+    -- Other sources
+    latex_symbols = true;
   };
 }
 
