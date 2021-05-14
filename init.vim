@@ -302,10 +302,27 @@ end
 -- Use a loop to conveniently both setup defined servers
 -- and map buffer local keybindings when the language server attaches
 -- local servers = { "pyright", "rust_analyzer", "tsserver" }
-local servers = { "julials" }
+local servers = { "julials", "bashls", "texlab" }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup { on_attach = on_attach }
 end
+
+nvim_lsp.julials.setup = {
+  on_attach = on_attach,
+  settings = {
+    julia = {
+      NumThreads = 1,
+      lint = {
+        call = false,
+        constif = false,
+        datadecl = true,
+        iter = true,
+        missingrefs = "none"
+      }
+    }
+  }
+}
+
 EOF
 
 " }}}
@@ -314,6 +331,8 @@ EOF
 
 nnoremap <leader>b :Buffers<cr>
 nnoremap <leader>f :Files %:p:h<cr>
+nnoremap <leader>t :Tags<cr>
+nnoremap <leader>T :BTags<cr>
 nnoremap <leader>gf :GFiles<cr>
 nnoremap <leader>: :History:<cr>
 nnoremap <leader>/ :History/<cr>
@@ -331,5 +350,8 @@ noremap Y y$
 nnoremap <silent> <leader>h :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><leader>h
 
 nnoremap <silent> <leader>cd :cd %:p:h<cr>
+
+" nnoremap <expr> j v:count ? 'j' : 'gj'
+" nnoremap <expr> k v:count ? 'k' : 'gk'
 
 " }}}
