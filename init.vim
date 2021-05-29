@@ -189,11 +189,14 @@ require'compe'.setup {
     nvim_lsp = true;
     nvim_lua = true;
     vsnip = true;
+    ultisnips = false;
+    emoji = false;
     -- Other sources
     latex_symbols = true;
   };
 }
 
+-- https://github.com/hrsh7th/nvim-compe#how-to-use-tab-to-navigate-completion-menu
 local t = function(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
@@ -227,6 +230,7 @@ _G.s_tab_complete = function()
   elseif vim.fn.call("vsnip#jumpable", {-1}) == 1 then
     return t "<Plug>(vsnip-jump-prev)"
   else
+    -- If <S-Tab> is not working in your terminal, change it to <C-h>
     return t "<S-Tab>"
   end
 end
