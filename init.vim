@@ -131,6 +131,12 @@ highlight link juliaParDelim Delimiter
 highlight link juliaSemicolon Operator
 highlight link juliaFunctionCall Identifier
 
+" LaTeX - VimTeX
+
+let g:vimtex_view_general_viewer = 'okular'
+let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
+let g:vimtex_view_general_options_latexmk = '--unique'
+
 " }}}
 
 "" VIM-VSNIP {{{
@@ -324,6 +330,27 @@ nvim_lsp.julials.setup = {
         datadecl = true,
         iter = true,
         missingrefs = "none"
+      }
+    }
+  }
+}
+
+nvim_lsp.texlab.setup = {
+  on_attach = on_attach,
+  settings = {
+    latex = {
+      build = {
+        executable = "latexmk",
+        onSave = false
+      },
+      forwardSearch = {
+        executable = "okular",
+        args = {"--unique", "file:%p#src:%l%f"},
+        onSave = false
+      },
+      lint = {
+        onChange = false,
+        onSave = true
       }
     }
   }
