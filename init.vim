@@ -57,6 +57,8 @@ call plug#end()
 " }}}
 
 "" OPTIONS {{{
+
+set shell=/bin/bash
 set termguicolors
 set number
 set relativenumber
