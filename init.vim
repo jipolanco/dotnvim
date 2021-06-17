@@ -7,6 +7,7 @@ Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'Raimondi/delimitMate'
+Plug 'junegunn/vim-easy-align'
 
 " Snippets
 " Plug 'honza/vim-snippets'
