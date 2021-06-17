@@ -10,10 +10,8 @@ Plug 'Raimondi/delimitMate'
 Plug 'junegunn/vim-easy-align'
 
 " Snippets
-" Plug 'honza/vim-snippets'
-Plug 'rafamadriz/friendly-snippets'
-Plug 'hrsh7th/vim-vsnip'
-Plug 'hrsh7th/vim-vsnip-integ'
+Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
 
 " Git
 Plug 'airblade/vim-gitgutter'
@@ -54,6 +52,15 @@ Plug 'junegunn/fzf.vim'
 Plug 'kshenoy/vim-signature'
 
 call plug#end()
+
+" }}}
+
+"" UltiSnips {{{
+
+let g:UltiSnipsExpandTrigger = "<c-j>"
+let g:UltiSnipsListSnippets = "<c-u>"
+let g:UltiSnipsJumpForwardTrigger = "<c-j>"
+let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
 
 " }}}
 
@@ -144,26 +151,6 @@ let g:vimtex_quickfix_open_on_warning = 0
 
 " }}}
 
-"" VIM-VSNIP {{{
-
-let g:vsnip_snippet_dir = stdpath("config") . "/vsnip"
-
-" Expand
-imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
-smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
-
-" Expand or jump
-imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-
-" Jump forward or backward
-imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
-smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
-
-" }}}
-
 "" VIM-SLIME {{{
 let g:slime_target = "tmux"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
@@ -193,8 +180,8 @@ require'compe'.setup {
     calc = true;
     nvim_lsp = true;
     nvim_lua = true;
-    vsnip = true;
-    ultisnips = false;
+    vsnip = false;
+    ultisnips = true;
     emoji = false;
     -- Other sources
     latex_symbols = true;
@@ -221,8 +208,8 @@ end
 _G.tab_complete = function()
   if vim.fn.pumvisible() == 1 then
     return t "<C-n>"
-  elseif vim.fn.call("vsnip#available", {1}) == 1 then
-    return t "<Plug>(vsnip-expand-or-jump)"
+  -- elseif vim.fn.call("vsnip#available", {1}) == 1 then
+  --   return t "<Plug>(vsnip-expand-or-jump)"
   elseif check_back_space() then
     return t "<Tab>"
   else
@@ -232,8 +219,8 @@ end
 _G.s_tab_complete = function()
   if vim.fn.pumvisible() == 1 then
     return t "<C-p>"
-  elseif vim.fn.call("vsnip#jumpable", {-1}) == 1 then
-    return t "<Plug>(vsnip-jump-prev)"
+  -- elseif vim.fn.call("vsnip#jumpable", {-1}) == 1 then
+  --   return t "<Plug>(vsnip-jump-prev)"
   else
     -- If <S-Tab> is not working in your terminal, change it to <C-h>
     return t "<S-Tab>"
