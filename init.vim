@@ -315,7 +315,7 @@ for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup { on_attach = on_attach }
 end
 
-nvim_lsp.julials.setup = {
+nvim_lsp.julials.setup {
   on_attach = on_attach,
   settings = {
     julia = {
@@ -331,7 +331,7 @@ nvim_lsp.julials.setup = {
   }
 }
 
-nvim_lsp.texlab.setup = {
+nvim_lsp.texlab.setup {
   on_attach = on_attach,
   settings = {
     latex = {
