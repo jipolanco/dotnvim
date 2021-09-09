@@ -50,7 +50,6 @@ Plug 'jpalardy/vim-slime'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'kshenoy/vim-signature'
-Plug 'tpope/vim-dispatch'
 
 call plug#end()
 
