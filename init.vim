@@ -170,6 +170,9 @@ let g:vimtex_fold_manual = 1
 let g:slime_target = "tmux"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
 let g:slime_paste_file = tempname()
+
+" To be combined with b:slime_cell_delimiter in ftplugin/*.vim
+nmap <c-c>c <Plug>SlimeSendCell
 " }}}
 
 "" CMP-NVIM {{{
