@@ -153,7 +153,6 @@ highlight link juliaFunctionCall Identifier
 
 let g:vimtex_view_general_viewer = 'okular'
 let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
-let g:vimtex_view_general_options_latexmk = '--unique'
 let g:vimtex_compiler_progname = 'nvr'
 
 let g:vimtex_quickfix_open_on_warning = 0
@@ -170,6 +169,7 @@ let g:vimtex_fold_manual = 1
 let g:slime_target = "tmux"
 let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
 let g:slime_paste_file = tempname()
+let g:slime_bracketed_paste = 1
 
 " To be combined with b:slime_cell_delimiter in ftplugin/*.vim
 nmap <c-c>c <Plug>SlimeSendCell
