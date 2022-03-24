@@ -1,65 +1,7 @@
 "" PLUGINS {{{
-" Using https://github.com/junegunn/vim-plug
-call plug#begin(stdpath('data') . '/plugged')
 
-" Editing
-Plug 'easymotion/vim-easymotion'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-surround'
-Plug 'Raimondi/delimitMate'
-Plug 'junegunn/vim-easy-align'
-" Plug 'andymass/vim-matchup'
-
-" Snippets
-Plug 'honza/vim-snippets'
-Plug 'SirVer/ultisnips'
-
-" Git
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
-
-" Mappings
-Plug 'Valloric/ListToggle'
-Plug 'tpope/vim-unimpaired'
-
-" Theming
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-
-" Colourschemes
-Plug 'overcache/NeoSolarized'
-
-" Completion
-Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'hrsh7th/cmp-buffer'
-Plug 'hrsh7th/cmp-path'
-Plug 'hrsh7th/cmp-cmdline'
-Plug 'hrsh7th/nvim-cmp'
-
-" Plug 'GoldsteinE/compe-latex-symbols'
-Plug 'quangnguyen30192/cmp-nvim-ultisnips'
-Plug 'onsails/lspkind-nvim'
-
-" Languages
-Plug 'JuliaEditorSupport/julia-vim'
-Plug 'lervag/vimtex'
-Plug 'vim-pandoc/vim-pandoc'
-Plug 'vim-pandoc/vim-pandoc-after'
-Plug 'vim-pandoc/vim-pandoc-syntax'
-Plug 'cespare/vim-toml'
-Plug 'dag/vim-fish'
-
-" Tmux
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'jpalardy/vim-slime'
-
-" Others
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'kshenoy/vim-signature'
-
-call plug#end()
+" Loads lua/plugins.lua
+lua require('plugins')
 
 " }}}
 
