@@ -120,10 +120,32 @@ nmap <c-c>c <Plug>SlimeSendCell
 "" CMP-NVIM {{{
 
 lua << EOF
--- Setup nvim-cmp.
-local cmp = require'cmp'
 
-cmp.setup({
+-- Adapted from https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion#coq_nvim
+
+-- Setup lspconfig.
+-- Add additional capabilities supported by nvim-cmp
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+
+local lspconfig = require('lspconfig')
+
+-- Enable some language servers with the additional completion capabilities offered by nvim-cmp
+local servers = { "julials", "bashls", "texlab", "fortls" }
+for _, lsp in ipairs(servers) do
+    lspconfig[lsp].setup {
+        -- on_attach = my_custom_on_attach,
+        capabilities = capabilities
+    }
+end
+
+-- luasnip setup
+-- local luasnip = require 'luasnip'
+
+-- nvim-cmp setup
+local cmp = require 'cmp'
+
+cmp.setup {
     snippet = {
         expand = function(args)
             -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
@@ -133,13 +155,13 @@ cmp.setup({
         end,
     },
     mapping = {
-        ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
         ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-        ['<Down>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-        ['<Up>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+        ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
         ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
         ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
         ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+        ['<Down>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+        ['<Up>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
         ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
         ['<C-e>'] = cmp.mapping({
             i = cmp.mapping.abort(),
@@ -157,23 +179,23 @@ cmp.setup({
         -- { name = 'luasnip' }, -- For luasnip users.
         { name = 'ultisnips' }, -- For ultisnips users.
         -- { name = 'snippy' }, -- For snippy users.
-    }, {
+        }, {
         { name = 'buffer' },
+        { name = 'path' },
         -- { name = 'latex_symbols' },
     }),
     formatting = {
         format = require("lspkind").cmp_format({with_text = true, maxwidth = 50,
-        menu = ({
-            buffer = "[Buffer]",
-            nvim_lsp = "[LSP]",
-            luasnip = "[LuaSnip]",
-            nvim_lua = "[Lua]",
-            -- latex_symbols = "[Latex]",
-        })
-    }),
-},
-
-})
+            menu = ({
+                buffer = "[Buffer]",
+                nvim_lsp = "[LSP]",
+                luasnip = "[LuaSnip]",
+                nvim_lua = "[Lua]",
+                -- latex_symbols = "[Latex]",
+            })
+        }),
+    },
+}
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline('/', {
@@ -190,15 +212,6 @@ cmp.setup.cmdline(':', {
     { name = 'cmdline' }
     })
 })
-
--- Setup lspconfig.
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-local servers = { "julials", "bashls", "texlab", "fortls" }
-for _, lsp in ipairs(servers) do
-    require('lspconfig')[lsp].setup {
-        capabilities = capabilities
-    }
-end
 
 EOF
 
