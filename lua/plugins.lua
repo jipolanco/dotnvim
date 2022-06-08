@@ -32,8 +32,12 @@ return require('packer').startup(function()
   -- use 'andymass/vim-matchup'
 
   -- Snippets
-  use 'honza/vim-snippets'
-  use 'SirVer/ultisnips'
+  -- use 'honza/vim-snippets'
+  -- use 'SirVer/ultisnips'
+  use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
+  -- use 'molleweide/LuaSnip-snippets.nvim'
+  use 'rafamadriz/friendly-snippets'
+  use 'L3MON4D3/LuaSnip'
 
   -- Git
   use 'airblade/vim-gitgutter'
@@ -59,7 +63,8 @@ return require('packer').startup(function()
   use 'hrsh7th/nvim-cmp'
 
   -- use 'GoldsteinE/compe-latex-symbols'
-  use 'quangnguyen30192/cmp-nvim-ultisnips'
+  -- use 'quangnguyen30192/cmp-nvim-ultisnips'
+
   use 'onsails/lspkind-nvim'
 
   -- Languages
