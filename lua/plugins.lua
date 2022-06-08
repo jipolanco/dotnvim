@@ -68,6 +68,7 @@ return require('packer').startup(function()
   use 'vim-pandoc/vim-pandoc'
   use 'vim-pandoc/vim-pandoc-after'
   use 'vim-pandoc/vim-pandoc-syntax'
+  use 'quarto-dev/quarto-vim'
   use 'cespare/vim-toml'
   use 'dag/vim-fish'
 
