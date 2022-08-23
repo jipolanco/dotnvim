@@ -234,7 +234,7 @@ nnoremap <leader>gd :Gdiffsplit<cr>
 "" NVIM_LSPCONFIG {{{
 
 lua << EOF
-local nvim_lsp = require('lspconfig')
+local lspconfig = require('lspconfig')
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
@@ -286,12 +286,12 @@ end
 -- Use a loop to conveniently both setup defined servers
 -- and map buffer local keybindings when the language server attaches
 -- local servers = { "pyright", "rust_analyzer", "tsserver" }
-local servers = { "julials", "bashls", "rust_analyzer", "texlab", "fortls" }
+local servers = { "julials", "bashls", "rust_analyzer", "texlab", "fortls", "ccls" }
 for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup { on_attach = on_attach }
+  lspconfig[lsp].setup { on_attach = on_attach }
 end
 
-nvim_lsp.julials.setup {
+lspconfig.julials.setup {
   on_attach = on_attach,
   settings = {
     julia = {
@@ -307,7 +307,7 @@ nvim_lsp.julials.setup {
   }
 }
 
-nvim_lsp.texlab.setup {
+lspconfig.texlab.setup {
   on_attach = on_attach,
   settings = {
     latex = {
@@ -325,6 +325,21 @@ nvim_lsp.texlab.setup {
         onSave = true
       }
     }
+  }
+}
+
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#ccls
+-- https://github.com/MaskRay/ccls/wiki/Customization#initialization-options
+lspconfig.ccls.setup {
+  on_attach = on_attach,
+  init_options = {
+    compilationDatabaseDirectory = "build";
+    -- index = {
+    --   threads = 0;
+    -- };
+    -- clang = {
+    --   excludeArgs = { "-frounding-math"} ;
+    -- };
   }
 }
 
