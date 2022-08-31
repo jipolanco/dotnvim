@@ -64,6 +64,7 @@ return require('packer').startup(function()
 
   -- Languages
   use 'JuliaEditorSupport/julia-vim'
+  use 'kdheepak/JuliaFormatter.vim'
   use 'lervag/vimtex'
   use 'vim-pandoc/vim-pandoc'
   use 'vim-pandoc/vim-pandoc-after'
