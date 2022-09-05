@@ -63,7 +63,8 @@ return require('packer').startup(function()
   use 'onsails/lspkind-nvim'
 
   -- Languages
-  use 'JuliaEditorSupport/julia-vim'
+  -- use 'JuliaEditorSupport/julia-vim'
+  use { 'ExpandingMan/julia-vim', branch = 'emfix1' }
   use 'kdheepak/JuliaFormatter.vim'
   use 'lervag/vimtex'
   use 'vim-pandoc/vim-pandoc'
