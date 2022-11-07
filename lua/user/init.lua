@@ -47,6 +47,8 @@ local config = {
       spell = false, -- sets vim.opt.spell
       signcolumn = "auto", -- sets vim.opt.signcolumn to auto
       wrap = false, -- sets vim.opt.wrap
+      splitbelow = false,
+      splitright = true,
     },
     g = {
       mapleader = " ", -- sets vim.g.mapleader
@@ -55,8 +57,16 @@ local config = {
       autopairs_enabled = true, -- enable autopairs at start
       diagnostics_enabled = true, -- enable diagnostics at start
       status_diagnostics_enabled = true, -- enable diagnostics in statusline
-      icons_enabled = true, -- disable icons in the UI (disable if no nerd font is available, requires :PackerSync after changing)
+      icons_enabled = false, -- disable icons in the UI (disable if no nerd font is available, requires :PackerSync after changing)
       ui_notifications_enabled = true, -- disable notifications when toggling UI elements
+
+      -- julia-vim plugin
+      latex_to_unicode_tab = "command",
+      latex_to_unicode_auto = 1,
+      latex_to_unicode_file_types = '.*',
+      latex_to_unicode_file_types_blacklist = 'tex',
+      julia_indent_align_brackets = 0,
+      julia_indent_align_funcargs = 0,
     },
   },
   -- If you need more control, you can use the function()...end notation
@@ -138,12 +148,13 @@ local config = {
   lsp = {
     -- enable servers that you already have installed without mason
     servers = {
+      "julials",
       -- "pyright"
     },
     formatting = {
       -- control auto formatting on save
       format_on_save = {
-        enabled = true, -- enable or disable format on save globally
+        enabled = false, -- enable or disable format on save globally
         allow_filetypes = { -- enable format on save for specified filetypes only
           -- "go",
         },
@@ -176,6 +187,20 @@ local config = {
 
     -- Add overrides for LSP server settings, the keys are the name of the server
     ["server-settings"] = {
+      julials = {
+        settings = {
+          julia = {
+            NumThreads = 1,
+            lint = {
+              call = false,
+              constif = false,
+              datadecl = true,
+              iter = true,
+              missingrefs = "none"
+            }
+          }
+        }
+      },
       -- example for addings schemas to yamlls
       -- yamlls = { -- override table for require("lspconfig").yamlls.setup({...})
       --   settings = {
@@ -230,8 +255,8 @@ local config = {
             -- Configuration here, or leave empty to use defaults
           })
         end
-      }
-
+      },
+      { "JuliaEditorSupport/julia-vim" },
       -- { "andweeb/presence.nvim" },
       -- {
       --   "ray-x/lsp_signature.nvim",
