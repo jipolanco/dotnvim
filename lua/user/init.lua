@@ -67,6 +67,12 @@ local config = {
       latex_to_unicode_file_types_blacklist = 'tex',
       julia_indent_align_brackets = 0,
       julia_indent_align_funcargs = 0,
+
+      -- vim-slime plugin
+      slime_target = "tmux",
+      slime_default_config = {socket_name = "default", target_pane =  "{last}"},
+      slime_paste_file = vim.call("tempname"),
+      slime_bracketed_paste = 1,
     },
   },
   -- If you need more control, you can use the function()...end notation
@@ -232,6 +238,10 @@ local config = {
       ["<leader>bt"] = { "<cmd>BufferLineSortByTabs<cr>", desc = "Sort by tabs" },
       -- quick save
       -- ["<C-s>"] = { ":w!<cr>", desc = "Save File" },  -- change description but the same command
+
+      -- vim-slime
+      -- To be combined with vim.b.slime_cell_delimiter in ftplugin/*.lua
+      ["<C-c>c"] = { "<Plug>SlimeSendCell", desc = "Slime: send cell" },
     },
     t = {
       -- setting a mapping to false will disable it
@@ -257,6 +267,7 @@ local config = {
         end
       },
       { "JuliaEditorSupport/julia-vim" },
+      { "jpalardy/vim-slime" },
       -- { "andweeb/presence.nvim" },
       -- {
       --   "ray-x/lsp_signature.nvim",
