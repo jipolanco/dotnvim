@@ -27,6 +27,7 @@ local config = {
 
   -- Set colorscheme to use
   colorscheme = "default_theme",
+  -- colorscheme = "nightfox",
 
   -- Add highlight groups in any theme
   highlights = {
@@ -49,6 +50,7 @@ local config = {
       wrap = false, -- sets vim.opt.wrap
       splitbelow = false,
       splitright = true,
+      shell = "/bin/bash",  -- avoid using fish (very slow)
     },
     g = {
       mapleader = " ", -- sets vim.g.mapleader
@@ -266,8 +268,17 @@ local config = {
           })
         end
       },
+      { "EdenEast/nightfox.nvim" },
       { "JuliaEditorSupport/julia-vim" },
       { "jpalardy/vim-slime" },
+      {
+        "andymass/vim-matchup",
+        setup = function()
+          vim.g.matchup_matchparen_offscreen = { method = "popup" }
+          -- lvim.builtin.treesitter.matchup.enable = true
+        end,
+      },
+
       -- { "andweeb/presence.nvim" },
       -- {
       --   "ray-x/lsp_signature.nvim",
