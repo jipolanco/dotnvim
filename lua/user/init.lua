@@ -51,6 +51,7 @@ local config = {
       splitbelow = false,
       splitright = true,
       shell = "/bin/bash",  -- avoid using fish (very slow)
+      -- showcmd = true,
     },
     g = {
       mapleader = " ", -- sets vim.g.mapleader
@@ -316,7 +317,11 @@ local config = {
     },
     -- use mason-lspconfig to configure LSP installations
     ["mason-lspconfig"] = { -- overrides `require("mason-lspconfig").setup(...)`
-      -- ensure_installed = { "sumneko_lua" },
+      ensure_installed = {
+        "sumneko_lua",
+        "bashls",
+        "texlab",
+      },
     },
     -- use mason-null-ls to configure Formatters/Linter installation for null-ls sources
     ["mason-null-ls"] = { -- overrides `require("mason-null-ls").setup(...)`
@@ -372,6 +377,23 @@ local config = {
   -- augroups/autocommands and custom filetypes also this just pure lua so
   -- anything that doesn't fit in the normal config locations above can go here
   polish = function()
+    local goto_remembered_position = function()
+      local buffer = 0  -- corresponds to current buffer
+      local pos = vim.api.nvim_buf_get_mark(buffer, '"')  -- pos = (row, col)
+      local line = pos[1]
+      local nlines = vim.api.nvim_buf_line_count(buffer)
+      if line > 1 and line < nlines then
+        local window = 0  -- current window
+        vim.api.nvim_win_set_cursor(window, pos)
+      end
+      return nil
+    end
+    vim.api.nvim_create_autocmd(
+      "BufRead", {
+        desc = "remember last position in file",
+        callback = goto_remembered_position,
+      }
+    )
     -- Set up custom filetypes
     -- vim.filetype.add {
     --   extension = {
