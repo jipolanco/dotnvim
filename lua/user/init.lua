@@ -271,6 +271,7 @@ local config = {
       },
       { "EdenEast/nightfox.nvim" },
       { "JuliaEditorSupport/julia-vim" },
+      { "khaveesh/vim-fish-syntax" },
       { "jpalardy/vim-slime" },
       {
         "andymass/vim-matchup",
