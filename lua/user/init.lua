@@ -50,7 +50,7 @@ local config = {
       wrap = false, -- sets vim.opt.wrap
       splitbelow = false,
       splitright = true,
-      shell = "/bin/bash",  -- avoid using fish (very slow)
+      shell = "/bin/bash", -- avoid using fish (very slow)
       -- showcmd = true,
     },
     g = {
@@ -62,20 +62,6 @@ local config = {
       status_diagnostics_enabled = true, -- enable diagnostics in statusline
       icons_enabled = false, -- disable icons in the UI (disable if no nerd font is available, requires :PackerSync after changing)
       ui_notifications_enabled = true, -- disable notifications when toggling UI elements
-
-      -- julia-vim plugin
-      latex_to_unicode_tab = "command",
-      latex_to_unicode_auto = 1,
-      latex_to_unicode_file_types = '.*',
-      latex_to_unicode_file_types_blacklist = 'tex',
-      julia_indent_align_brackets = 0,
-      julia_indent_align_funcargs = 0,
-
-      -- vim-slime plugin
-      slime_target = "tmux",
-      slime_default_config = {socket_name = "default", target_pane =  "{last}"},
-      slime_paste_file = vim.call("tempname"),
-      slime_bracketed_paste = 1,
     },
   },
   -- If you need more control, you can use the function()...end notation
@@ -270,9 +256,27 @@ local config = {
         end
       },
       { "EdenEast/nightfox.nvim" },
-      { "JuliaEditorSupport/julia-vim" },
       { "khaveesh/vim-fish-syntax" },
-      { "jpalardy/vim-slime" },
+      {
+        "JuliaEditorSupport/julia-vim",
+        config = function()
+          vim.g.latex_to_unicode_tab = "command"
+          vim.g.latex_to_unicode_auto = 1
+          vim.g.latex_to_unicode_file_types = '.*'
+          vim.g.latex_to_unicode_file_types_blacklist = 'tex'
+          vim.g.julia_indent_align_brackets = 0
+          vim.g.julia_indent_align_funcargs = 0
+        end,
+      },
+      {
+        "jpalardy/vim-slime",
+        config = function()
+          vim.g.slime_target = "tmux"
+          vim.g.slime_default_config = { socket_name = "default", target_pane = "{last}" }
+          vim.g.slime_paste_file = vim.call("tempname")
+          vim.g.slime_bracketed_paste = 1
+        end,
+      },
       {
         "andymass/vim-matchup",
         setup = function()
@@ -379,21 +383,21 @@ local config = {
   -- anything that doesn't fit in the normal config locations above can go here
   polish = function()
     local goto_remembered_position = function()
-      local buffer = 0  -- corresponds to current buffer
-      local pos = vim.api.nvim_buf_get_mark(buffer, '"')  -- pos = (row, col)
+      local buffer = 0 -- corresponds to current buffer
+      local pos = vim.api.nvim_buf_get_mark(buffer, '"') -- pos = (row, col)
       local line = pos[1]
       local nlines = vim.api.nvim_buf_line_count(buffer)
       if line > 1 and line < nlines then
-        local window = 0  -- current window
+        local window = 0 -- current window
         vim.api.nvim_win_set_cursor(window, pos)
       end
       return nil
     end
     vim.api.nvim_create_autocmd(
       "BufRead", {
-        desc = "remember last position in file",
-        callback = goto_remembered_position,
-      }
+      desc = "remember last position in file",
+      callback = goto_remembered_position,
+    }
     )
     -- Set up custom filetypes
     -- vim.filetype.add {
