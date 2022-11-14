@@ -47,7 +47,7 @@ local config = {
       number = true, -- sets vim.opt.number
       spell = false, -- sets vim.opt.spell
       signcolumn = "auto", -- sets vim.opt.signcolumn to auto
-      wrap = false, -- sets vim.opt.wrap
+      wrap = true, -- sets vim.opt.wrap
       splitbelow = false,
       splitright = true,
       shell = "/bin/bash", -- avoid using fish (very slow)
@@ -144,6 +144,7 @@ local config = {
     -- enable servers that you already have installed without mason
     servers = {
       "julials",
+      "texlab",
       -- "pyright"
     },
     formatting = {
@@ -269,6 +270,17 @@ local config = {
         end,
       },
       {
+        "lervag/vimtex",
+        ft = "tex",
+        config = function()
+          vim.g.vimtex_view_method = "general"
+          vim.g.vimtex_view_general_viewer = "okular"
+          vim.g.vimtex_view_general_options = "--unique file:@pdf#src:@line@tex"
+          vim.g.vimtex_quickfix_open_on_warning = 0
+          vim.g.vimtex_fold_manual = 1
+        end,
+      },
+      {
         "jpalardy/vim-slime",
         config = function()
           vim.g.slime_target = "tmux"
@@ -325,7 +337,7 @@ local config = {
       ensure_installed = {
         "sumneko_lua",
         "bashls",
-        "texlab",
+        -- "texlab",
       },
     },
     -- use mason-null-ls to configure Formatters/Linter installation for null-ls sources
