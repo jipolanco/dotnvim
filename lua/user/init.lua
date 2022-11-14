@@ -355,7 +355,8 @@ local config = {
     -- Configure luasnip loaders (vscode, lua, and/or snipmate)
     vscode = {
       -- Add paths for including more VS Code style snippets in luasnip
-      paths = {},
+      -- This will find directories including ~/.config/{nvim,astronvim}/lua/user/snippets
+      paths = vim.api.nvim_get_runtime_file("lua/user/snippets", true),
     },
   },
 
