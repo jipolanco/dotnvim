@@ -232,6 +232,9 @@ local config = {
       -- vim-slime
       -- To be combined with vim.b.slime_cell_delimiter in ftplugin/*.lua
       ["<C-c>c"] = { "<Plug>SlimeSendCell", desc = "Slime: send cell" },
+
+      ["<leader>fg"] = { "<cmd>lua require('telescope.builtin').git_files()<cr>", desc = "Search git files" },
+      ["<leader>gf"] = { "<cmd>lua require('telescope.builtin').git_files()<cr>", desc = "Search git files" },
     },
     t = {
       -- setting a mapping to false will disable it
@@ -329,9 +332,11 @@ local config = {
       }
       return config -- return final config table
     end,
+
     treesitter = { -- overrides `require("treesitter").setup(...)`
       -- ensure_installed = { "lua" },
     },
+
     -- use mason-lspconfig to configure LSP installations
     ["mason-lspconfig"] = { -- overrides `require("mason-lspconfig").setup(...)`
       ensure_installed = {
