@@ -6,6 +6,10 @@
   "contributes": {
     "snippets": [
       {
+        "language": "julia",
+        "path": "./julia.json"
+      },
+      {
         "language": "tex",
         "path": "./tex.json"
       }
