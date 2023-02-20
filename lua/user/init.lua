@@ -145,6 +145,7 @@ local config = {
     servers = {
       "julials",
       "texlab",
+      "ccls",
       -- "pyright"
     },
     formatting = {
@@ -196,6 +197,20 @@ local config = {
             }
           }
         }
+      },
+      ccls = {
+          -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#ccls
+          setup = {
+              init_options = {
+                  compilationDatabaseDirectory = "build",
+                  index = {
+                      threads = 1,
+                  },
+                  cache = {
+                      directory = "/tmp/ccls-cache",
+                  },
+              },
+          }
       },
       -- example for addings schemas to yamlls
       -- yamlls = { -- override table for require("lspconfig").yamlls.setup({...})
@@ -261,6 +276,7 @@ local config = {
       },
       { "EdenEast/nightfox.nvim" },
       { "khaveesh/vim-fish-syntax" },
+      { "vim-pandoc/vim-pandoc" },
       {
         "JuliaEditorSupport/julia-vim",
         config = function()
@@ -294,10 +310,24 @@ local config = {
       },
       {
         "andymass/vim-matchup",
-        setup = function()
-          vim.g.matchup_matchparen_offscreen = { method = "popup" }
-          -- lvim.builtin.treesitter.matchup.enable = true
-        end,
+        -- setup = function()
+        --   vim.g.matchup_matchparen_offscreen = { method = "popup" }
+        --   vim.builtin.treesitter.matchup.enable = true
+        -- end,
+      },
+      {
+          "TimUntersberger/neogit",
+          requires = {
+              "nvim-lua/plenary.nvim",
+              "sindrets/diffview.nvim",
+          },
+          config = function()
+              require("neogit").setup { 
+                  integrations = {
+                      diffview = true,
+                  },
+               }
+          end,
       },
 
       -- { "andweeb/presence.nvim" },
@@ -334,13 +364,13 @@ local config = {
     end,
 
     treesitter = { -- overrides `require("treesitter").setup(...)`
-      -- ensure_installed = { "lua" },
+      ensure_installed = { "lua" },
     },
 
     -- use mason-lspconfig to configure LSP installations
     ["mason-lspconfig"] = { -- overrides `require("mason-lspconfig").setup(...)`
       ensure_installed = {
-        "sumneko_lua",
+        -- "sumneko_lua",
         "bashls",
         -- "texlab",
       },
