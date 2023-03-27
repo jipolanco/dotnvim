@@ -22,8 +22,13 @@ return {
   },
 
   {
+    "vim-pandoc/vim-pandoc-syntax",
+    ft = "markdown",
+  },
+
+  {
     "JuliaEditorSupport/julia-vim",
-    event = "BufRead",  -- always enable, to be able to use latex-to-unicode in non-Julia files
+    lazy = false,  -- always enable, to be able to use latex-to-unicode in non-Julia files
     config = function()
       vim.g.latex_to_unicode_tab = "command"
       vim.g.latex_to_unicode_auto = 1
@@ -48,7 +53,7 @@ return {
 
   {
     "jpalardy/vim-slime",
-    event = "BufRead",
+    lazy = false,
     config = function()
       vim.g.slime_target = "tmux"
       vim.g.slime_default_config = { socket_name = "default", target_pane = "{last}" }
@@ -59,7 +64,7 @@ return {
 
   {
     "kylechui/nvim-surround",
-    event = "BufRead",
+    lazy = false,
     config = function()
       require("nvim-surround").setup({
         -- Configuration here, or leave empty to use defaults
