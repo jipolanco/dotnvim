@@ -18,12 +18,12 @@ return {
 
   {
     "vim-pandoc/vim-pandoc",
-    ft = "markdown",
+    ft = {"markdown", "pandoc"},
   },
 
   {
     "vim-pandoc/vim-pandoc-syntax",
-    ft = "markdown",
+    ft = {"markdown", "pandoc"},
   },
 
   {
