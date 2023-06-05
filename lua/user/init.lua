@@ -41,7 +41,8 @@ return {
         },
       },
       disabled = { -- disable formatting capabilities for the listed language servers
-        -- "sumneko_lua",
+        -- disable lua_ls formatting capability if you want to use StyLua to format your lua code
+        -- "lua_ls",
       },
       timeout_ms = 1000, -- default format timeout
       -- filter = function(client) -- fully override the default formatting function
@@ -58,20 +59,20 @@ return {
 
     -- Add overrides for LSP server settings, the keys are the name of the server
     ["server-settings"] = {
-      julials = {
-        settings = {
-          julia = {
-            NumThreads = 1,
-            lint = {
-              call = false,
-              constif = false,
-              datadecl = true,
-              iter = true,
-              missingrefs = "none"
-            }
-          }
-        }
-      },
+      -- julials = {
+      --   settings = {
+      --     julia = {
+      --       NumThreads = 1,
+      --       lint = {
+      --         call = false,
+      --         constif = false,
+      --         datadecl = true,
+      --         iter = true,
+      --         missingrefs = "none"
+      --       }
+      --     }
+      --   }
+      -- },
       ccls = {
           -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#ccls
           setup = {
