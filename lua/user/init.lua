@@ -51,10 +51,16 @@ return {
     },
     -- enable servers that you already have installed without mason
     servers = {
-      "julials",
+      -- "julials",
       "texlab",
-      "ccls",
+      -- "ccls",
       -- "pyright"
+    },
+
+    config = {
+      marksman = {
+        filetypes = {"markdown", "pandoc"},
+      },
     },
 
     -- Add overrides for LSP server settings, the keys are the name of the server
