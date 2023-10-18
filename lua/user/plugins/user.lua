@@ -9,7 +9,7 @@ return {
   --     require("lsp_signature").setup()
   --   end,
   -- },
-  "EdenEast/nightfox.nvim",
+  -- "EdenEast/nightfox.nvim",
 
   {
     "khaveesh/vim-fish-syntax",
