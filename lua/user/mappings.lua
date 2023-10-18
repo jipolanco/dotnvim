@@ -29,6 +29,8 @@ return {
 
     ["<leader>fg"] = { "<cmd>lua require('telescope.builtin').git_files()<cr>", desc = "Search git files" },
     ["<leader>gf"] = { "<cmd>lua require('telescope.builtin').git_files()<cr>", desc = "Search git files" },
+
+    ["<leader>lg"] = { "<cmd>lua require('telescope.builtin').lsp_workspace_symbols()<cr>", desc = "List workspace symbols" },
   },
   t = {
     -- setting a mapping to false will disable it
