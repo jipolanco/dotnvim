@@ -1,4 +1,4 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
+-- if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
 
 -- AstroCore provides a central place to modify mappings, vim options, autocommands, and more!
 -- Configuration documentation can be found with `:h astrocore`
@@ -32,6 +32,10 @@ return {
         spell = false, -- sets vim.opt.spell
         signcolumn = "auto", -- sets vim.opt.signcolumn to auto
         wrap = false, -- sets vim.opt.wrap
+        -- ADDED BY ME
+        splitbelow = false,
+        splitright = true,
+        shell = "/bin/bash", -- avoid using fish (very slow, for slime in particular)
       },
       g = { -- vim.g.<key>
         -- configure global vim variables (vim.g)
@@ -64,6 +68,18 @@ return {
         ["<Leader>b"] = { desc = "Buffers" },
         -- quick save
         -- ["<C-s>"] = { ":w!<cr>", desc = "Save File" },  -- change description but the same command
+
+        -- ADDED BY ME
+        ["<Leader>fg"] = {
+          function()
+            require('telescope.builtin').git_files()
+          end,
+          desc = "Search git files",
+        },
+
+        -- vim-slime
+        -- To be combined with vim.b.slime_cell_delimiter in ftplugin/*.lua
+        ["<C-c>c"] = { "<Plug>SlimeSendCell", desc = "Slime: send cell" },
       },
       t = {
         -- setting a mapping to false will disable it

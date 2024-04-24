@@ -1,84 +1,76 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-
--- You can also add or configure plugins by creating files in this `plugins/` folder
--- Here are some examples:
-
 ---@type LazySpec
 return {
-
-  -- == Examples of Adding Plugins ==
-
-  "andweeb/presence.nvim",
   {
-    "ray-x/lsp_signature.nvim",
-    event = "BufRead",
-    config = function() require("lsp_signature").setup() end,
+    "khaveesh/vim-fish-syntax",
+    ft = "fish",  -- only gets loaded when a fish file is opened
   },
 
-  -- == Examples of Overriding Plugins ==
-
-  -- customize alpha options
   {
-    "goolord/alpha-nvim",
-    opts = function(_, opts)
-      -- customize the dashboard header
-      opts.section.header.val = {
-        " █████  ███████ ████████ ██████   ██████",
-        "██   ██ ██         ██    ██   ██ ██    ██",
-        "███████ ███████    ██    ██████  ██    ██",
-        "██   ██      ██    ██    ██   ██ ██    ██",
-        "██   ██ ███████    ██    ██   ██  ██████",
-        " ",
-        "    ███    ██ ██    ██ ██ ███    ███",
-        "    ████   ██ ██    ██ ██ ████  ████",
-        "    ██ ██  ██ ██    ██ ██ ██ ████ ██",
-        "    ██  ██ ██  ██  ██  ██ ██  ██  ██",
-        "    ██   ████   ████   ██ ██      ██",
-      }
-      return opts
+    "vim-pandoc/vim-pandoc",
+    ft = {"markdown", "pandoc"},
+  },
+
+  {
+    "vim-pandoc/vim-pandoc-syntax",
+    ft = {"markdown", "pandoc"},
+  },
+
+  {
+    "JuliaEditorSupport/julia-vim",
+    lazy = false,  -- always enable, to be able to use latex-to-unicode in non-Julia files
+    config = function()
+      vim.g.latex_to_unicode_tab = "command"
+      vim.g.latex_to_unicode_auto = 1
+      vim.g.latex_to_unicode_file_types = '.*'
+      vim.g.latex_to_unicode_file_types_blacklist = 'tex'
+      vim.g.julia_indent_align_brackets = 0
+      vim.g.julia_indent_align_funcargs = 0
     end,
   },
 
-  -- You can disable default plugins as follows:
-  { "max397574/better-escape.nvim", enabled = false },
+  {
+    "lervag/vimtex",
+    ft = "tex",
+    config = function()
+      vim.g.vimtex_view_method = "general"
+      vim.g.vimtex_view_general_viewer = "okular"
+      vim.g.vimtex_view_general_options = "--unique file:@pdf#src:@line@tex"
+      vim.g.vimtex_quickfix_open_on_warning = 0
+      vim.g.vimtex_fold_manual = 1
+    end,
+  },
 
-  -- You can also easily customize additional setup of plugins that is outside of the plugin's setup call
+  {
+    "jpalardy/vim-slime",
+    lazy = false,
+    config = function()
+      vim.g.slime_target = "tmux"
+      vim.g.slime_default_config = { socket_name = "default", target_pane = "{last}" }
+      vim.g.slime_paste_file = vim.call("tempname")
+      vim.g.slime_bracketed_paste = 1
+    end,
+  },
+
+  {
+    "kylechui/nvim-surround",
+    lazy = false,
+    config = function()
+      require("nvim-surround").setup({
+        -- Configuration here, or leave empty to use defaults
+      })
+    end
+  },
+
   {
     "L3MON4D3/LuaSnip",
     config = function(plugin, opts)
       require "astronvim.plugins.configs.luasnip"(plugin, opts) -- include the default astronvim config that calls the setup call
       -- add more custom luasnip configuration such as filetype extend or custom snippets
-      local luasnip = require "luasnip"
-      luasnip.filetype_extend("javascript", { "javascriptreact" })
-    end,
-  },
-
-  {
-    "windwp/nvim-autopairs",
-    config = function(plugin, opts)
-      require "astronvim.plugins.configs.nvim-autopairs"(plugin, opts) -- include the default astronvim config that calls the setup call
-      -- add more custom autopairs configuration such as custom rules
-      local npairs = require "nvim-autopairs"
-      local Rule = require "nvim-autopairs.rule"
-      local cond = require "nvim-autopairs.conds"
-      npairs.add_rules(
-        {
-          Rule("$", "$", { "tex", "latex" })
-            -- don't add a pair if the next character is %
-            :with_pair(cond.not_after_regex "%%")
-            -- don't add a pair if  the previous character is xxx
-            :with_pair(
-              cond.not_before_regex("xxx", 3)
-            )
-            -- don't move right when repeat character
-            :with_move(cond.none())
-            -- don't delete if the next character is xx
-            :with_del(cond.not_after_regex "xx")
-            -- disable adding a newline when you press <cr>
-            :with_cr(cond.none()),
-        },
-        -- disable for .vim files, but it work for another filetypes
-        Rule("a", "a", "-vim")
+      -- local luasnip = require "luasnip"
+      -- luasnip.filetype_extend("javascript", { "javascriptreact" })
+      require("luasnip.loaders.from_vscode").lazy_load(
+        -- load snippets in vscode format (.json) in ~/.config/nvim/snippets
+        { paths = "./snippets" }
       )
     end,
   },
