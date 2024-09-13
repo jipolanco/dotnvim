@@ -20,7 +20,7 @@ return {
       enable = true,
       disable = {
         "julia",
-        -- "latex",
+        "latex",
       },
     }
     opts.indent = {
