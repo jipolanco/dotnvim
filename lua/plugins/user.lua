@@ -41,6 +41,16 @@ return {
   },
 
   {
+    "kaarmu/typst.vim",
+    ft = "typst",
+    config = function()
+      vim.g.typst_pdf_viewer = "xdg-open"
+      -- vim.g.typst_conceal = 1
+      -- vim.g.typst_conceal_math = 0
+    end,
+  },
+
+  {
     "jpalardy/vim-slime",
     lazy = false,
     config = function()
